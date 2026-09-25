@@ -1,0 +1,607 @@
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import contactBanner from "../../assets/contact/contact-banner-img.jpg";
+
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "Basic Education", href: "/basic" },
+  { label: "Post Primary", href: "/post" },
+  { label: "VET", href: "/vet" },
+  { label: "FODE", href: "/fode" },
+  { label: "Contact", href: "/contact" },
+];
+
+function ContactIcon({ name, className = "w-5 h-5" }: { name: string; className?: string }) {
+  const paths = {
+    pin: <><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>,
+    phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4 8.81 2 2 0 0 1 6 6.63h3a2 2 0 0 1 2 1.72c.15 1.13.48 2.22.97 3.23a2 2 0 0 1-.57 2.11l-1.4 1.4a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.11-.57c1.01.49 2.1.82 3.23.97a2 2 0 0 1 1.72 2Z" />,
+    email: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
+    clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+    check: <path d="m5 12 4 4L19 6" />,
+  };
+
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[name as keyof typeof paths] || paths.pin}
+    </svg>
+  );
+}
+
+function Header({
+  menuOpen,
+  setMenuOpen,
+}: {
+  menuOpen: boolean;
+  setMenuOpen: (v: boolean) => void;
+}) {
+  const location = useLocation();
+  return (
+    <>
+      <div className="bg-[#0B2545] text-white text-sm py-2 px-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+          <div className="flex gap-6 items-center">
+            <span className="flex items-center gap-1.5 opacity-80">
+              <ContactIcon name="phone" className="w-4 h-4" /> +675 641 1234
+            </span>
+            <span className="flex items-center gap-1.5 opacity-80">
+              <ContactIcon name="email" className="w-4 h-4" /> info@mbpeducation.gov.pg
+            </span>
+          </div>
+          <div className="flex gap-4 items-center opacity-80">
+            <span>Mon – Fri: 8:00am – 4:30pm</span>
+            <span className="hidden sm:block">|</span>
+            <a href="#" className="hover:text-[#C9A84C] transition-colors">
+              NDoE Portal
+            </a>
+            <a href="#" className="hover:text-[#C9A84C] transition-colors">
+              TSC Online
+            </a>
+          </div>
+        </div>
+      </div>
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src="/assets/logo/mbp-logo-bg-removed.png"
+              alt="Milne Bay Province Division of Education"
+              className="w-12 h-12 shrink-0 object-contain"
+            />
+            <div className="leading-tight">
+              <div
+                className="text-[#0B2545] font-bold text-base"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                Milne Bay Province
+              </div>
+              <div className="text-[#0D9488] text-xs font-semibold uppercase tracking-widest">
+                Division of Education
+              </div>
+            </div>
+          </Link>
+          <nav className="hidden lg:flex items-center gap-1">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.label}
+                to={link.href}
+                className={`px-3 py-2 text-sm font-medium rounded transition-colors ${
+                  location.pathname === link.href
+                    ? "text-[#0D9488] bg-gray-50"
+                    : "text-gray-700 hover:text-[#0D9488] hover:bg-gray-50"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/#contact"
+              className="hidden sm:inline-flex items-center gap-2 bg-[#0D9488] text-white text-sm font-semibold px-4 py-2 rounded hover:bg-[#0e7a6e] transition-colors"
+            >
+              Get Help
+            </Link>
+            <button
+              className="lg:hidden p-2 text-gray-600 hover:text-[#0B2545]"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Menu"
+            >
+              {menuOpen ? "✕" : "☰"}
+            </button>
+          </div>
+        </div>
+      </header>
+      {menuOpen && (
+        <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.label}
+              to={link.href}
+              className="block py-2 text-sm font-medium text-gray-700 border-b border-gray-50 hover:text-[#0D9488]"
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
+function PageHero() {
+  return (
+    <section className="relative h-[400px] sm:h-[440px] overflow-hidden bg-[#0B2545]">
+      <img
+        src={contactBanner}
+        alt="Contact Milne Bay Education"
+        className="absolute inset-0 w-full h-full object-cover object-[90%_100%] opacity-55"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#07192E]/90 via-[#0B2545]/60 to-[#0B2545]/10" />
+      <div className="absolute -left-44 -bottom-52 w-[34rem] h-[34rem] rounded-full bg-cyan-400/15 blur-3xl" />
+      <div className="absolute right-[38%] -top-44 w-[28rem] h-[28rem] rounded-full bg-sky-300/10 blur-3xl" />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#07192E]/65 to-transparent" />
+      <svg className="contact-banner-wave absolute inset-x-0 -bottom-10 h-52 w-full opacity-70" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 72C180 30 330 108 520 62s330-30 680 26v32H0Z" fill="#0D9488" fillOpacity=".42" />
+        <path d="M0 94c190-42 350 30 540-12s340-24 660 14v24H0Z" fill="#07192E" fillOpacity=".82" />
+      </svg>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
+        <div className="max-w-3xl rounded-3xl border border-white/15 bg-[#07192E]/35 p-6 sm:p-8 backdrop-blur-md shadow-2xl">
+          <div className="inline-flex items-center gap-2 bg-[#C9A84C]/20 border border-[#C9A84C]/40 text-[#E2C47A] text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] inline-block" />
+            We’re Here to Help
+          </div>
+          <h1
+            className="text-4xl sm:text-5xl font-bold text-white leading-[1.1] mb-4"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            Contact <span className="text-[#14B8A6]">Us</span>
+          </h1>
+          <p className="text-blue-100 text-lg leading-relaxed max-w-2xl">
+            Visit, call or send a message. Our team across Alotau and district offices is ready to
+            support students, parents and teachers.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ContactCards() {
+  return (
+    <section className="py-14 px-4 bg-[#F8F6F1] -mt-8 relative z-20">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {[
+            {
+              icon: "pin",
+              title: "Head Office",
+              lines: ["Division of Education", "Alotau, Milne Bay Province", "Papua New Guinea"],
+              action: "Get Directions →",
+            },
+            {
+              icon: "phone",
+              title: "Phone",
+              lines: [
+                "+675 641 1234 (Main)",
+                "+675 641 1235 (Helpdesk)",
+                "Mon–Fri 8:00am – 4:30pm",
+              ],
+              action: "Call Now →",
+            },
+            {
+              icon: "email",
+              title: "Email",
+              lines: [
+                "info@mbpeducation.gov.pg",
+                "help@mbpeducation.gov.pg",
+                "Response within 24 hours",
+              ],
+              action: "Send Email →",
+            },
+            {
+              icon: "clock",
+              title: "Office Hours",
+              lines: ["Monday – Friday", "8:00am – 4:30pm", "Closed weekends & public holidays"],
+              action: "View Holidays →",
+            },
+          ].map((c) => (
+            <div
+              key={c.title}
+              className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[#0B2545] text-white flex items-center justify-center text-xl mb-4">
+                <ContactIcon name={c.icon} className="w-6 h-6" />
+              </div>
+              <div
+                className="font-bold text-[#0B2545] mb-2"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                {c.title}
+              </div>
+              {c.lines.map((l) => (
+                <div key={l} className="text-gray-600 text-sm leading-relaxed">
+                  {l}
+                </div>
+              ))}
+              <div className="text-[#0D9488] text-sm font-semibold mt-4">{c.action}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function VisitMap() {
+  return (
+    <div className="mt-8 bg-[#F8F6F1] rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
+      <div
+        className="relative min-h-[340px] overflow-hidden bg-[#DCEAE8]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(11,37,69,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(11,37,69,.08) 1px, transparent 1px)",
+          backgroundSize: "42px 42px",
+        }}
+      >
+        <div className="absolute -left-16 top-20 h-20 w-[120%] -rotate-12 rounded-[50%] border-[18px] border-white/60" />
+        <div className="absolute -right-20 bottom-14 h-28 w-[90%] rotate-6 rounded-[50%] border-[20px] border-[#0D9488]/15" />
+        <div className="absolute left-[16%] top-[24%] h-24 w-40 rounded-2xl bg-white/55" />
+        <div className="absolute right-[14%] top-[18%] h-32 w-48 rounded-2xl bg-white/45" />
+        <div className="absolute left-1/2 top-[44%] -translate-x-1/2 -translate-y-1/2 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#0B2545] text-white grid place-items-center shadow-xl ring-8 ring-white/70 mx-auto">
+            <ContactIcon name="pin" className="w-8 h-8" />
+          </div>
+          <div className="mt-3 rounded-full bg-white px-4 py-2 text-sm font-bold text-[#0B2545] shadow-lg">
+            Division of Education
+          </div>
+        </div>
+        <div className="absolute left-5 bottom-5 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold text-[#0B2545] shadow">
+          Alotau, Milne Bay Province
+        </div>
+      </div>
+      <div className="p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="w-12 h-12 shrink-0 rounded-xl bg-[#0D9488] text-white grid place-items-center">
+          <ContactIcon name="pin" className="w-6 h-6" />
+        </div>
+        <div>
+          <h3
+            className="text-xl font-bold text-[#0B2545]"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            Visit Us
+          </h3>
+          <p className="text-gray-600 text-sm mt-1">
+            Division of Education, Main Street, Alotau, Milne Bay Province, Papua New Guinea.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FormSection() {
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({
+    full_name: "",
+    phone: "",
+    email: "",
+    category: "General Enquiry",
+    district: "",
+    subject: "",
+    message: "",
+  });
+  const [sending, setSending] = useState(false);
+  const [err, setErr] = useState("");
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErr("");
+    setSending(true);
+    try {
+      const { api } = await import("@/lib/api");
+      await api.contact(form);
+      setSent(true);
+    } catch (e: any) {
+      setErr(e.message || "Failed to send");
+    } finally {
+      setSending(false);
+    }
+  }
+  return (
+    <section className="py-16 px-4 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-5 gap-10">
+          <div className="lg:col-span-3">
+            <span className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
+              Send a Message
+            </span>
+            <h2
+              className="text-3xl font-bold text-[#0B2545] mt-2 mb-2"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              How can we help?
+            </h2>
+            <p className="text-gray-500 mb-8">
+              Complete the form and our team will respond within one business day.
+            </p>
+            {sent ? (
+              <div className="bg-teal-50 border border-teal-200 rounded-xl p-8 text-center">
+                <ContactIcon name="check" className="w-10 h-10 mx-auto mb-3 text-[#0D9488]" />
+                <div className="text-[#0B2545] font-bold text-lg mb-1">Message sent</div>
+                <p className="text-gray-600 text-sm">
+                  Thank you. We’ll respond via email or phone shortly. For urgent matters please
+                  call +675 641 1234.
+                </p>
+                <button
+                  onClick={() => setSent(false)}
+                  className="mt-4 text-[#0D9488] font-semibold text-sm hover:underline"
+                >
+                  Send another message
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {err && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-xl">
+                    {err}
+                  </div>
+                )}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700">Full Name *</label>
+                    <input
+                      required
+                      value={form.full_name}
+                      onChange={(e) => setForm({ ...form, full_name: e.target.value })}
+                      placeholder="John Doe"
+                      className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700">Phone</label>
+                    <input
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      placeholder="+675 7000 0000"
+                      className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-gray-700">Email *</label>
+                  <input
+                    type="email"
+                    required
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    placeholder="you@example.com"
+                    className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
+                  />
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700">Category</label>
+                    <select
+                      value={form.category}
+                      onChange={(e) => setForm({ ...form, category: e.target.value })}
+                      className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
+                    >
+                      <option>General Enquiry</option>
+                      <option>Enrolment & Transfers</option>
+                      <option>Examinations & Selections</option>
+                      <option>Teacher Support</option>
+                      <option>FODE / VET</option>
+                      <option>Complaint</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700">District</label>
+                    <select
+                      value={form.district}
+                      onChange={(e) => setForm({ ...form, district: e.target.value })}
+                      className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
+                    >
+                      <option value="">Select district</option>
+                      <option>Alotau</option>
+                      <option>Es'ala</option>
+                      <option>Kiriwina-Goodenough</option>
+                      <option>Samarai-Murua</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-gray-700">Subject *</label>
+                  <input
+                    required
+                    value={form.subject}
+                    onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                    placeholder="Brief subject"
+                    className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-gray-700">Message *</label>
+                  <textarea
+                    required
+                    rows={5}
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    placeholder="Describe your enquiry in detail…"
+                    className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm resize-none"
+                  />
+                </div>
+                <button
+                  disabled={sending}
+                  type="submit"
+                  className="w-full sm:w-auto bg-[#0B2545] hover:bg-[#163663] text-white font-semibold px-8 py-3.5 rounded-lg transition-colors disabled:opacity-60"
+                >
+                  {sending ? "Sending…" : "Send Message →"}
+                </button>
+                <p className="text-xs text-gray-400">
+                  By submitting you agree to our privacy policy. We never share your details. Saved
+                  to MySQL contact_messages.
+                </p>
+              </form>
+            )}
+          </div>
+          <div className="lg:col-span-2">
+            <div className="bg-[#0B2545] rounded-2xl p-6 text-white">
+              <h3
+                className="font-bold text-lg mb-4"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                District Education Contacts
+              </h3>
+              <div className="space-y-3 text-sm max-h-[520px] overflow-auto pr-1">
+                {[
+                  ["Alotau District", "+675 641 1234 ext. 101", "alotau@mbpeducation.gov.pg"],
+                  ["Esa'ala District", "+675 641 1234 ext. 102", "esaala@mbpeducation.gov.pg"],
+                  ["Kiriwina-Goodenough", "+675 641 1234 ext. 103", "kiriwina@mbpeducation.gov.pg"],
+                  ["Samarai-Murua", "+675 641 1234 ext. 104", "samarai@mbpeducation.gov.pg"],
+                  ["Huhu District", "+675 641 1234 ext. 105", "huhu@mbpeducation.gov.pg"],
+                  ["Rabaruana District", "+675 641 1234 ext. 106", "rabaruana@mbpeducation.gov.pg"],
+                ].map(([d, p, e]) => (
+                  <div key={d} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                    <div className="font-semibold text-white">{d}</div>
+                    <div className="text-teal-200 text-xs mt-1">{p}</div>
+                    <div className="text-teal-200 text-xs">{e}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 bg-[#C9A84C] rounded-xl p-4 text-[#0B2545]">
+                <div className="font-bold text-sm">Emergency Helpdesk</div>
+                <div className="text-sm mt-1">For urgent school closures or safety issues:</div>
+                <div className="font-bold mt-1 flex items-center justify-center gap-2">
+                  <ContactIcon name="phone" className="w-4 h-4" />
+                  <span>+675 641 1234 • help@mbpeducation.gov.pg</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <VisitMap />
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="bg-[#07192E] text-white pt-14 pb-6 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <img
+                src="/assets/logo/mbp-logo-bg-removed.png"
+                alt="MBP Logo"
+                className="w-10 h-10 object-contain"
+              />
+              <div>
+                <div
+                  className="font-bold text-sm"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
+                  Milne Bay Province
+                </div>
+                <div className="text-[#0D9488] text-xs">Division of Education</div>
+              </div>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Committed to quality education for all children and young people across Milne Bay
+              Province, Papua New Guinea.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
+              Quick Links
+            </h4>
+            <ul className="space-y-2">
+              {NAV_LINKS.map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.href}
+                    className="text-gray-400 text-sm hover:text-white transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
+              Related Agencies
+            </h4>
+            <ul className="space-y-2">
+              {[
+                "National Dept. of Education",
+                "Teaching Service Commission",
+                "National Library of PNG",
+                "Flexible Open Distance Ed.",
+                "TVET Authority",
+              ].map((l) => (
+                <li key={l}>
+                  <a href="#" className="text-gray-400 text-sm hover:text-white transition-colors">
+                    {l}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
+              Contact Us
+            </h4>
+            <div className="space-y-3 text-sm text-gray-400">
+              <div>
+                <div className="text-white font-medium mb-0.5">Office Address</div>
+                Division of Education, Alotau, Milne Bay Province, PNG
+              </div>
+              <div>
+                <div className="text-white font-medium mb-0.5">Phone</div>+675 641 1234
+              </div>
+              <div>
+                <div className="text-white font-medium mb-0.5">Email</div>
+                info@mbpeducation.gov.pg
+              </div>
+              <div>
+                <div className="text-white font-medium mb-0.5">Office Hours</div>
+                Mon – Fri: 8:00am – 4:30pm
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/10 pt-6 flex flex-wrap justify-between items-center gap-3 text-sm text-gray-500">
+          <span>© 2026 Milne Bay Province Division of Education. All rights reserved.</span>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-white transition-colors">
+              Privacy Policy
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Terms of Use
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Accessibility
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default function ContactPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <div className="min-h-screen" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
+      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <PageHero />
+      <ContactCards />
+      <FormSection />
+      <Footer />
+    </div>
+  );
+}
