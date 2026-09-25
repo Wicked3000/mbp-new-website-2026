@@ -606,7 +606,6 @@ function G11() {
   );
 }
 export default function SelectionsManager() {
-  const toast = useToast();
   const [tab, setTab] = useState<"g9" | "g11">("g9");
   return (
     <div className="space-y-6">

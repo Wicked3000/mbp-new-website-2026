@@ -1,4 +1,4 @@
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 
 const FALLBACK = [

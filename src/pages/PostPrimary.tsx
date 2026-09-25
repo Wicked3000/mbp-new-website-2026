@@ -430,33 +430,6 @@ function CurriculumSection() {
   );
 }
 
-const GRADE9_SCHOOLS = [
-  "Cameron Secondary School",
-  "Cape Vogel High School",
-  "Duau High School",
-  "Holy Name Secondary School",
-  "Hagita Secondary School",
-  "Kiriwina High School",
-  "Kuiaro High School",
-  "Misima High School",
-  "Santa Maria Secondary School",
-  "Suau High School",
-  "Wesley Secondary School",
-  "Woodlark Junior School",
-  "Yeleyamba Junior High School",
-];
-
-const GRADE11_SCHOOLS = [
-  "Cameron Secondary School",
-  "Duau High School",
-  "Holy Name Secondary School",
-  "Hagita Secondary School",
-  "Kiriwina High School",
-  "Misima High School",
-  "Santa Maria Secondary School",
-  "Wesley Secondary School",
-];
-
 const GRADE9_DATA: Record<
   string,
   {

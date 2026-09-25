@@ -337,7 +337,7 @@ function HistorySection() {
         <div className="relative">
           <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-[#C9A84C] hidden lg:block" />
           <div className="space-y-10">
-            {MILESTONES.map((m, i) => (
+            {MILESTONES.map((m) => (
               <div key={m.year} className="relative lg:pl-20">
                 <div className="absolute left-0 top-4 w-16 h-16 lg:w-14 lg:h-14 lg:left-[-8px] rounded-full bg-[#0B2545] border-4 border-white flex items-center justify-center shadow-lg z-10">
                   <span
