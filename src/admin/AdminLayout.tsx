@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate, Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import {
   DashboardIcon,
@@ -45,11 +45,54 @@ export default function AdminLayout() {
   const loc = useLocation();
   const nav = useNavigate();
   const user = api.user();
+  const sidebarRef = useRef<HTMLElement>(null);
+  const sidebarCloseRef = useRef<HTMLButtonElement>(null);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
+
+  const closeSidebar = useCallback((restoreFocus = false) => {
+    setOpen(false);
+    if (restoreFocus) menuToggleRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    sidebarCloseRef.current?.focus();
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeSidebar(true);
+        return;
+      }
+      if (event.key !== "Tab" || !sidebarRef.current) return;
+      const focusable = sidebarRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      const inside = !!active && sidebarRef.current?.contains(active);
+      if (event.shiftKey && (!inside || active === first)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && inside && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open, closeSidebar]);
+
   return (
     <ToastProvider>
       <div className="min-h-screen bg-[#F1F5F9] flex">
         {/* sidebar */}
         <aside
+          ref={sidebarRef}
+          id="admin-sidebar"
+          aria-label="Admin navigation"
+          {...(open ? ({ role: "dialog", "aria-modal": true } as const) : {})}
           className={`bg-[#07192E] text-white w-[260px] shrink-0 flex flex-col fixed lg:static inset-y-0 left-0 z-40 transition-transform ${
             open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
@@ -58,7 +101,7 @@ export default function AdminLayout() {
             <img
               src="/assets/logo/mbp-logo-bg-removed.png"
               className="w-9 h-9 bg-white rounded-full p-1 object-contain"
-              alt="logo"
+              alt="MBP Education logo"
             />
             <div>
               <div className="font-bold text-sm leading-none">MBP Education</div>
@@ -67,7 +110,10 @@ export default function AdminLayout() {
               </div>
             </div>
             <button
-              onClick={() => setOpen(false)}
+              ref={sidebarCloseRef}
+              type="button"
+              aria-label="Close navigation menu"
+              onClick={() => closeSidebar(true)}
               className="lg:hidden ml-auto w-8 h-8 rounded-full bg-white/10 grid place-items-center"
             >
               ✕
@@ -88,7 +134,11 @@ export default function AdminLayout() {
                   <Link
                     key={n.to}
                     to={n.to}
-                    onClick={() => setOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => {
+                      closeSidebar(false);
+                      requestAnimationFrame(() => document.getElementById("main-content")?.focus());
+                    }}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                       active
                         ? "bg-[#0D9488] text-white shadow"
@@ -104,7 +154,10 @@ export default function AdminLayout() {
           </div>
           <div className="p-4 border-t border-white/10">
             <div className="bg-white/5 rounded-xl p-3 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#C9A84C] text-[#07192E] grid place-items-center font-bold">
+              <div
+                aria-hidden="true"
+                className="w-9 h-9 rounded-full bg-[#C9A84C] text-[#07192E] grid place-items-center font-bold"
+              >
                 {user?.username?.[0]?.toUpperCase() || "A"}
               </div>
               <div className="min-w-0 flex-1">
@@ -112,6 +165,7 @@ export default function AdminLayout() {
                 <div className="text-xs text-white/60 truncate">{user?.role || "super_admin"}</div>
               </div>
               <button
+                type="button"
                 onClick={() => {
                   api.logout();
                   nav("/admin/login");
@@ -133,7 +187,8 @@ export default function AdminLayout() {
         {/* overlay */}
         {open && (
           <div
-            onClick={() => setOpen(false)}
+            aria-hidden="true"
+            onClick={() => closeSidebar(true)}
             className="fixed inset-0 bg-black/40 z-30 lg:hidden"
           />
         )}
@@ -142,6 +197,11 @@ export default function AdminLayout() {
           <header className="bg-white border-b border-gray-100 sticky top-0 z-20">
             <div className="px-4 sm:px-6 py-3 flex items-center gap-3">
               <button
+                ref={menuToggleRef}
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded={open}
+                aria-controls="admin-sidebar"
                 onClick={() => setOpen(!open)}
                 className="lg:hidden w-10 h-10 rounded-xl border border-gray-200 grid place-items-center"
               >
@@ -158,7 +218,10 @@ export default function AdminLayout() {
               </div>
               <div className="ml-auto flex items-center gap-2">
                 <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-full">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span
+                    aria-hidden="true"
+                    className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
+                  />
                   DB: {(import.meta as any).env?.VITE_API_BASE || "http://localhost/mbp-api"}{" "}
                   <span className="opacity-50">(falls back to local)</span>
                 </span>
@@ -171,7 +234,7 @@ export default function AdminLayout() {
               </div>
             </div>
           </header>
-          <main className="p-4 sm:p-6 flex-1">
+          <main id="main-content" tabIndex={-1} className="p-4 sm:p-6 flex-1">
             <Outlet />
           </main>
         </div>

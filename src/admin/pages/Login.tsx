@@ -31,7 +31,7 @@ export default function Login() {
           <div className="bg-gradient-to-r from-[#0B2545] to-[#0D9488] p-6 text-white text-center">
             <img
               src="/assets/logo/mbp-logo-bg-removed.png"
-              alt="logo"
+              alt="MBP Education logo"
               className="w-12 h-12 mx-auto bg-white rounded-full p-1 object-contain"
             />
             <div
@@ -44,15 +44,27 @@ export default function Login() {
               Admin Sign In
             </div>
           </div>
-          <form onSubmit={submit} className="p-6 space-y-4">
+          <form onSubmit={submit} className="p-6 space-y-4" aria-busy={loading}>
             {err && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-xl">
+              <div
+                id="login-error"
+                role="alert"
+                className="bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-xl"
+              >
                 {err}
               </div>
             )}
             <div>
-              <label className="text-sm font-semibold text-gray-700">Username or Email</label>
+              <label htmlFor="login-username" className="text-sm font-semibold text-gray-700">
+                Username or Email
+              </label>
               <input
+                id="login-username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                aria-invalid={!!err || undefined}
+                aria-describedby={err ? "login-error" : undefined}
                 value={user}
                 onChange={(e) => setUser(e.target.value)}
                 className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
@@ -60,21 +72,30 @@ export default function Login() {
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-gray-700">Password</label>
+              <label htmlFor="login-password" className="text-sm font-semibold text-gray-700">
+                Password
+              </label>
               <input
+                id="login-password"
+                name="password"
                 type="password"
+                autoComplete="current-password"
+                aria-invalid={!!err || undefined}
+                aria-describedby={err ? "login-password-hint login-error" : "login-password-hint"}
                 value={pass}
                 onChange={(e) => setPass(e.target.value)}
                 className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
                 placeholder="••••••••"
               />
-              <div className="text-xs text-gray-500 mt-1.5">
+              <div id="login-password-hint" className="text-xs text-gray-500 mt-1.5">
                 Default: <span className="font-mono font-bold">admin / password</span> (change after
                 first login)
               </div>
             </div>
             <button
+              type="submit"
               disabled={loading}
+              aria-busy={loading}
               className="w-full bg-[#0B2545] hover:bg-[#0D9488] text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-60"
             >
               {loading ? "Signing in..." : "Sign In →"}

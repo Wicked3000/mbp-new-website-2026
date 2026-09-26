@@ -113,12 +113,15 @@ function DownloadsSection() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
+              type="search"
+              aria-label="Search downloads"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search downloads..."
               className="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm outline-none focus:border-[#0D9488]"
             />
             <select
+              aria-label="Filter downloads by category"
               value={category}
               onChange={(event) => setCategory(event.target.value)}
               className="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm outline-none focus:border-[#0D9488]"
@@ -208,6 +211,7 @@ export default function DownloadsPage() {
     <div className="min-h-screen" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
       <SiteHeader />
       <PageHero />
+      <main id="main-content"></main>
       <DownloadsSection />
       <SiteFooter />
     </div>

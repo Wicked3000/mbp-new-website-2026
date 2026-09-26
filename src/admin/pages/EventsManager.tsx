@@ -153,12 +153,16 @@ export default function EventsManager() {
         </div>
         <div className="flex gap-2">
           <input
+            id="event-search"
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search..."
+            aria-label="Search events"
             className="px-4 py-2.5 rounded-full border border-gray-200 bg-white text-sm w-56"
           />
           <button
+            type="button"
             onClick={() => {
               setEditing(null);
               setForm({
@@ -178,16 +182,30 @@ export default function EventsManager() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        aria-busy={loading}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
+            <caption className="sr-only">Upcoming events</caption>
             <thead>
               <tr className="bg-[#0B2545] text-white text-left">
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Title</th>
-                <th className="px-4 py-3">Time</th>
-                <th className="px-4 py-3">Cat</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th scope="col" className="px-4 py-3">
+                  Date
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Title
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Time
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Cat
+                </th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -215,12 +233,16 @@ export default function EventsManager() {
                   <td className="px-4 py-3">{r.cat}</td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button
+                      type="button"
+                      aria-label={`Edit event ${r.title}`}
                       onClick={() => setEditing(r)}
                       className="text-xs font-bold bg-amber-100 text-amber-700 px-3 py-1.5 rounded-full mr-1"
                     >
                       Edit
                     </button>
                     <button
+                      type="button"
+                      aria-label={`Delete event ${r.title}`}
                       onClick={() => del(r.id)}
                       className="text-xs font-bold bg-red-50 text-red-600 px-3 py-1.5 rounded-full"
                     >
@@ -236,11 +258,14 @@ export default function EventsManager() {
 
       <form
         id="event-form"
+        aria-labelledby="event-form-heading"
         onSubmit={submit}
         className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-[#0B2545]">{editing ? "Edit" : "Add"} - Event</h2>
+          <h2 id="event-form-heading" className="font-bold text-[#0B2545]">
+            {editing ? "Edit" : "Add"} - Event
+          </h2>
           {editing && (
             <button
               type="button"
@@ -264,12 +289,17 @@ export default function EventsManager() {
 
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="sm:col-span-3">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="event-pick-date"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Pick date (sets month/day)
             </label>
             <input
+              id="event-pick-date"
               type="date"
               value={toInputFromMonthDay(form.month, form.day)}
+              aria-describedby="event-pick-date-hint"
               onChange={(e) =>
                 setForm({
                   ...form,
@@ -279,16 +309,20 @@ export default function EventsManager() {
               }
               className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
             />
-            <div className="text-xs text-gray-500 mt-1">
+            <div id="event-pick-date-hint" className="text-xs text-gray-500 mt-1">
               Selected: {form.month} {form.day}
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="event-month"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Month
             </label>
             <select
+              id="event-month"
               value={form.month}
               onChange={(e) => setForm({ ...form, month: e.target.value })}
               className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm"
@@ -314,8 +348,14 @@ export default function EventsManager() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">Day</label>
+            <label
+              htmlFor="event-day"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
+              Day
+            </label>
             <input
+              id="event-day"
               value={form.day}
               onChange={(e) => setForm({ ...form, day: e.target.value })}
               placeholder="07"
@@ -323,10 +363,14 @@ export default function EventsManager() {
             />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="event-category"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Category
             </label>
             <select
+              id="event-category"
               value={form.cat}
               onChange={(e) => setForm({ ...form, cat: e.target.value })}
               className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm"
@@ -342,10 +386,14 @@ export default function EventsManager() {
           </div>
 
           <div className="sm:col-span-3">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="event-title"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Title *
             </label>
             <input
+              id="event-title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               required
@@ -354,10 +402,14 @@ export default function EventsManager() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="event-time"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Time / Venue *
             </label>
             <input
+              id="event-time"
               value={form.event_time}
               onChange={(e) => setForm({ ...form, event_time: e.target.value })}
               required
@@ -366,10 +418,14 @@ export default function EventsManager() {
             />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="event-color"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Badge color
             </label>
             <input
+              id="event-color"
               value={form.color}
               onChange={(e) => setForm({ ...form, color: e.target.value })}
               placeholder="bg-[#0B2545]"
@@ -378,9 +434,11 @@ export default function EventsManager() {
           </div>
         </div>
 
-        <button className="bg-[#0D9488] text-white font-bold px-6 py-3 rounded-full text-sm">
-          {" "}
-          {editing ? "Update" : "Create"}{" "}
+        <button
+          type="submit"
+          className="bg-[#0D9488] text-white font-bold px-6 py-3 rounded-full text-sm"
+        >
+          {editing ? "Update" : "Create"}
         </button>
       </form>
     </div>

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import contactBanner from "../../assets/contact/contact-banner-img.jpg";
+import { api } from "@/lib/api";
+import PageHeroBanner, { NAVY_HERO } from "@/components/PageHero";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -47,48 +49,41 @@ function ContactIcon({ name, className = "w-5 h-5" }: { name: string; className?
 
 function PageHero() {
   return (
-    <section className="relative h-[400px] sm:h-[440px] overflow-hidden bg-[#0B2545]">
-      <img
-        src={contactBanner}
-        alt="Contact Milne Bay Education"
-        className="absolute inset-0 w-full h-full object-cover object-[90%_100%] opacity-55"
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#07192E]/90 via-[#0B2545]/60 to-[#0B2545]/10" />
-      <div className="absolute -left-44 -bottom-52 w-[34rem] h-[34rem] rounded-full bg-cyan-400/15 blur-3xl" />
-      <div className="absolute right-[38%] -top-44 w-[28rem] h-[28rem] rounded-full bg-sky-300/10 blur-3xl" />
-      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#07192E]/65 to-transparent" />
-      <svg
-        className="contact-banner-wave absolute inset-x-0 -bottom-10 h-52 w-full opacity-70"
-        viewBox="0 0 1200 120"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M0 72C180 30 330 108 520 62s330-30 680 26v32H0Z"
-          fill="#0D9488"
-          fillOpacity=".42"
-        />
-        <path d="M0 94c190-42 350 30 540-12s340-24 660 14v24H0Z" fill="#07192E" fillOpacity=".82" />
-      </svg>
-      <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
-        <div className="max-w-3xl rounded-3xl border border-white/15 bg-[#07192E]/35 p-6 sm:p-8 backdrop-blur-md shadow-2xl">
-          <div className="inline-flex items-center gap-2 bg-[#C9A84C]/20 border border-[#C9A84C]/40 text-[#E2C47A] text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] inline-block" />
-            We’re Here to Help
-          </div>
-          <h1
-            className="text-4xl sm:text-5xl font-bold text-white leading-[1.1] mb-4"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+    <PageHeroBanner
+      theme={NAVY_HERO}
+      image={contactBanner}
+      imageAlt="Contact Milne Bay Education"
+      imagePosition="object-[90%_100%]"
+      imageOpacity={55}
+      eyebrow="We’re Here to Help"
+      title="Contact Us"
+      lead="Visit, call or send a message. Our team across Alotau and district offices is ready to support students, parents and teachers."
+      contentClassName="max-w-3xl rounded-3xl border border-white/15 bg-[#07192E]/35 p-6 sm:p-8 backdrop-blur-md shadow-2xl"
+      overlay={
+        <>
+          <div className="absolute -left-44 -bottom-52 w-[34rem] h-[34rem] rounded-full bg-cyan-400/15 blur-3xl" />
+          <div className="absolute right-[38%] -top-44 w-[28rem] h-[28rem] rounded-full bg-sky-300/10 blur-3xl" />
+          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#07192E]/65 to-transparent" />
+          <svg
+            className="contact-banner-wave absolute inset-x-0 -bottom-10 h-52 w-full opacity-70"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+            aria-hidden="true"
           >
-            Contact <span className="text-[#14B8A6]">Us</span>
-          </h1>
-          <p className="text-blue-100 text-lg leading-relaxed max-w-2xl">
-            Visit, call or send a message. Our team across Alotau and district offices is ready to
-            support students, parents and teachers.
-          </p>
-        </div>
-      </div>
-    </section>
+            <path
+              d="M0 72C180 30 330 108 520 62s330-30 680 26v32H0Z"
+              fill="#0D9488"
+              fillOpacity=".42"
+            />
+            <path
+              d="M0 94c190-42 350 30 540-12s340-24 660 14v24H0Z"
+              fill="#07192E"
+              fillOpacity=".82"
+            />
+          </svg>
+        </>
+      }
+    />
   );
 }
 
@@ -223,7 +218,6 @@ function FormSection() {
     setErr("");
     setSending(true);
     try {
-      const { api } = await import("@/lib/api");
       await api.contact(form);
       setSent(true);
     } catch (e: any) {
@@ -250,7 +244,11 @@ function FormSection() {
               Complete the form and our team will respond within one business day.
             </p>
             {sent ? (
-              <div className="bg-teal-50 border border-teal-200 rounded-xl p-8 text-center">
+              <div
+                role="status"
+                aria-live="polite"
+                className="bg-teal-50 border border-teal-200 rounded-xl p-8 text-center"
+              >
                 <ContactIcon name="check" className="w-10 h-10 mx-auto mb-3 text-[#0D9488]" />
                 <div className="text-[#0B2545] font-bold text-lg mb-1">Message sent</div>
                 <p className="text-gray-600 text-sm">
@@ -267,15 +265,21 @@ function FormSection() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 {err && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-xl">
+                  <div
+                    role="alert"
+                    className="bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2 rounded-xl"
+                  >
                     {err}
                   </div>
                 )}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-semibold text-gray-700">Full Name *</label>
+                    <label htmlFor="contact-name" className="text-sm font-semibold text-gray-700">
+                      Full Name <span aria-hidden="true">*</span>
+                    </label>
                     <input
                       required
+                      id="contact-name"
                       value={form.full_name}
                       onChange={(e) => setForm({ ...form, full_name: e.target.value })}
                       placeholder="John Doe"
@@ -283,9 +287,12 @@ function FormSection() {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-semibold text-gray-700">Phone</label>
+                    <label htmlFor="contact-phone" className="text-sm font-semibold text-gray-700">
+                      Phone
+                    </label>
                     <input
                       value={form.phone}
+                      id="contact-phone"
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
                       placeholder="+675 7000 0000"
                       className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
@@ -293,9 +300,12 @@ function FormSection() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Email *</label>
+                  <label htmlFor="contact-email" className="text-sm font-semibold text-gray-700">
+                    Email <span aria-hidden="true">*</span>
+                  </label>
                   <input
                     type="email"
+                    id="contact-email"
                     required
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -305,9 +315,15 @@ function FormSection() {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-semibold text-gray-700">Category</label>
+                    <label
+                      htmlFor="contact-category"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      Category
+                    </label>
                     <select
                       value={form.category}
+                      id="contact-category"
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
                       className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
                     >
@@ -320,9 +336,15 @@ function FormSection() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-sm font-semibold text-gray-700">District</label>
+                    <label
+                      htmlFor="contact-district"
+                      className="text-sm font-semibold text-gray-700"
+                    >
+                      District
+                    </label>
                     <select
                       value={form.district}
+                      id="contact-district"
                       onChange={(e) => setForm({ ...form, district: e.target.value })}
                       className="mt-1 w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
                     >
@@ -336,9 +358,12 @@ function FormSection() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Subject *</label>
+                  <label htmlFor="contact-subject" className="text-sm font-semibold text-gray-700">
+                    Subject <span aria-hidden="true">*</span>
+                  </label>
                   <input
                     required
+                    id="contact-subject"
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
                     placeholder="Brief subject"
@@ -346,9 +371,12 @@ function FormSection() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Message *</label>
+                  <label htmlFor="contact-message" className="text-sm font-semibold text-gray-700">
+                    Message <span aria-hidden="true">*</span>
+                  </label>
                   <textarea
                     required
+                    id="contact-message"
                     rows={5}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
@@ -358,6 +386,7 @@ function FormSection() {
                 </div>
                 <button
                   disabled={sending}
+                  aria-busy={sending}
                   type="submit"
                   className="w-full sm:w-auto bg-[#0B2545] hover:bg-[#163663] text-white font-semibold px-8 py-3.5 rounded-lg transition-colors disabled:opacity-60"
                 >
@@ -416,7 +445,9 @@ export default function ContactPage() {
     <div className="min-h-screen" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
       <SiteHeader />
       <PageHero />
-      <ContactCards />
+      <main id="main-content">
+        <ContactCards />
+      </main>
       <FormSection />
       <SiteFooter />
     </div>

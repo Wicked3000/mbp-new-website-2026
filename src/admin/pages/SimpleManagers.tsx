@@ -194,12 +194,16 @@ export function QuickLinksManager() {
         </div>
         <div className="flex gap-2">
           <input
+            id="quick-link-search"
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search..."
+            aria-label="Search quick links"
             className="px-4 py-2.5 rounded-full border border-gray-200 bg-white text-sm w-56"
           />
           <button
+            type="button"
             onClick={() => {
               setEditing(null);
               setForm({
@@ -218,16 +222,30 @@ export function QuickLinksManager() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        aria-busy={loading}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
+            <caption className="sr-only">Quick links</caption>
             <thead>
               <tr className="bg-[#0B2545] text-white text-left">
-                <th className="px-4 py-3">Icon</th>
-                <th className="px-4 py-3">Label</th>
-                <th className="px-4 py-3">Description</th>
-                <th className="px-4 py-3">Href</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th scope="col" className="px-4 py-3">
+                  Icon
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Label
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Description
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Href
+                </th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -248,7 +266,10 @@ export function QuickLinksManager() {
               {filtered.map((r, i) => (
                 <tr key={r.id} className={`border-b ${i % 2 === 0 ? "bg-white" : "bg-[#F8F6F1]"}`}>
                   <td className="px-4 py-3">
-                    <span className="w-8 h-8 rounded-lg bg-[#0B2545] text-white grid place-items-center">
+                    <span
+                      aria-hidden="true"
+                      className="w-8 h-8 rounded-lg bg-[#0B2545] text-white grid place-items-center"
+                    >
                       <QuickIconPreview name={r.icon} />
                     </span>
                   </td>
@@ -261,12 +282,16 @@ export function QuickLinksManager() {
                   <td className="px-4 py-3 text-gray-500 truncate max-w-[160px]">{r.href}</td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button
+                      type="button"
+                      aria-label={`Edit quick link ${r.label}`}
                       onClick={() => setEditing(r)}
                       className="text-xs font-bold bg-amber-100 text-amber-700 px-3 py-1.5 rounded-full mr-1"
                     >
                       Edit
                     </button>
                     <button
+                      type="button"
+                      aria-label={`Delete quick link ${r.label}`}
                       onClick={() => del(r.id)}
                       className="text-xs font-bold bg-red-50 text-red-600 px-3 py-1.5 rounded-full"
                     >
@@ -282,11 +307,14 @@ export function QuickLinksManager() {
 
       <form
         id="ql-form"
+        aria-labelledby="ql-form-heading"
         onSubmit={submit}
         className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-[#0B2545]">{editing ? "Edit" : "Add"} - Quick Link</h2>
+          <h2 id="ql-form-heading" className="font-bold text-[#0B2545]">
+            {editing ? "Edit" : "Add"} - Quick Link
+          </h2>
           {editing && (
             <button
               type="button"
@@ -308,13 +336,18 @@ export function QuickLinksManager() {
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="ql-icon"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Icon - SVG only *
             </label>
             <select
+              id="ql-icon"
               value={form.icon}
               onChange={(e) => setForm({ ...form, icon: e.target.value })}
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] outline-none"
+              aria-describedby="ql-icon-hint"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
             >
               {QUICK_ICONS.map((o) => (
                 <option key={o.value} value={o.value}>
@@ -322,18 +355,25 @@ export function QuickLinksManager() {
                 </option>
               ))}
             </select>
-            <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
-              <span className="w-8 h-8 rounded-lg bg-[#0B2545] text-white grid place-items-center">
+            <div id="ql-icon-hint" className="mt-2 flex items-center gap-2 text-xs text-gray-500">
+              <span
+                aria-hidden="true"
+                className="w-8 h-8 rounded-lg bg-[#0B2545] text-white grid place-items-center"
+              >
                 <QuickIconPreview name={form.icon} />
               </span>
               Preview: {form.icon} - SVG only, no emojis
             </div>
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="ql-label"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Label *
             </label>
             <input
+              id="ql-label"
               value={form.label}
               onChange={(e) => setForm({ ...form, label: e.target.value })}
               required
@@ -342,10 +382,14 @@ export function QuickLinksManager() {
             />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="ql-description"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Description *
             </label>
             <input
+              id="ql-description"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               required
@@ -354,10 +398,14 @@ export function QuickLinksManager() {
             />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="ql-href"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Href *
             </label>
             <input
+              id="ql-href"
               value={form.href}
               onChange={(e) => setForm({ ...form, href: e.target.value })}
               required
@@ -366,10 +414,14 @@ export function QuickLinksManager() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="ql-sort-order"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Sort order
             </label>
             <input
+              id="ql-sort-order"
               type="number"
               value={form.sort_order}
               onChange={(e) => setForm({ ...form, sort_order: Number(e.target.value) })}
@@ -377,9 +429,11 @@ export function QuickLinksManager() {
             />
           </div>
         </div>
-        <button className="bg-[#0D9488] text-white font-bold px-6 py-3 rounded-full text-sm">
-          {" "}
-          {editing ? "Update" : "Create"}{" "}
+        <button
+          type="submit"
+          className="bg-[#0D9488] text-white font-bold px-6 py-3 rounded-full text-sm"
+        >
+          {editing ? "Update" : "Create"}
         </button>
       </form>
     </div>
