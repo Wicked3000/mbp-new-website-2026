@@ -29,7 +29,7 @@ All sections fall back to hardcoded data if MySQL is offline (localStorage mock)
 4. **Configure DB** (`backend/api/config/database.php`): default `root` / `""` password. Update if you set a password.
 5. **Frontend env** (`.env`): `VITE_API_BASE=http://localhost/mbp-api`
 6. **Run site**: `npm run dev` → http://localhost:8443
-7. **Admin**: http://localhost:8443/admin/login → user `admin` / pass `password` → change after login (bcrypt hash in `users` table).
+7. **Admin**: http://localhost:8443/admin/login → the seed data creates an initial `admin` account; set a unique password on first login (bcrypt hash in the `users` table).
 
 ## API
 

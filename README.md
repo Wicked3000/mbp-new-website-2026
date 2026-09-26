@@ -72,12 +72,14 @@ npm run dev:api
 
 Open `http://localhost:8443/admin/login`.
 
-The local fallback login is:
+The seed data creates an initial admin account. Set your own credentials before the
+first login, and set `JWT_SECRET` in `.env` to a random value of at least 32 characters:
 
-- Username: `admin`
-- Password: `password`
+```bash
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
 
-Change the credentials and JWT secret before deploying to a public environment.
+Never deploy with the seeded account or the published development `JWT_SECRET`.
 
 ## Useful Commands
 

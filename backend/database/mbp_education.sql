@@ -224,7 +224,8 @@ SET FOREIGN_KEY_CHECKS=1;
 -- SEED DATA
 INSERT INTO users (username,email,password_hash,role) VALUES
 ('admin','admin@mbpeducation.gov.pg','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'super_admin');
--- password is 'password' (bcrypt). Change after first login.
+-- Initial super_admin account. Set a unique password on first login, or replace
+-- this hash with your own bcrypt hash before importing into any real environment.
 
 INSERT INTO hero_slides (src,alt,sort_order) VALUES
 ('/assets/slider/mbp-img1.png','Milne Bay students and community learning',1),
