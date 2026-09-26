@@ -705,6 +705,10 @@ export function createApp({
   alias(app, "/auth/login.php", "/api/auth/login");
   alias(app, "/api/auth/change-password.php", "/api/auth/change-password");
   alias(app, "/auth/change-password.php", "/api/auth/change-password");
+  alias(app, "/api/auth/me.php", "/api/auth/me");
+  alias(app, "/auth/me.php", "/api/auth/me");
+  alias(app, "/api/health.php", "/api/health");
+  alias(app, "/api/whatsapp/subscribe.php", "/api/whatsapp/subscribe");
 
   app.use((req, res) => res.status(404).json({ error: "Not found" }));
 
