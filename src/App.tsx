@@ -1,5 +1,5 @@
-import { Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
 import whatsappCartoon from "../assets/whatsapp/whatsapp-cartoon-img.png";
 import AboutPage from "./pages/About";
 import BasicEducationPage from "./pages/BasicEducation";
@@ -10,11 +10,14 @@ import ContactPage from "./pages/Contact";
 import SelectionsPage from "./pages/Selections";
 import NewsPage from "./pages/News";
 import NewsDetail from "./pages/NewsDetail";
+import NoticesPage from "./pages/Notices";
 import AccessibilityPage from "./pages/Accessibility";
 import DownloadsPage from "./pages/Downloads";
 import CalendarPage from "./pages/Calendar";
 import { api } from "@/lib/api";
 import { useEntity } from "@/hooks/useDynamic";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 import AdminLayout from "@/admin/AdminLayout";
 import Login from "@/admin/pages/Login";
 import Dashboard from "@/admin/pages/Dashboard";
@@ -36,17 +39,6 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
   if (!api.isAuthed()) return <Navigate to="/admin/login" replace />;
   return <>{children}</>;
 }
-
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Basic Education", href: "/basic" },
-  { label: "Post Primary", href: "/post" },
-  { label: "VET", href: "/vet" },
-  { label: "FODE", href: "/fode" },
-  { label: "Contact", href: "/contact" },
-  { label: "Accessibility", href: "/accessibility" },
-];
 
 const QUICK_LINKS = [
   {
@@ -167,213 +159,6 @@ const NOTICES = [
   { date: "Aug 20", title: "Annual School Sports Carnival registration open" },
 ];
 
-function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const location = useLocation();
-  const searchSuggestions = useMemo(() => {
-    const all = [
-      "Term Dates 2026",
-      "School Directory",
-      "Grade 8 Exam Timetable",
-      "Teacher Relief Grants",
-      "VET Centres Alotau",
-      "FODE Enrolment",
-      "Selection Lists 2026",
-      "Contact Helpdesk",
-    ];
-    if (!query) return [];
-    return all.filter((s) => s.toLowerCase().includes(query.toLowerCase())).slice(0, 5);
-  }, [query]);
-
-  return (
-    <>
-      <div className="bg-[#07192E] text-white text-[13px] py-2 px-4 border-b border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-          <div className="flex gap-5 items-center">
-            <span className="flex items-center gap-1.5 opacity-90">
-              <span className="opacity-60">📞</span> +675 641 1234
-            </span>
-            <span className="hidden sm:flex items-center gap-1.5 opacity-90">
-              <span className="opacity-60">✉️</span> info@mbpeducation.gov.pg
-            </span>
-          </div>
-          <div className="flex gap-4 items-center opacity-80 text-xs">
-            <span className="hidden md:inline">Mon – Fri: 8:00am – 4:30pm</span>
-            <span className="hidden sm:block opacity-30">|</span>
-            <a href="#" className="hover:text-[#C9A84C] transition-colors font-medium">
-              NDoE Portal
-            </a>
-            <a href="#" className="hover:text-[#C9A84C] transition-colors font-medium">
-              TSC Online
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <header className="bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 border-b border-gray-100 sticky top-0 z-50 shadow-[0_2px_20px_rgba(11,37,69,0.06)]">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3 group">
-            <img
-              src="/assets/logo/mbp-logo-bg-removed.png"
-              alt="Milne Bay Province Division of Education"
-              className="w-12 h-12 shrink-0 object-contain group-hover:scale-105 transition-transform duration-300"
-            />
-            <div className="leading-tight">
-              <div
-                className="text-[#0B2545] font-bold text-[16px] tracking-tight"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                Milne Bay Province
-              </div>
-              <div className="text-[#0D9488] text-[11px] font-bold uppercase tracking-[0.14em]">
-                Division of Education
-              </div>
-            </div>
-          </Link>
-
-          <nav className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((link) => {
-              const active =
-                location.pathname === link.href ||
-                (link.href !== "/" && location.pathname.startsWith(link.href));
-              return (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className={`px-3.5 py-2 text-[13.5px] font-semibold rounded-full transition-all ${
-                    active
-                      ? "text-white bg-[#0B2545] shadow-sm"
-                      : "text-gray-600 hover:text-[#0B2545] hover:bg-gray-50"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              aria-label="Search"
-              aria-expanded={searchOpen}
-              className={`hidden sm:inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-full border transition-colors shadow-sm ${
-                searchOpen
-                  ? "bg-[#0B2545] text-white border-[#0B2545]"
-                  : "bg-white text-[#0B2545] border-gray-200 hover:bg-gray-50 hover:border-gray-300"
-              }`}
-            >
-              <span className="text-[14px]">⌕</span> Search
-            </button>
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              aria-label="Search"
-              className="sm:hidden w-10 h-10 rounded-full bg-white border border-gray-200 text-[#0B2545] grid place-items-center hover:bg-gray-50 transition-colors"
-            >
-              ⌕
-            </button>
-            <Link
-              to="/contact"
-              className="hidden sm:inline-flex items-center gap-2 bg-[#0D9488] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#0b7a6e] transition-colors shadow-sm"
-            >
-              Get Help
-            </Link>
-            <button
-              className="lg:hidden p-2.5 rounded-xl text-gray-600 hover:text-[#0B2545] hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-colors"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-              aria-expanded={menuOpen}
-            >
-              <span className="text-lg leading-none">{menuOpen ? "✕" : "☰"}</span>
-            </button>
-          </div>
-        </div>
-        {searchOpen && (
-          <div className="border-t border-gray-100 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
-            <div className="max-w-3xl mx-auto px-4 py-4">
-              <div className="flex rounded-2xl overflow-hidden bg-gray-50 border border-gray-200 p-1.5 gap-1.5 focus-within:bg-white focus-within:border-[#0D9488] focus-within:ring-2 focus-within:ring-[#0D9488]/20 transition-all">
-                <div className="flex-1 relative flex items-center">
-                  <span className="absolute left-3.5 text-gray-400">⌕</span>
-                  <input
-                    type="text"
-                    placeholder="Search term dates, schools, forms…"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    autoFocus
-                    className="w-full pl-9 pr-4 py-2.5 text-sm text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
-                  />
-                </div>
-                <Link
-                  to={query ? "/selections" : "#news"}
-                  onClick={() => setSearchOpen(false)}
-                  className="bg-[#0B2545] hover:bg-[#0D9488] text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-colors shrink-0 shadow-sm inline-flex items-center justify-center"
-                >
-                  Search
-                </Link>
-                <button
-                  onClick={() => setSearchOpen(false)}
-                  aria-label="Close search"
-                  className="w-10 h-10 rounded-xl bg-white border border-gray-200 text-gray-500 hover:text-[#0B2545] grid place-items-center shrink-0"
-                >
-                  ✕
-                </button>
-              </div>
-              {searchSuggestions.length > 0 && (
-                <div className="mt-3 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
-                  {searchSuggestions.map((s) => (
-                    <Link
-                      key={s}
-                      to="/selections"
-                      onClick={() => {
-                        setQuery("");
-                        setSearchOpen(false);
-                      }}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 text-sm text-gray-700 border-b last:border-0 border-gray-50"
-                    >
-                      <span className="text-gray-400">⌕</span> {s}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-        {menuOpen && (
-          <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3 animate-in">
-            <div className="grid gap-1">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className={`block py-2.5 px-3 text-sm font-medium rounded-lg border ${
-                    location.pathname === link.href
-                      ? "bg-[#0B2545] text-white border-[#0B2545]"
-                      : "text-gray-700 border-transparent hover:bg-gray-50 hover:text-[#0D9488]"
-                  }`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <button
-                onClick={() => {
-                  setMenuOpen(false);
-                  setSearchOpen(true);
-                }}
-                className="mt-2 w-full text-center bg-white border border-gray-200 text-[#0B2545] font-semibold py-2.5 rounded-full hover:bg-gray-50 flex items-center justify-center gap-2"
-              >
-                <span>⌕</span> Search
-              </button>
-            </div>
-          </div>
-        )}
-      </header>
-    </>
-  );
-}
-
 const HERO_FALLBACK = [
   {
     src: "/assets/slider/mbp-img1.png",
@@ -491,8 +276,8 @@ function HeroSection() {
             </span>
           </h1>
           <p className="text-blue-100/90 text-[17px] leading-relaxed mt-4 max-w-xl font-light">
-            The Division of Education oversees and supports all levels of schooling from
-            elementary through post-secondary across{" "}
+            The Division of Education oversees and supports all levels of schooling from elementary
+            through post-secondary across{" "}
             <span className="text-white font-semibold">17 districts & 312 schools.</span>
           </p>
 
@@ -808,7 +593,7 @@ function NewsSection() {
               {normNotices.map((n: any, i: number) => (
                 <Link
                   key={n.title + i}
-                  to="/selections"
+                  to="/notices"
                   className={`flex gap-4 px-5 py-4 hover:bg-[#F8F6F1] transition-colors group ${
                     i < normNotices.length - 1 ? "border-b border-gray-100" : ""
                   }`}
@@ -825,7 +610,7 @@ function NewsSection() {
               ))}
               <div className="px-5 py-3.5 bg-[#F8F6F1] border-t border-gray-100 flex items-center justify-between">
                 <Link
-                  to="/selections"
+                  to="/notices"
                   className="text-sm font-bold text-[#0D9488] hover:text-[#0B2545] transition-colors"
                 >
                   View All Notices →
@@ -1097,152 +882,6 @@ function AboutMissionSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="bg-[#07192E] text-white pt-14 pb-6 px-4" id="contact">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <img
-                src="/assets/logo/mbp-logo-bg-removed.png"
-                alt="Milne Bay Province Division of Education"
-                className="w-10 h-10 shrink-0 object-contain bg-white rounded-full p-1"
-              />
-              <div>
-                <div
-                  className="font-bold text-sm tracking-tight"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
-                >
-                  Milne Bay Province
-                </div>
-                <div className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
-                  Division of Education
-                </div>
-              </div>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Committed to quality education for all children and young people across Milne Bay
-              Province, Papua New Guinea.
-            </p>
-            <div className="mt-4 flex gap-2">
-              <span className="w-8 h-8 rounded-full bg-white/5 border border-white/10 grid place-items-center text-xs hover:bg-white hover:text-[#07192E] transition-colors cursor-pointer">
-                f
-              </span>
-              <span className="w-8 h-8 rounded-full bg-white/5 border border-white/10 grid place-items-center text-xs hover:bg-white hover:text-[#07192E] transition-colors cursor-pointer">
-                𝕏
-              </span>
-              <span className="w-8 h-8 rounded-full bg-white/5 border border-white/10 grid place-items-center text-xs hover:bg-white hover:text-[#07192E] transition-colors cursor-pointer">
-                ▶
-              </span>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
-              Quick Links
-            </h4>
-            <ul className="space-y-2.5">
-              {NAV_LINKS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-400 text-sm hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link
-                  to="/selections"
-                  className="text-[#C9A84C] text-sm font-semibold hover:text-white transition-colors"
-                >
-                  Selections 2026 →
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
-              Related Agencies
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                "National Dept. of Education",
-                "Teaching Service Commission",
-                "National Library of PNG",
-                "Flexible Open Distance Ed.",
-                "TVET Authority",
-              ].map((l) => (
-                <li key={l}>
-                  <a href="#" className="text-gray-400 text-sm hover:text-white transition-colors">
-                    {l}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
-              Contact Us
-            </h4>
-            <div className="space-y-3 text-sm text-gray-400">
-              <div>
-                <div className="text-white font-semibold mb-0.5 text-xs uppercase tracking-widest">
-                  Office Address
-                </div>
-                Division of Education, Alotau, Milne Bay Province, PNG
-              </div>
-              <div>
-                <div className="text-white font-semibold mb-0.5 text-xs uppercase tracking-widest">
-                  Phone
-                </div>
-                <a href="tel:+6756411234" className="hover:text-white">
-                  +675 641 1234
-                </a>
-              </div>
-              <div>
-                <div className="text-white font-semibold mb-0.5 text-xs uppercase tracking-widest">
-                  Email
-                </div>
-                <a href="mailto:info@mbpeducation.gov.pg" className="hover:text-white">
-                  info@mbpeducation.gov.pg
-                </a>
-              </div>
-              <div>
-                <div className="text-white font-semibold mb-0.5 text-xs uppercase tracking-widest">
-                  Office Hours
-                </div>
-                Mon – Fri: 8:00am – 4:30pm
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-sm">
-          <span className="text-gray-500 text-xs">
-            © 2026 Milne Bay Province Division of Education. All rights reserved.
-          </span>
-          <div className="flex gap-5 text-xs">
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-gray-500 hover:text-white transition-colors">
-              Terms of Use
-            </a>
-            <Link to="/accessibility" className="text-gray-500 hover:text-white transition-colors">
-              Accessibility
-            </Link>
-          </div>
-        </div>
-      </div>
-    </footer>
   );
 }
 
@@ -1764,7 +1403,7 @@ function HomePage() {
       className="min-h-screen bg-[#F8F6F1]"
       style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}
     >
-      <Header />
+      <SiteHeader />
       <HeroSection />
       <QuickLinksStrip />
       <StatsSection />
@@ -1777,7 +1416,7 @@ function HomePage() {
       <DistrictsSection />
       <PartnersSection />
       <HelpCTASection />
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
@@ -1788,7 +1427,7 @@ function NotFoundPage() {
       className="min-h-screen bg-[#F8F6F1]"
       style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}
     >
-      <Header />
+      <SiteHeader />
       <main className="max-w-3xl mx-auto px-4 py-24 text-center">
         <div
           className="text-7xl font-bold text-[#C9A84C]"
@@ -1812,7 +1451,7 @@ function NotFoundPage() {
           Return Home
         </Link>
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
@@ -1833,6 +1472,7 @@ export default function App() {
       <Route path="/selections" element={<SelectionsPage />} />
       <Route path="/news" element={<NewsPage />} />
       <Route path="/news/:id" element={<NewsDetail />} />
+      <Route path="/notices" element={<NoticesPage />} />
 
       <Route path="/admin/login" element={<Login />} />
       <Route

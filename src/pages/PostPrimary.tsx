@@ -1,123 +1,8 @@
-import { Link, useLocation } from "react-router-dom";
-import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
+import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
-
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Basic Education", href: "/basic" },
-  { label: "Post Primary", href: "/post" },
-  { label: "VET", href: "/vet" },
-  { label: "FODE", href: "/fode" },
-  { label: "Contact", href: "/contact" },
-];
-
-function Header({
-  menuOpen,
-  setMenuOpen,
-}: {
-  menuOpen: boolean;
-  setMenuOpen: Dispatch<SetStateAction<boolean>>;
-}) {
-  const location = useLocation();
-
-  return (
-    <>
-      <div className="bg-[#0B2545] text-white text-sm py-2 px-4">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-          <div className="flex gap-6 items-center">
-            <span className="flex items-center gap-1.5 opacity-80">
-              <span>📞</span> +675 641 1234
-            </span>
-            <span className="flex items-center gap-1.5 opacity-80">
-              <span>✉️</span> info@mbpeducation.gov.pg
-            </span>
-          </div>
-          <div className="flex gap-4 items-center opacity-80">
-            <span>Mon – Fri: 8:00am – 4:30pm</span>
-            <span className="hidden sm:block">|</span>
-            <Link to="/about" className="hover:text-[#C9A84C] transition-colors">
-              NDoE Portal
-            </Link>
-            <Link to="/contact" className="hover:text-[#C9A84C] transition-colors">
-              TSC Online
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <img
-              src="/assets/logo/mbp-logo-bg-removed.png"
-              alt="Milne Bay Province Division of Education"
-              className="w-12 h-12 shrink-0 object-contain"
-            />
-            <div className="leading-tight">
-              <div
-                className="text-[#0B2545] font-bold text-base"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                Milne Bay Province
-              </div>
-              <div className="text-[#0D9488] text-xs font-semibold uppercase tracking-widest">
-                Division of Education
-              </div>
-            </div>
-          </div>
-
-          <nav className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className={`px-3 py-2 text-sm font-medium rounded transition-colors ${
-                  location.pathname === link.href
-                    ? "text-[#0D9488] bg-gray-50"
-                    : "text-gray-700 hover:text-[#0D9488] hover:bg-gray-50"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link
-              to="/#contact"
-              className="hidden sm:inline-flex items-center gap-2 bg-[#0D9488] text-white text-sm font-semibold px-4 py-2 rounded hover:bg-[#0B9080] transition-colors"
-            >
-              Get Help
-            </Link>
-            <button
-              className="lg:hidden p-2 text-gray-600 hover:text-[#0B2545]"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Menu"
-            >
-              {menuOpen ? "✕" : "☰"}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {menuOpen && (
-        <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.label}
-              to={link.href}
-              className="block py-2 text-sm font-medium text-gray-700 border-b border-gray-50 hover:text-[#0D9488]"
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </>
-  );
-}
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 function PageHero() {
   return (
@@ -1286,8 +1171,12 @@ function SelectionListsSection() {
       .then((rows) => {
         if (!active || !rows.length) return;
         setStudents((current) => {
-          const managedGrade9 = rows.filter((row: SelectionStudent) => Number(row.grade_level) === 9);
-          const managedGrade11 = rows.filter((row: SelectionStudent) => Number(row.grade_level) === 11);
+          const managedGrade9 = rows.filter(
+            (row: SelectionStudent) => Number(row.grade_level) === 9,
+          );
+          const managedGrade11 = rows.filter(
+            (row: SelectionStudent) => Number(row.grade_level) === 11,
+          );
           return [
             ...(managedGrade9.length
               ? managedGrade9
@@ -1391,12 +1280,18 @@ function SelectionListsSection() {
                               key={i}
                               className={`border-b ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
                             >
-                              <td className="px-3 py-2 text-center text-gray-700">{student.position_no || "-"}</td>
-                              <td className="px-3 py-2 text-gray-700">{student.primary_school || "-"}</td>
+                              <td className="px-3 py-2 text-center text-gray-700">
+                                {student.position_no || "-"}
+                              </td>
+                              <td className="px-3 py-2 text-gray-700">
+                                {student.primary_school || "-"}
+                              </td>
                               <td className="px-3 py-2 font-medium text-[#0B2545]">
                                 {student.surname}
                               </td>
-                              <td className="px-3 py-2 text-gray-700">{student.first_name || "-"}</td>
+                              <td className="px-3 py-2 text-gray-700">
+                                {student.first_name || "-"}
+                              </td>
                               <td className="px-3 py-2 text-center">
                                 <span
                                   className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -1485,7 +1380,9 @@ function SelectionListsSection() {
                                   {student.gender}
                                 </span>
                               </td>
-                              <td className="px-3 py-2 font-mono text-gray-700">{student.slf_no || "-"}</td>
+                              <td className="px-3 py-2 font-mono text-gray-700">
+                                {student.slf_no || "-"}
+                              </td>
                               <td className="px-3 py-2 text-gray-600">
                                 {student.transferred_from || "-"}
                               </td>
@@ -1773,7 +1670,7 @@ function SupportSection() {
                   desc: "Syllabuses, exam specs, past papers, marking guides distributed annually",
                 },
                 {
-                  icon: "� - ️",
+                  icon: "🏗️",
                   title: "Infrastructure & Maintenance",
                   desc: "TFF infrastructure component, SLIP grants, boarding facility funding",
                 },
@@ -2040,120 +1937,10 @@ function FAQSection() {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="bg-[#07192E] text-white pt-14 pb-6 px-4" id="contact">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <img
-                src="/assets/logo/mbp-logo-bg-removed.png"
-                alt="Milne Bay Province Division of Education"
-                className="w-10 h-10 shrink-0 object-contain bg-white rounded-full p-1"
-              />
-              <div>
-                <div
-                  className="font-bold text-sm"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
-                >
-                  Milne Bay Province
-                </div>
-                <div className="text-[#0D9488] text-xs">Division of Education</div>
-              </div>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Committed to quality education for all children and young people across Milne Bay
-              Province, Papua New Guinea.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
-              Quick Links
-            </h4>
-            <ul className="space-y-2">
-              {NAV_LINKS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-400 text-sm hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
-              Related Agencies
-            </h4>
-            <ul className="space-y-2">
-              {[
-                { label: "National Dept. of Education", href: "/about" },
-                { label: "Teaching Service Commission", href: "/contact" },
-                { label: "National Library of PNG", href: "/news" },
-                { label: "Flexible Open Distance Ed.", href: "/fode" },
-                { label: "TVET Authority", href: "/vet" },
-              ].map((link) => (
-                <li key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-400 text-sm hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
-              Contact Us
-            </h4>
-            <div className="space-y-3 text-sm text-gray-400">
-              <div>
-                <div className="text-white font-medium mb-0.5">Office Address</div>
-                Division of Education, Alotau, Milne Bay Province, PNG
-              </div>
-              <div>
-                <div className="text-white font-medium mb-0.5">Phone</div>+675 641 1234
-              </div>
-              <div>
-                <div className="text-white font-medium mb-0.5">Email</div>
-                info@mbpeducation.gov.pg
-              </div>
-              <div>
-                <div className="text-white font-medium mb-0.5">Office Hours</div>
-                Mon – Fri: 8:00am – 4:30pm
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="border-t border-white/10 pt-6 flex flex-wrap justify-between items-center gap-3 text-sm text-gray-500">
-          <span>© 2026 Milne Bay Province Division of Education. All rights reserved.</span>
-          <div className="flex gap-4">
-            <Link to="/contact" className="hover:text-white transition-colors">
-              Privacy Policy
-            </Link>
-            <Link to="/contact" className="hover:text-white transition-colors">
-              Terms of Use
-            </Link>
-            <Link to="/accessibility" className="hover:text-white transition-colors">
-              Accessibility
-            </Link>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 export default function PostPrimaryPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
-      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <SiteHeader />
       <PageHero />
       <OverviewSection />
       <CurriculumSection />
@@ -2164,7 +1951,7 @@ export default function PostPrimaryPage() {
       <SupportSection />
       <DownloadsSection />
       <FAQSection />
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }

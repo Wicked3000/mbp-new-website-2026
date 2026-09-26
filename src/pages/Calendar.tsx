@@ -1,6 +1,8 @@
-import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+
 import { useEntity } from "@/hooks/useDynamic";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 type EventRow = {
   id?: number | string;
@@ -69,115 +71,7 @@ function monthNumber(value: string) {
   return MONTHS.findIndex((month) => month.toLowerCase().startsWith(normalized.slice(0, 3)));
 }
 
-function Header({
-  menuOpen,
-  setMenuOpen,
-}: {
-  menuOpen: boolean;
-  setMenuOpen: Dispatch<SetStateAction<boolean>>;
-}) {
-  const links = [
-    { label: "Home", href: "/" },
-    { label: "About Us", href: "/about" },
-    { label: "Calendar", href: "/calendar" },
-    { label: "Contact", href: "/contact" },
-  ];
-
-  return (
-    <>
-      <div className="bg-[#07192E] text-white text-sm py-2 px-4">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-between gap-2">
-          <span>+675 641 1234</span>
-          <span>Mon – Fri: 8:00am – 4:30pm</span>
-        </div>
-      </div>
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/assets/logo/mbp-logo-bg-removed.png"
-              alt="Milne Bay Province Division of Education"
-              className="w-12 h-12 object-contain"
-            />
-            <div>
-              <div
-                className="font-bold text-[#0B2545]"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                Milne Bay Province
-              </div>
-              <div className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
-                Division of Education
-              </div>
-            </div>
-          </Link>
-          <nav className="hidden lg:flex items-center gap-1">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`px-3 py-2 text-sm font-semibold rounded-full ${
-                  link.href === "/calendar"
-                    ? "bg-[#0B2545] text-white"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-[#0B2545]"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((value) => !value)}
-            className="lg:hidden p-2.5 rounded-xl border border-gray-200 text-gray-600"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-          >
-            {menuOpen ? "Close" : "Menu"}
-          </button>
-        </div>
-        {menuOpen && (
-          <nav className="lg:hidden border-t border-gray-100 bg-white px-4 py-3">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                onClick={() => setMenuOpen(false)}
-                className="block py-2.5 text-sm font-semibold text-gray-700"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        )}
-      </header>
-    </>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="bg-[#07192E] text-gray-400 px-4 py-8 text-sm">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between gap-3">
-        <span>© 2026 Milne Bay Province Division of Education</span>
-        <div className="flex gap-5">
-          <Link to="/" className="hover:text-white">
-            Home
-          </Link>
-          <Link to="/contact" className="hover:text-white">
-            Contact
-          </Link>
-          <Link to="/accessibility" className="hover:text-white">
-            Accessibility
-          </Link>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 export default function CalendarPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const currentYear = new Date().getFullYear();
   const [viewMonth, setViewMonth] = useState(new Date().getMonth());
   const [query, setQuery] = useState("");
@@ -224,7 +118,7 @@ export default function CalendarPage() {
       className="min-h-screen bg-[#F8F6F1]"
       style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}
     >
-      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <SiteHeader />
       <section className="bg-[#0B2545] px-4 py-14 sm:py-20">
         <div className="max-w-7xl mx-auto">
           <span className="text-[#C9A84C] text-xs font-bold uppercase tracking-widest">
@@ -400,7 +294,7 @@ export default function CalendarPage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }

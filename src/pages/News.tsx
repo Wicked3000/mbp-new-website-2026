@@ -1,16 +1,8 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { useEntity } from "@/hooks/useDynamic";
-
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Basic Education", href: "/basic" },
-  { label: "Post Primary", href: "/post" },
-  { label: "VET", href: "/vet" },
-  { label: "FODE", href: "/fode" },
-  { label: "Contact", href: "/contact" },
-];
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 const FALLBACK_NEWS = [
   {
@@ -99,123 +91,7 @@ const EXTERNAL_NEWS = [
   },
 ];
 
-function Header({
-  menuOpen,
-  setMenuOpen,
-}: {
-  menuOpen: boolean;
-  setMenuOpen: (v: boolean) => void;
-}) {
-  const location = useLocation();
-  return (
-    <>
-      <div className="bg-[#0B2545] text-white text-sm py-2 px-4">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-          <div className="flex gap-6 items-center">
-            <span className="flex items-center gap-1.5 opacity-80">
-              <span>📞</span> +675 641 1234
-            </span>
-            <span className="flex items-center gap-1.5 opacity-80">
-              <span>✉️</span> info@mbpeducation.gov.pg
-            </span>
-          </div>
-          <div className="flex gap-4 items-center opacity-80">
-            <span>Mon – Fri: 8:00am – 4:30pm</span>
-            <span className="hidden sm:block">|</span>
-            <a href="#" className="hover:text-[#C9A84C]">
-              NDoE Portal
-            </a>
-            <a href="#" className="hover:text-[#C9A84C]">
-              TSC Online
-            </a>
-          </div>
-        </div>
-      </div>
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/assets/logo/mbp-logo-bg-removed.png"
-              alt="MBP"
-              className="w-12 h-12 object-contain"
-            />
-            <div className="leading-tight">
-              <div
-                className="text-[#0B2545] font-bold text-base"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                Milne Bay Province
-              </div>
-              <div className="text-[#0D9488] text-xs font-semibold uppercase tracking-widest">
-                Division of Education
-              </div>
-            </div>
-          </Link>
-          <nav className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.label}
-                to={l.href}
-                className={`px-3 py-2 text-sm font-medium rounded ${
-                  location.pathname === l.href
-                    ? "text-[#0D9488] bg-gray-50"
-                    : "text-gray-700 hover:text-[#0D9488]"
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
-            <Link
-              to="/news"
-              className={`px-3 py-2 text-sm font-bold rounded ${
-                location.pathname.startsWith("/news")
-                  ? "text-white bg-[#0B2545]"
-                  : "text-[#0D9488] bg-teal-50"
-              }`}
-            >
-              News
-            </Link>
-          </nav>
-          <div className="flex items-center gap-3">
-            <Link
-              to="/contact"
-              className="hidden sm:inline-flex bg-[#0D9488] text-white text-sm font-semibold px-4 py-2 rounded hover:bg-[#0b7a6e]"
-            >
-              Get Help
-            </Link>
-            <button className="lg:hidden p-2 text-gray-600" onClick={() => setMenuOpen(!menuOpen)}>
-              {menuOpen ? "✕" : "☰"}
-            </button>
-          </div>
-        </div>
-        {menuOpen && (
-          <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.label}
-                to={l.href}
-                onClick={() => setMenuOpen(false)}
-                className="block py-2 text-sm font-medium text-gray-700 border-b border-gray-50"
-              >
-                {l.label}
-              </Link>
-            ))}
-            <Link
-              to="/news"
-              onClick={() => setMenuOpen(false)}
-              className="block py-2 text-sm font-bold text-[#0D9488]"
-            >
-              News →
-            </Link>
-          </div>
-        )}
-      </header>
-    </>
-  );
-}
-
 export default function NewsPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [tab, setTab] = useState<"latest" | "previous" | "external">("latest");
   const [q, setQ] = useState("");
   const { data } = useEntity("news", FALLBACK_NEWS as any);
@@ -243,7 +119,7 @@ export default function NewsPage() {
       className="min-h-screen bg-[#F8F6F1]"
       style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}
     >
-      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <SiteHeader />
 
       <section className="relative h-[320px] sm:h-[380px] overflow-hidden bg-[#0B2545]">
         <img
@@ -453,12 +329,7 @@ export default function NewsPage() {
         )}
       </section>
 
-      <footer className="bg-[#07192E] text-white py-8 px-4 text-center text-sm text-gray-400">
-        © 2026 Milne Bay Province Division of Education •{" "}
-        <Link to="/" className="text-[#C9A84C] hover:text-white">
-          Back to Home
-        </Link>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

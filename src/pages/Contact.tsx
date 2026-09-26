@@ -1,132 +1,47 @@
-import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import contactBanner from "../../assets/contact/contact-banner-img.jpg";
-
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Basic Education", href: "/basic" },
-  { label: "Post Primary", href: "/post" },
-  { label: "VET", href: "/vet" },
-  { label: "FODE", href: "/fode" },
-  { label: "Contact", href: "/contact" },
-];
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 function ContactIcon({ name, className = "w-5 h-5" }: { name: string; className?: string }) {
   const paths = {
-    pin: <><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></>,
-    phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4 8.81 2 2 0 0 1 6 6.63h3a2 2 0 0 1 2 1.72c.15 1.13.48 2.22.97 3.23a2 2 0 0 1-.57 2.11l-1.4 1.4a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.11-.57c1.01.49 2.1.82 3.23.97a2 2 0 0 1 1.72 2Z" />,
-    email: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
-    clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+    pin: (
+      <>
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+      </>
+    ),
+    phone: (
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4 8.81 2 2 0 0 1 6 6.63h3a2 2 0 0 1 2 1.72c.15 1.13.48 2.22.97 3.23a2 2 0 0 1-.57 2.11l-1.4 1.4a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.11-.57c1.01.49 2.1.82 3.23.97a2 2 0 0 1 1.72 2Z" />
+    ),
+    email: (
+      <>
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
+      </>
+    ),
+    clock: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </>
+    ),
     check: <path d="m5 12 4 4L19 6" />,
   };
 
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
       {paths[name as keyof typeof paths] || paths.pin}
     </svg>
-  );
-}
-
-function Header({
-  menuOpen,
-  setMenuOpen,
-}: {
-  menuOpen: boolean;
-  setMenuOpen: (v: boolean) => void;
-}) {
-  const location = useLocation();
-  return (
-    <>
-      <div className="bg-[#0B2545] text-white text-sm py-2 px-4">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-          <div className="flex gap-6 items-center">
-            <span className="flex items-center gap-1.5 opacity-80">
-              <ContactIcon name="phone" className="w-4 h-4" /> +675 641 1234
-            </span>
-            <span className="flex items-center gap-1.5 opacity-80">
-              <ContactIcon name="email" className="w-4 h-4" /> info@mbpeducation.gov.pg
-            </span>
-          </div>
-          <div className="flex gap-4 items-center opacity-80">
-            <span>Mon – Fri: 8:00am – 4:30pm</span>
-            <span className="hidden sm:block">|</span>
-            <a href="#" className="hover:text-[#C9A84C] transition-colors">
-              NDoE Portal
-            </a>
-            <a href="#" className="hover:text-[#C9A84C] transition-colors">
-              TSC Online
-            </a>
-          </div>
-        </div>
-      </div>
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/assets/logo/mbp-logo-bg-removed.png"
-              alt="Milne Bay Province Division of Education"
-              className="w-12 h-12 shrink-0 object-contain"
-            />
-            <div className="leading-tight">
-              <div
-                className="text-[#0B2545] font-bold text-base"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                Milne Bay Province
-              </div>
-              <div className="text-[#0D9488] text-xs font-semibold uppercase tracking-widest">
-                Division of Education
-              </div>
-            </div>
-          </Link>
-          <nav className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className={`px-3 py-2 text-sm font-medium rounded transition-colors ${
-                  location.pathname === link.href
-                    ? "text-[#0D9488] bg-gray-50"
-                    : "text-gray-700 hover:text-[#0D9488] hover:bg-gray-50"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="flex items-center gap-3">
-            <Link
-              to="/#contact"
-              className="hidden sm:inline-flex items-center gap-2 bg-[#0D9488] text-white text-sm font-semibold px-4 py-2 rounded hover:bg-[#0e7a6e] transition-colors"
-            >
-              Get Help
-            </Link>
-            <button
-              className="lg:hidden p-2 text-gray-600 hover:text-[#0B2545]"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Menu"
-            >
-              {menuOpen ? "✕" : "☰"}
-            </button>
-          </div>
-        </div>
-      </header>
-      {menuOpen && (
-        <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.label}
-              to={link.href}
-              className="block py-2 text-sm font-medium text-gray-700 border-b border-gray-50 hover:text-[#0D9488]"
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </>
   );
 }
 
@@ -142,8 +57,17 @@ function PageHero() {
       <div className="absolute -left-44 -bottom-52 w-[34rem] h-[34rem] rounded-full bg-cyan-400/15 blur-3xl" />
       <div className="absolute right-[38%] -top-44 w-[28rem] h-[28rem] rounded-full bg-sky-300/10 blur-3xl" />
       <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#07192E]/65 to-transparent" />
-      <svg className="contact-banner-wave absolute inset-x-0 -bottom-10 h-52 w-full opacity-70" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 72C180 30 330 108 520 62s330-30 680 26v32H0Z" fill="#0D9488" fillOpacity=".42" />
+      <svg
+        className="contact-banner-wave absolute inset-x-0 -bottom-10 h-52 w-full opacity-70"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M0 72C180 30 330 108 520 62s330-30 680 26v32H0Z"
+          fill="#0D9488"
+          fillOpacity=".42"
+        />
         <path d="M0 94c190-42 350 30 540-12s340-24 660 14v24H0Z" fill="#07192E" fillOpacity=".82" />
       </svg>
       <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
@@ -487,121 +411,14 @@ function FormSection() {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="bg-[#07192E] text-white pt-14 pb-6 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <img
-                src="/assets/logo/mbp-logo-bg-removed.png"
-                alt="MBP Logo"
-                className="w-10 h-10 object-contain"
-              />
-              <div>
-                <div
-                  className="font-bold text-sm"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
-                >
-                  Milne Bay Province
-                </div>
-                <div className="text-[#0D9488] text-xs">Division of Education</div>
-              </div>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Committed to quality education for all children and young people across Milne Bay
-              Province, Papua New Guinea.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
-              Quick Links
-            </h4>
-            <ul className="space-y-2">
-              {NAV_LINKS.map((l) => (
-                <li key={l.label}>
-                  <Link
-                    to={l.href}
-                    className="text-gray-400 text-sm hover:text-white transition-colors"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
-              Related Agencies
-            </h4>
-            <ul className="space-y-2">
-              {[
-                "National Dept. of Education",
-                "Teaching Service Commission",
-                "National Library of PNG",
-                "Flexible Open Distance Ed.",
-                "TVET Authority",
-              ].map((l) => (
-                <li key={l}>
-                  <a href="#" className="text-gray-400 text-sm hover:text-white transition-colors">
-                    {l}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-sm uppercase tracking-wider text-[#C9A84C] mb-4">
-              Contact Us
-            </h4>
-            <div className="space-y-3 text-sm text-gray-400">
-              <div>
-                <div className="text-white font-medium mb-0.5">Office Address</div>
-                Division of Education, Alotau, Milne Bay Province, PNG
-              </div>
-              <div>
-                <div className="text-white font-medium mb-0.5">Phone</div>+675 641 1234
-              </div>
-              <div>
-                <div className="text-white font-medium mb-0.5">Email</div>
-                info@mbpeducation.gov.pg
-              </div>
-              <div>
-                <div className="text-white font-medium mb-0.5">Office Hours</div>
-                Mon – Fri: 8:00am – 4:30pm
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="border-t border-white/10 pt-6 flex flex-wrap justify-between items-center gap-3 text-sm text-gray-500">
-          <span>© 2026 Milne Bay Province Division of Education. All rights reserved.</span>
-          <div className="flex gap-4">
-            <a href="#" className="hover:text-white transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Terms of Use
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Accessibility
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 export default function ContactPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
-      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <SiteHeader />
       <PageHero />
       <ContactCards />
       <FormSection />
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 const FALLBACK = [
   {
@@ -33,39 +35,6 @@ const FALLBACK = [
     img: "https://images.unsplash.com/photo-1632932693914-89b90ae3d16d?w=600&h=380&fit=crop&auto=format",
   },
 ];
-
-function Header() {
-  return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3">
-          <img
-            src="/assets/logo/mbp-logo-bg-removed.png"
-            alt="MBP"
-            className="w-10 h-10 object-contain"
-          />
-          <div className="leading-tight">
-            <div
-              className="text-[#0B2545] font-bold"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
-              Milne Bay Province
-            </div>
-            <div className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
-              Division of Education
-            </div>
-          </div>
-        </Link>
-        <Link
-          to="/news"
-          className="text-sm font-bold bg-[#0B2545] text-white px-5 py-2 rounded-full"
-        >
-          ← All News
-        </Link>
-      </div>
-    </header>
-  );
-}
 
 export default function NewsDetail() {
   const { id } = useParams();
@@ -109,7 +78,7 @@ export default function NewsDetail() {
       className="min-h-screen bg-[#F8F6F1]"
       style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}
     >
-      <Header />
+      <SiteHeader />
       <div className="relative h-[360px] sm:h-[420px] overflow-hidden bg-[#0B2545]">
         <img
           src={item.img}
@@ -228,6 +197,8 @@ export default function NewsDetail() {
           </div>
         )}
       </div>
+
+      <SiteFooter />
     </div>
   );
 }
