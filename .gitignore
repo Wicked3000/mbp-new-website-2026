@@ -3,6 +3,9 @@ dist/
 build/
 .cache/
 .env*
+# ...but keep the committed template: it is the only place the required
+# JWT_SECRET / CORS_ORIGINS settings are documented.
+!.env.example
 .vite/
 vite.config.*.timestamp-*
 *.tsbuildinfo

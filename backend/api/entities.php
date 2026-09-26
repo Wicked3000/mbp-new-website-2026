@@ -24,7 +24,7 @@ $MAP=[
   'selections_grade9'=>['table'=>'selections_grade9','cols'=>['school','district','type','capacity','placed','stream','cutoff']],
   'selections_grade11'=>['table'=>'selections_grade11','cols'=>['school','district','type','streams_json','placed_json','cutoff_json']],
   'contact_messages'=>['table'=>'contact_messages','cols'=>['full_name','phone','email','category','district','subject','message','status']],
-  'users'=>['table'=>'users','cols'=>['username','email','role'],'readOnly'=>true],
+  'users'=>['table'=>'users','cols'=>['username','email','role'],'selectCols'=>['id','username','email','role'],'readOnly'=>true],
 ];
 
 $entity=$_GET['entity']??'';
@@ -55,13 +55,18 @@ if($method==='GET'){
     respond(['data'=>$map]);
   }
   $id=$_GET['id']??null;
+  // Never SELECT * on entities with a selectCols allowlist: users also stores
+  // password_hash and bcrypt hashes are enough to mount an offline attack.
+  $selectList = isset($cfg['selectCols'])
+    ? implode(',', array_map(fn($c)=>"`$c`", $cfg['selectCols']))
+    : '*';
   if($id){
-    $row=q($pdo,"SELECT * FROM $table WHERE $pk=? LIMIT 1",[$id])->fetch();
+    $row=q($pdo,"SELECT $selectList FROM $table WHERE $pk=? LIMIT 1",[$id])->fetch();
     if(!$row) respond(['error'=>'Not found'],404);
     respond(['data'=>$row]);
   }
   // pagination optional
-  $q=q($pdo,"SELECT * FROM $table ORDER BY ".($pk==='skey'?'skey':"$pk ASC"));
+  $q=q($pdo,"SELECT $selectList FROM $table ORDER BY ".($pk==='skey'?'skey':"$pk ASC"));
   respond(['data'=>$q->fetchAll()]);
 }
 

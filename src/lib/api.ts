@@ -22,18 +22,18 @@ async function request(path: string, opts: RequestInit = {}) {
       err.status = res.status;
       err.details = j.details;
       if (res.status === 401) err.__auth = true;
-      if (opts.method === undefined || opts.method === "GET" || res.status === 401)
-        err.__fallback = true;
+      // Reads may fall back to the offline store. Writes must not: silently
+      // "saving" into localStorage after a 401 loses the edit and hides the fact
+      // that the session is no longer valid.
+      if (opts.method === undefined || opts.method === "GET") err.__fallback = true;
       throw err;
     }
     return j;
   } catch (e: any) {
-    if (e?.status === 401) e.__fallback = true;
+    if (e?.status === 401) e.__auth = true;
     if (opts.method === undefined || opts.method === "GET") {
       (e as any).__fallback = true;
     }
-    // for saving (POST/PUT/DELETE) also allow fallback on 401/auth errors so admin never blocks
-    if (e?.__auth) e.__fallback = true;
     // network errors
     if (e?.message?.includes("Failed to fetch") || e?.message?.includes("NetworkError"))
       e.__fallback = true;
@@ -482,37 +482,17 @@ Object.keys(SEEDS).forEach((k) => ensureMock(k, SEEDS[k as keyof typeof SEEDS]))
 export const api = {
   // Auth
   async login(username: string, password: string) {
-    // try backend first
-    try {
-      const r = await request("/auth/login.php", {
-        method: "POST",
-        body: JSON.stringify({ username, password }),
-      });
-      if (r?.token) {
-        localStorage.setItem("mbp_admin_token", r.token);
-        localStorage.setItem("mbp_admin_user", JSON.stringify(r.user));
-        return r;
-      }
-    } catch (e: any) {
-      // fallback mock login: admin/password
-      if (username === "admin" && password === "password") {
-        const token = "mock_" + Math.random().toString(36).slice(2);
-        localStorage.setItem("mbp_admin_token", token);
-        localStorage.setItem(
-          "mbp_admin_user",
-          JSON.stringify({ id: 1, username: "admin", role: "super_admin" }),
-        );
-        return {
-          token,
-          user: {
-            id: 1,
-            username: "admin",
-            role: "super_admin",
-            email: "admin@mbpeducation.gov.pg",
-          },
-        };
-      }
-      throw new Error("Invalid credentials");
+    // Credentials are only ever checked by the server. There is deliberately
+    // no local fallback account: a hardcoded one would be a public admin
+    // backdoor for anyone who can reach the admin UI.
+    const r = await request("/auth/login.php", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    });
+    if (r?.token) {
+      localStorage.setItem("mbp_admin_token", r.token);
+      localStorage.setItem("mbp_admin_user", JSON.stringify(r.user));
+      return r;
     }
     throw new Error("Login failed");
   },
@@ -766,10 +746,18 @@ export const api = {
         body: fd,
       });
       const j = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(j.error || `Upload failed ${r.status}`);
+      if (!r.ok) {
+        const err: any = new Error(j.error || `Upload failed ${r.status}`);
+        err.status = r.status;
+        if (r.status === 401) err.__auth = true;
+        throw err;
+      }
       if (j.url) return j.url as string;
       throw new Error("No url in response");
     } catch (e: any) {
+      // A rejected session is not an offline condition - surface it instead of
+      // quietly storing the file as a data URL in the record.
+      if (e?.status === 401 || e?.__auth) throw e;
       // offline or backend not deployed - fallback to data URL so device upload always works
       return await toDataUrl();
     }

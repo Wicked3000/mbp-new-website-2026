@@ -1,6 +1,20 @@
 <?php
 // Simple JWT-like auth (no external deps). For demo. Use stronger library in prod.
-function jwt_secret(){ return getenv('JWT_SECRET') ?: 'mbp_education_dev_secret_change_me_32chars'; }
+function jwt_secret(){
+  $secret = getenv('JWT_SECRET');
+  // A published default signing key lets anyone mint admin tokens, so refuse to
+  // fall back to one outside development.
+  if(!$secret){
+    if(strtolower((string)getenv('NODE_ENV')) === 'production'){
+      http_response_code(500); echo json_encode(['error'=>'JWT_SECRET is not configured']); exit;
+    }
+    $secret = 'mbp_education_dev_secret_change_me_32chars';
+  }
+  if(strlen($secret) < 32){
+    http_response_code(500); echo json_encode(['error'=>'JWT_SECRET must be at least 32 characters']); exit;
+  }
+  return $secret;
+}
 function base64url_encode($d){ return rtrim(strtr(base64_encode($d),'+/','-_'),'='); }
 function base64url_decode($d){ return base64_decode(strtr($d,'-_','+/')); }
 function jwt_sign($payload, $expSec=86400){
@@ -37,10 +51,6 @@ function auth_require(){
     http_response_code(401); echo json_encode(['error'=>'Missing token','hint'=>'Ensure .htaccess forwards Authorization and you are logged in']); exit;
   }
   $token = trim($m[1]);
-  // allow mock_ tokens for local fallback dev (saves to DB even without valid JWT)
-  if(str_starts_with($token, 'mock_')){
-    return ['uid'=>1,'username'=>'admin','role'=>'super_admin','mock'=>true];
-  }
   $p = jwt_verify($token);
   if(!$p){ http_response_code(401); echo json_encode(['error'=>'Invalid or expired token']); exit; }
   return $p;
@@ -48,9 +58,7 @@ function auth_require(){
 function auth_optional(){
   $hdr = get_auth_header();
   if(preg_match('/Bearer\s+(.+)/',$hdr,$m)){
-    $t=trim($m[1]);
-    if(str_starts_with($t,'mock_')) return ['uid'=>1,'username'=>'admin','role'=>'super_admin','mock'=>true];
-    return jwt_verify($t);
+    return jwt_verify(trim($m[1]));
   }
   return null;
 }

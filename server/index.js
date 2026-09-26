@@ -14,7 +14,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = process.env.API_PORT || 3001;
-const JWT_SECRET = process.env.JWT_SECRET || "mbp_education_dev_secret_change_me_32chars";
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
+// Fail closed: a published default signing key lets anyone mint admin tokens.
+if (IS_PRODUCTION && !process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET must be set when NODE_ENV=production");
+}
+const JWT_SECRET =
+  process.env.JWT_SECRET || "mbp_education_dev_secret_change_me_32chars";
+if (!IS_PRODUCTION && !process.env.JWT_SECRET) {
+  console.warn(
+    "[security] JWT_SECRET is unset - using the public development default. Never do this in production.",
+  );
+}
 const DB = {
   host: process.env.DB_HOST || "127.0.0.1",
   port: Number(process.env.DB_PORT || 3306),
@@ -109,29 +121,112 @@ const upload = multer({
   storage,
   limits: { fileSize: 25 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const ok =
-      /^(image\/(jpeg|png|webp|gif|svg\+xml|avif)|application\/(pdf|msword|vnd\.openxmlformats-officedocument\.(wordprocessingml\.document|spreadsheetml\.sheet)|vnd\.ms-excel|text\/(csv|plain))$)/i.test(
+    // SVG is deliberately excluded: it is an XML document that can carry
+    // <script>, and uploads are served from this origin, so accepting it is a
+    // stored-XSS route into the admin's session.
+    const ext = path.extname(file.originalname).toLowerCase();
+    const mimeOk =
+      /^(image\/(jpeg|png|webp|gif|avif)|application\/(pdf|msword|vnd\.openxmlformats-officedocument\.(wordprocessingml\.document|spreadsheetml\.sheet)|vnd\.ms-excel|text\/(csv|plain))$)/i.test(
         file.mimetype,
-      ) ||
-      /\.(jpg|jpeg|png|webp|gif|svg|avif|pdf|doc|docx|xls|xlsx|csv|txt)$/i.test(
-        file.originalname,
       );
-    cb(null, ok);
+    const extOk = /\.(jpg|jpeg|png|webp|gif|avif|pdf|doc|docx|xls|xlsx|csv|txt)$/i.test(
+      file.originalname,
+    );
+    if (/\.svg$/i.test(file.originalname) || ext === ".svg") {
+      return cb(new Error("SVG uploads are not allowed"));
+    }
+    if (!mimeOk && !extOk) return cb(new Error("Unsupported file type"));
+    cb(null, true);
   },
 });
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+app.disable("x-powered-by");
+
+// Reflecting any Origin with credentials lets arbitrary sites drive the admin
+// API from a visitor's browser, so only configured origins are allowed.
+const DEFAULT_ORIGINS = [
+  "http://localhost:8443",
+  "http://127.0.0.1:8443",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
+const ALLOWED_ORIGINS = new Set(
+  (process.env.CORS_ORIGINS || DEFAULT_ORIGINS.join(","))
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean),
+);
+app.use(
+  cors({
+    origin(origin, cb) {
+      // Same-origin/tool requests (curl, server-to-server) send no Origin.
+      if (!origin) return cb(null, true);
+      cb(null, ALLOWED_ORIGINS.has(origin));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("X-DNS-Prefetch-Control", "off");
+  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+  if (IS_PRODUCTION) {
+    res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  }
+  next();
+});
+
 app.use(express.json({ limit: "25mb" }));
 app.use(express.urlencoded({ limit: "25mb", extended: true }));
-app.use("/uploads", express.static(uploadDir));
+// Uploaded files are user-supplied: never let a browser sniff them into HTML.
+app.use(
+  "/uploads",
+  express.static(uploadDir, {
+    setHeaders(res) {
+      res.setHeader("X-Content-Type-Options", "nosniff");
+      res.setHeader("Content-Security-Policy", "default-src 'none'; sandbox");
+    },
+  }),
+);
+
+// Fixed-window limiter, enough to blunt credential stuffing and spam without
+// adding a dependency or shared state.
+const WINDOW_MS = 15 * 60 * 1000;
+const buckets = new Map();
+function rateLimit({ limit, windowMs = WINDOW_MS, key = (req) => req.ip, message }) {
+  return (req, res, next) => {
+    const now = Date.now();
+    const k = key(req);
+    let entry = buckets.get(k);
+    if (!entry || now > entry.resetAt) {
+      entry = { count: 0, resetAt: now + windowMs };
+      buckets.set(k, entry);
+    }
+    entry.count += 1;
+    if (entry.count > limit) {
+      const retryAfter = Math.ceil((entry.resetAt - now) / 1000);
+      res.setHeader("Retry-After", String(retryAfter));
+      return res.status(429).json({ error: message || "Too many requests, please try again later" });
+    }
+    next();
+  };
+}
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of buckets) if (now > v.resetAt) buckets.delete(k);
+}, WINDOW_MS).unref();
 
 function sign(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 }
 function verify(token) {
-  if (token?.startsWith("mock_"))
-    return { uid: 1, username: "admin", role: "super_admin", mock: true };
   return jwt.verify(token, JWT_SECRET);
 }
 function auth(req, res, next) {
@@ -157,29 +252,33 @@ app.get("/health.php", (req, res) =>
 );
 
 // auth login
-app.post("/api/auth/login", async (req, res) => {
-  const { username, password } = req.body || {};
-  if (!username || !password)
-    return res.status(400).json({ error: "Username and password required" });
-  const [rows] = await pool.query("SELECT * FROM users WHERE username=? OR email=? LIMIT 1", [
-    username,
-    username,
-  ]);
-  const user = rows[0];
-  if (!user || !bcrypt.compareSync(password, user.password_hash)) {
-    // also allow plain 'password' check for seeded bcrypt (bcryptjs compare should work)
-    return res.status(401).json({ error: "Invalid credentials" });
-  }
-  const token = sign({ uid: user.id, username: user.username, role: user.role });
-  res.json({
-    token,
-    user: {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-    },
-  });
+app.post(
+  "/api/auth/login",
+  rateLimit({ limit: 10, message: "Too many login attempts, please try again later" }),
+  async (req, res) => {
+    const { username, password } = req.body || {};
+    if (!username || !password)
+      return res.status(400).json({ error: "Username and password required" });
+    const [rows] = await pool.query(
+      "SELECT id, username, email, role, password_hash FROM users WHERE username=? OR email=? LIMIT 1",
+      [username, username],
+    );
+    const user = rows[0];
+    // Async compare keeps a flood of guesses from blocking the event loop, and
+    // the placeholder hash keeps the timing similar for unknown usernames.
+    const hash = user?.password_hash || "$2a$10$invalidinvalidinvalidinvalidinvalidinvalidinvalidinvalidin";
+    const ok = await bcrypt.compare(String(password), hash);
+    if (!user || !ok) return res.status(401).json({ error: "Invalid credentials" });
+    const token = sign({ uid: user.id, username: user.username, role: user.role });
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
+    });
 });
 app.get("/api/auth/me", auth, (req, res) => res.json({ user: req.user }));
 
@@ -226,7 +325,10 @@ app.post("/api/selections/students/bulk", auth, async (req, res) => {
   }
 });
 
-app.post("/api/whatsapp/subscribe", async (req, res) => {
+app.post(
+  "/api/whatsapp/subscribe",
+  rateLimit({ limit: 20, message: "Too many subscriptions from this address" }),
+  async (req, res) => {
   const phone = String(req.body?.phone || "").trim();
   const source = String(req.body?.source || "Official announcements").trim();
   if (!/^\+?\d{7,15}$/.test(phone))
@@ -241,7 +343,8 @@ app.post("/api/whatsapp/subscribe", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Unable to save subscription" });
   }
-});
+  },
+);
 
 // generic map
 const MAP = {
@@ -342,9 +445,13 @@ const MAP = {
   users: {
     table: "users",
     cols: ["username", "email", "role"],
+    // Never SELECT * here: the table also holds password_hash.
+    selectCols: ["id", "username", "email", "role"],
     readOnly: true,
   },
 };
+// selection_students holds minors' names, SLF numbers and gender, so it is
+// deliberately absent: it stays admin-only.
 const publicRead = new Set([
   "hero_slides",
   "news",
@@ -361,37 +468,32 @@ const publicRead = new Set([
   "site_settings",
   "selections_grade9",
   "selections_grade11",
-  "selection_students",
 ]);
 
 app.all("/api/entities", async (req, res) => {
   const entity = req.query.entity;
-  if (!MAP[entity])
+  // Object.hasOwn, not `MAP[entity]`: a plain lookup would happily accept
+  // "constructor"/"__proto__" and build a query against `undefined`.
+  if (typeof entity !== "string" || !Object.hasOwn(MAP, entity))
     return res.status(400).json({ error: "Unknown entity", allowed: Object.keys(MAP) });
   const cfg = MAP[entity];
   const table = cfg.table;
   const pk = cfg.pk || "id";
-  // auth
-  const needAuthForRead = !publicRead.has(entity);
-  if (req.method === "GET" && needAuthForRead) {
-    const hdr = req.headers.authorization || "";
-    if (!hdr) return res.status(401).json({ error: "Missing token" });
+  // Public GETs are limited to the allowlist; every write needs a valid token.
+  const needsAuth =
+    ["POST", "PUT", "DELETE"].includes(req.method) || !publicRead.has(entity);
+  if (needsAuth) {
+    const hdr = req.headers.authorization || req.headers["x-authorization"] || "";
+    const m = hdr.match(/Bearer\s+(.+)/);
+    if (!m) return res.status(401).json({ error: "Missing token" });
     try {
-      verify(hdr.replace(/Bearer\s+/, "").trim());
+      verify(m[1].trim());
     } catch {
-      return res.status(401).json({ error: "Invalid token" });
+      return res.status(401).json({ error: "Invalid or expired token" });
     }
   }
-  if (["POST", "PUT", "DELETE"].includes(req.method)) {
-    const hdr = req.headers.authorization || "";
-    if (!hdr) return res.status(401).json({ error: "Missing token" });
-    try {
-      verify(hdr.replace(/Bearer\s+/, "").trim());
-    } catch {
-      return res.status(401).json({ error: "Invalid token" });
-    }
-    if (cfg.readOnly) return res.status(403).json({ error: "Read only" });
-  }
+  if (["POST", "PUT", "DELETE"].includes(req.method) && cfg.readOnly)
+    return res.status(403).json({ error: "Read only" });
   try {
     if (req.method === "GET") {
       if (entity === "site_settings") {
@@ -400,14 +502,22 @@ app.all("/api/entities", async (req, res) => {
         rows.forEach((r) => (map[r.skey] = r.svalue));
         return res.json({ data: map });
       }
+      // Entities with a selectCols allowlist (e.g. users) must never fall back
+      // to SELECT *, which would hand back password_hash.
+      const selectList = cfg.selectCols
+        ? cfg.selectCols.map((c) => `\`${c}\``).join(",")
+        : "*";
       if (req.query.id) {
-        const [rows] = await pool.query(`SELECT * FROM \`${table}\` WHERE \`${pk}\`=? LIMIT 1`, [
-          req.query.id,
-        ]);
+        const [rows] = await pool.query(
+          `SELECT ${selectList} FROM \`${table}\` WHERE \`${pk}\`=? LIMIT 1`,
+          [req.query.id],
+        );
         if (!rows[0]) return res.status(404).json({ error: "Not found" });
         return res.json({ data: rows[0] });
       }
-      const [rows] = await pool.query(`SELECT * FROM \`${table}\` ORDER BY \`${pk}\` ASC`);
+      const [rows] = await pool.query(
+        `SELECT ${selectList} FROM \`${table}\` ORDER BY \`${pk}\` ASC`,
+      );
       return res.json({ data: rows });
     }
     if (req.method === "POST") {
@@ -455,8 +565,9 @@ app.all("/api/entities", async (req, res) => {
     }
     res.status(405).json({ error: "Method not allowed" });
   } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "DB error", details: e.message });
+    // Log the detail server-side; never hand SQL text or table names to callers.
+    console.error(`[${entity}] ${req.method} failed:`, e);
+    res.status(500).json({ error: "DB error" });
   }
 });
 // compat: /entities.php
@@ -470,7 +581,10 @@ app.all("/api/entities.php", (req, res) => {
 });
 
 // contact public
-app.post("/api/contact", async (req, res) => {
+app.post(
+  "/api/contact",
+  rateLimit({ limit: 10, message: "Too many messages, please try again later" }),
+  async (req, res) => {
   const { full_name, phone, email, category, district, subject, message } = req.body || {};
   if (!full_name || !email || !subject || !message)
     return res.status(400).json({ error: "Missing required fields" });
@@ -487,8 +601,10 @@ app.post("/api/contact", async (req, res) => {
     ],
   );
   res.json({ ok: true });
-});
-app.post("/contact.php", (req, res) => {
+  },
+);
+
+app.post("/contact.php", rateLimit({ limit: 10 }), (req, res) => {
   req.url = "/api/contact";
   app.handle(req, res);
 });
@@ -519,14 +635,18 @@ app.get("/api/stats/dashboard", auth, async (req, res) => {
 });
 
 // upload
-app.post("/api/upload", auth, upload.single("file"), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: "No file" });
-  const url = `http://localhost:${PORT}/uploads/${req.file.filename}`;
-  res.json({
-    ok: true,
-    url,
-    filename: req.file.filename,
-    path: `uploads/${req.file.filename}`,
+// multer signals rejected files through errors; answer with a clean 400.
+app.post("/api/upload", auth, (req, res) => {
+  upload.single("file")(req, res, (err) => {
+    if (err)
+      return res
+        .status(400)
+        .json({ error: err.message || "Upload rejected", code: err.code });
+    if (!req.file) return res.status(400).json({ error: "No file" });
+    // Relative URL: hardcoding localhost leaked the internal host and broke
+    // every deployed environment.
+    const rel = `/uploads/${req.file.filename}`;
+    res.json({ ok: true, url: rel, filename: req.file.filename, path: rel });
   });
 });
 app.post("/upload.php", (req, res) => {

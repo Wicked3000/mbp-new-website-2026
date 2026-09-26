@@ -19,19 +19,20 @@ if($file['size'] > $maxBytes){
   http_response_code(400); echo json_encode(['error'=>'File too large, max 8MB']); exit;
 }
 
-$allowedExt = ['jpg','jpeg','png','webp','gif','svg','avif'];
-$allowedMime = ['image/jpeg','image/png','image/webp','image/gif','image/svg+xml','image/avif'];
+// SVG is excluded: it can carry <script>, and uploads are served from this
+// origin, so accepting it is a stored-XSS route into the admin session.
+$allowedExt = ['jpg','jpeg','png','webp','gif','avif'];
+$allowedMime = ['image/jpeg','image/png','image/webp','image/gif','image/avif'];
 $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 $finfo = finfo_open(FILEINFO_MIME_TYPE);
 $mime = $finfo ? finfo_file($finfo, $file['tmp_name']) : $file['type'];
 if($finfo) finfo_close($finfo);
 
-// allow svg+xml etc, also fallback to ext check
-if(!in_array($ext, $allowedExt) || !in_array($mime, $allowedMime) && $mime !== 'image/svg+xml'){
-  // still allow if ext is allowed
-  if(!in_array($ext, $allowedExt)){
-    http_response_code(400); echo json_encode(['error'=>'Invalid file type. Allowed: '.implode(', ',$allowedExt),'mime'=>$mime,'ext'=>$ext]); exit;
-  }
+if(!in_array($ext, $allowedExt, true)){
+  http_response_code(400); echo json_encode(['error'=>'Invalid file type. Allowed: '.implode(', ',$allowedExt)]); exit;
+}
+if(!in_array($mime, $allowedMime, true)){
+  http_response_code(400); echo json_encode(['error'=>'File contents do not match an allowed image type']); exit;
 }
 
 $uploadDir = __DIR__ . '/uploads';
