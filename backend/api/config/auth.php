@@ -1,23 +1,28 @@
 <?php
-// Simple JWT-like auth (no external deps). For demo. Use stronger library in prod.
+// Self-contained JWT (HS256) so the XAMPP deployment needs no Composer packages.
+require_once __DIR__.'/../helpers.php';
+
+const TOKEN_TTL_SECONDS = 86400; // 1 day
+const MIN_PASSWORD_LENGTH = 12;
+
 function jwt_secret(){
-  $secret = getenv('JWT_SECRET');
+  $secret = env_or('JWT_SECRET');
   // A published default signing key lets anyone mint admin tokens, so refuse to
   // fall back to one outside development.
   if(!$secret){
-    if(strtolower((string)getenv('NODE_ENV')) === 'production'){
-      http_response_code(500); echo json_encode(['error'=>'JWT_SECRET is not configured']); exit;
+    if(is_production()){
+      http_response_code(500); respond(['error'=>'JWT_SECRET is not configured']);
     }
     $secret = 'mbp_education_dev_secret_change_me_32chars';
   }
   if(strlen($secret) < 32){
-    http_response_code(500); echo json_encode(['error'=>'JWT_SECRET must be at least 32 characters']); exit;
+    http_response_code(500); respond(['error'=>'JWT_SECRET must be at least 32 characters']);
   }
   return $secret;
 }
 function base64url_encode($d){ return rtrim(strtr(base64_encode($d),'+/','-_'),'='); }
 function base64url_decode($d){ return base64_decode(strtr($d,'-_','+/')); }
-function jwt_sign($payload, $expSec=86400){
+function jwt_sign($payload, $expSec=TOKEN_TTL_SECONDS){
   $header = base64url_encode(json_encode(['alg'=>'HS256','typ'=>'JWT']));
   $payload['exp'] = time()+$expSec;
   $payload['iat'] = time();
@@ -45,14 +50,44 @@ function get_auth_header(){
   if(!$hdr && isset($_SERVER['HTTP_X_AUTHORIZATION'])) $hdr = $_SERVER['HTTP_X_AUTHORIZATION'];
   return $hdr;
 }
-function auth_require(){
+
+function user_public(array $user): array {
+  return [
+    'id'       => (int)$user['id'],
+    'username' => $user['username'],
+    'email'    => $user['email'],
+    'role'     => $user['role'],
+  ];
+}
+
+function token_for(array $user): string {
+  $payload = user_public($user);
+  $payload['uid'] = $payload['id'];
+  if (isset($user['auth_version'])) $payload['ver'] = (int)$user['auth_version'];
+  return jwt_sign($payload);
+}
+
+// A password change bumps users.auth_version, so tokens carrying an older value
+// stop verifying. $pdo may be null on endpoints that never open a connection.
+function auth_require($pdo = null){
   $hdr = get_auth_header();
   if(!preg_match('/Bearer\s+(.+)/',$hdr,$m)){
-    http_response_code(401); echo json_encode(['error'=>'Missing token','hint'=>'Ensure .htaccess forwards Authorization and you are logged in']); exit;
+    http_response_code(401); respond(['error'=>'Missing token','hint'=>'Ensure .htaccess forwards Authorization and you are logged in']);
   }
   $token = trim($m[1]);
   $p = jwt_verify($token);
-  if(!$p){ http_response_code(401); echo json_encode(['error'=>'Invalid or expired token']); exit; }
+  if(!$p){ http_response_code(401); respond(['error'=>'Invalid or expired token']); }
+  if($pdo !== null && isset($p['ver'])){
+    try {
+      $row = q($pdo,'SELECT auth_version FROM users WHERE id=? LIMIT 1',[$p['uid']])->fetch();
+      // A database this app cannot ALTER keeps working, just without revocation.
+      if ($row !== false && (int)$row['auth_version'] !== (int)$p['ver']) {
+        http_response_code(401); respond(['error'=>'Session revoked, please sign in again']);
+      }
+    } catch (PDOException $e) {
+      error_log('[mbp-api] auth_version check unavailable: ' . $e->getMessage());
+    }
+  }
   return $p;
 }
 function auth_optional(){
