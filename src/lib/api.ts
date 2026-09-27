@@ -42,7 +42,7 @@ async function request(path: string, opts: RequestInit = {}) {
 }
 
 // localStorage fallback store
-const LS_KEY = "mbp_mock_db_v1";
+const LS_KEY = "mbp_mock_db_v2";
 type MockDB = Record<string, any[]>;
 function loadMock(): MockDB {
   try {
@@ -67,21 +67,21 @@ const SEEDS: Record<string, any[]> = {
   hero_slides: [
     {
       id: 1,
-      src: "/assets/slider/mbp-img1.png",
+      src: "/assets/slider/mbp-img1.jpg",
       alt: "Milne Bay students and community learning",
       sort_order: 1,
       is_active: 1,
     },
     {
       id: 2,
-      src: "/assets/slider/mbp-img2.png",
+      src: "/assets/slider/mbp-img2.jpg",
       alt: "Milne Bay Province schools and education",
       sort_order: 2,
       is_active: 1,
     },
     {
       id: 3,
-      src: "/assets/slider/mbp-img3.png",
+      src: "/assets/slider/mbp-img3.jpg",
       alt: "Milne Bay coastal education community",
       sort_order: 3,
       is_active: 1,
@@ -96,7 +96,7 @@ const SEEDS: Record<string, any[]> = {
       title: "Grade 8 and Grade 10 Examination Timetable Released",
       excerpt:
         "The Division of Education has officially released the 2026 examination timetable for all Grade 8 and Grade 10 students across Milne Bay Province.",
-      img: "https://images.unsplash.com/photo-1627423896085-e3e694d88e40?w=600&h=380&fit=crop&auto=format",
+      img: "/assets/education_programs/basic/banner.jpg",
       is_published: 1,
       is_previous: 0,
     },
@@ -108,7 +108,7 @@ const SEEDS: Record<string, any[]> = {
       title: "New VET Training Centres to Open in Alotau and Samarai",
       excerpt:
         "Two new Vocational Education and Training centres are set to open in Term 4, expanding skills-based learning opportunities for youth across the province.",
-      img: "https://images.unsplash.com/photo-1632215861513-130b66fe97f4?w=600&h=380&fit=crop&auto=format",
+      img: "/assets/education_programs/vet/banner.jpg",
       is_published: 1,
       is_previous: 0,
     },
@@ -120,7 +120,7 @@ const SEEDS: Record<string, any[]> = {
       title: "School Subsidy Payment Schedule for Term 4 Now Available",
       excerpt:
         "Head teachers and school boards are advised to collect the Term 4 subsidy payment schedules from the Division office by 5 October 2026.",
-      img: "https://images.unsplash.com/photo-1632932693914-89b90ae3d16d?w=600&h=380&fit=crop&auto=format",
+      img: "/assets/slider/mbp-img1.jpg",
       is_published: 1,
       is_previous: 0,
     },
@@ -212,7 +212,7 @@ const SEEDS: Record<string, any[]> = {
       color: "bg-[#0B2545]",
       accent: "bg-teal-500",
       href: "/basic",
-      img: "/assets/education_programs/basic/banner.png",
+      img: "/assets/education_programs/basic/banner.jpg",
       sort_order: 1,
     },
     {
@@ -225,7 +225,7 @@ const SEEDS: Record<string, any[]> = {
       color: "bg-[#163663]",
       accent: "bg-amber-400",
       href: "/post",
-      img: "/assets/education_programs/post/banner.png",
+      img: "/assets/education_programs/post/banner.jpg",
       sort_order: 2,
     },
     {
@@ -238,7 +238,7 @@ const SEEDS: Record<string, any[]> = {
       color: "bg-[#0D9488]",
       accent: "bg-amber-300",
       href: "/vet",
-      img: "/assets/education_programs/vet/banner.png",
+      img: "/assets/education_programs/vet/banner.jpg",
       sort_order: 3,
     },
     {
@@ -251,7 +251,7 @@ const SEEDS: Record<string, any[]> = {
       color: "bg-[#0B2545]",
       accent: "bg-teal-400",
       href: "/fode",
-      img: "/assets/education_programs/fode/banner.png",
+      img: "/assets/education_programs/fode/banner.jpg",
       sort_order: 4,
     },
   ],

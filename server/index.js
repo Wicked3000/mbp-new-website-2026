@@ -103,8 +103,10 @@ async function ensureSelectionGrade11Columns() {
   }
 }
 
-// ensure uploads
-const uploadDir = path.join(__dirname, "uploads");
+// Uploads live inside public/ so that Vite copies them into the build output.
+// Without this, anything uploaded through the admin panel exists only on this
+// machine and 404s once the built site is deployed.
+const uploadDir = path.join(__dirname, "..", "public", "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),

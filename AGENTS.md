@@ -20,6 +20,8 @@ This is the canonical project structure. Start with task-relevant files below. O
 - `package.json` - Project dependencies and the Vite build, development, preview, and formatting scripts
 - `vite.config.ts` - Vite configuration with React, Tailwind CSS v4, development proxy, and the `@` alias for `src`
 - `.mise.toml` - Toolchain versions for Node.js and pnpm
+- `public/assets/` - Site imagery, referenced by root-absolute path (`/assets/...`) and served statically
+- `public/uploads/` - Admin-uploaded files. Deliberately **not** git-ignored: uploads are committed (via git-lfs) and copied into the build by Vite, so anything uploaded must be committed and the site rebuilt for it to deploy
 
 ## Dependencies
 

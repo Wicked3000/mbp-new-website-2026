@@ -8,13 +8,16 @@ export const MAIN_NAV = [
   { label: "Contact", href: "/contact" },
 ];
 
+// Quick-jump entries for the header search dropdown. Each one points at a real
+// page on this site, so a suggestion click always lands somewhere useful.
+// Free-text searches go to /news?q= instead.
 export const SEARCH_SUGGESTIONS = [
-  "Term Dates 2026",
-  "School Directory",
-  "Grade 8 Exam Timetable",
-  "Teacher Relief Grants",
-  "VET Centres Alotau",
-  "FODE Enrolment",
-  "Selection Lists 2026",
-  "Contact Helpdesk",
+  { label: "Term Dates", to: "/calendar" },
+  { label: "School Directory", to: "/basic#schools" },
+  { label: "Grade 8 Exam Timetable", to: "/notices" },
+  { label: "Teacher Relief Grants", to: "/notices" },
+  { label: "VET Centres Alotau", to: "/vet#centres" },
+  { label: "FODE Enrolment", to: "/fode#centres" },
+  { label: "Selection Lists 2026", to: "/selections" },
+  { label: "Contact Helpdesk", to: "/contact" },
 ];

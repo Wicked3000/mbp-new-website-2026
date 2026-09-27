@@ -228,9 +228,9 @@ INSERT INTO users (username,email,password_hash,role) VALUES
 -- this hash with your own bcrypt hash before importing into any real environment.
 
 INSERT INTO hero_slides (src,alt,sort_order) VALUES
-('/assets/slider/mbp-img1.png','Milne Bay students and community learning',1),
-('/assets/slider/mbp-img2.png','Milne Bay Province schools and education',2),
-('/assets/slider/mbp-img3.png','Milne Bay coastal education community',3);
+('/assets/slider/mbp-img1.jpg','Milne Bay students and community learning',1),
+('/assets/slider/mbp-img2.jpg','Milne Bay Province schools and education',2),
+('/assets/slider/mbp-img3.jpg','Milne Bay coastal education community',3);
 
 INSERT INTO news (tag,tag_color,news_date,title,excerpt,img) VALUES
 ('Announcement','bg-[#0D9488]','September 18, 2026','Grade 8 and Grade 10 Examination Timetable Released','The Division of Education has officially released the 2026 examination timetable for all Grade 8 and Grade 10 students across Milne Bay Province.','https://images.unsplash.com/photo-1627423896085-e3e694d88e40?w=600&h=380&fit=crop&auto=format'),
@@ -252,10 +252,10 @@ INSERT INTO events (month,day,title,event_time,cat,color) VALUES
 ('DEC','05','Grade 10 & 12 Results Release','Online & School Noticeboards','Results','bg-[#163663]');
 
 INSERT INTO programs (code,label,level,description,color,accent,href,img,sort_order) VALUES
-('01','Basic Education','Elementary \u2013 Grade 8','Providing foundational literacy, numeracy and life skills for all children from Prep through to Grade 8 across Milne Bay.','bg-[#0B2545]','bg-teal-500','/basic','/assets/education_programs/basic/banner.png',1),
-('02','Post Primary','Grade 9 \u2013 Grade 12','Secondary education pathways preparing students for tertiary admission, technical training, and employment in the formal sector.','bg-[#163663]','bg-amber-400','/post','/assets/education_programs/post/banner.png',2),
-('03','VET','Vocational Education','Skills and trades training for out-of-school youth and adults, delivered through registered VET providers across the province.','bg-[#0D9488]','bg-amber-300','/vet','/assets/education_programs/vet/banner.png',3),
-('04','FODE','Flexible Open & Distance','Distance and open learning enabling students in remote areas to access quality secondary education without leaving their communities.','bg-[#0B2545]','bg-teal-400','/fode','/assets/education_programs/fode/banner.png',4);
+('01','Basic Education','Elementary \u2013 Grade 8','Providing foundational literacy, numeracy and life skills for all children from Prep through to Grade 8 across Milne Bay.','bg-[#0B2545]','bg-teal-500','/basic','/assets/education_programs/basic/banner.jpg',1),
+('02','Post Primary','Grade 9 \u2013 Grade 12','Secondary education pathways preparing students for tertiary admission, technical training, and employment in the formal sector.','bg-[#163663]','bg-amber-400','/post','/assets/education_programs/post/banner.jpg',2),
+('03','VET','Vocational Education','Skills and trades training for out-of-school youth and adults, delivered through registered VET providers across the province.','bg-[#0D9488]','bg-amber-300','/vet','/assets/education_programs/vet/banner.jpg',3),
+('04','FODE','Flexible Open & Distance','Distance and open learning enabling students in remote areas to access quality secondary education without leaving their communities.','bg-[#0B2545]','bg-teal-400','/fode','/assets/education_programs/fode/banner.jpg',4);
 
 INSERT INTO stats (value_text,label,sub,sort_order) VALUES
 ('312','Schools','Province-wide',1),

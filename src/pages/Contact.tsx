@@ -1,5 +1,4 @@
 import { useState } from "react";
-import contactBanner from "../../assets/contact/contact-banner-img.jpg";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -48,8 +47,8 @@ function ContactIcon({ name, className = "w-5 h-5" }: { name: string; className?
 function PageHero() {
   return (
     <section className="relative h-[400px] sm:h-[440px] overflow-hidden bg-[#0B2545]">
-      <img
-        src={contactBanner}
+      <img decoding="async"
+        src="/assets/contact/contact-banner-img.jpg"
         alt="Contact Milne Bay Education"
         className="absolute inset-0 w-full h-full object-cover object-[90%_100%] opacity-55"
       />

@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { MAIN_NAV, SEARCH_SUGGESTIONS } from "@/components/siteNav";
 
@@ -7,14 +7,23 @@ export default function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
   const searchSuggestions = useMemo(() => {
-    if (!query) return [];
-    return SEARCH_SUGGESTIONS.filter((s) => s.toLowerCase().includes(query.toLowerCase())).slice(
-      0,
-      5,
-    );
+    if (!query.trim()) return [];
+    return SEARCH_SUGGESTIONS.filter((s) =>
+      s.label.toLowerCase().includes(query.trim().toLowerCase()),
+    ).slice(0, 5);
   }, [query]);
+
+  const runSearch = () => {
+    const term = query.trim();
+    setSearchOpen(false);
+    setQuery("");
+    // No term: fall back to the home news feed rather than a no-op "#news"
+    // link that would do nothing on any page other than the home page.
+    navigate(term ? `/news?q=${encodeURIComponent(term)}` : "/#news");
+  };
 
   return (
     <>
@@ -31,10 +40,20 @@ export default function SiteHeader() {
           <div className="flex gap-4 items-center opacity-80 text-xs">
             <span className="hidden md:inline">Mon – Fri: 8:00am – 4:30pm</span>
             <span className="hidden sm:block opacity-30">|</span>
-            <a href="#" className="hover:text-[#C9A84C] transition-colors font-medium">
+            <a
+              href="https://education.gov.pg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#C9A84C] transition-colors font-medium"
+            >
               NDoE Portal
             </a>
-            <a href="#" className="hover:text-[#C9A84C] transition-colors font-medium">
+            <a
+              href="https://tsc.gov.pg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#C9A84C] transition-colors font-medium"
+            >
               TSC Online
             </a>
           </div>
@@ -128,20 +147,26 @@ export default function SiteHeader() {
                   <span className="absolute left-3.5 text-gray-400">⌕</span>
                   <input
                     type="text"
-                    placeholder="Search term dates, schools, forms…"
+                    placeholder="Search news and pages…"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        runSearch();
+                      }
+                    }}
                     autoFocus
                     className="w-full pl-9 pr-4 py-2.5 text-sm text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
                   />
                 </div>
-                <Link
-                  to={query ? "/selections" : "#news"}
-                  onClick={() => setSearchOpen(false)}
+                <button
+                  type="button"
+                  onClick={runSearch}
                   className="bg-[#0B2545] hover:bg-[#0D9488] text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-colors shrink-0 shadow-sm inline-flex items-center justify-center"
                 >
                   Search
-                </Link>
+                </button>
                 <button
                   onClick={() => setSearchOpen(false)}
                   aria-label="Close search"
@@ -154,15 +179,15 @@ export default function SiteHeader() {
                 <div className="mt-3 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
                   {searchSuggestions.map((s) => (
                     <Link
-                      key={s}
-                      to="/selections"
+                      key={s.label}
+                      to={s.to}
                       onClick={() => {
                         setQuery("");
                         setSearchOpen(false);
                       }}
                       className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 text-sm text-gray-700 border-b last:border-0 border-gray-50"
                     >
-                      <span className="text-gray-400">⌕</span> {s}
+                      <span className="text-gray-400">⌕</span> {s.label}
                     </Link>
                   ))}
                 </div>

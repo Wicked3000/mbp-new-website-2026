@@ -21,7 +21,9 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       "/api": { target: "http://localhost:3001", changeOrigin: true },
-      "/uploads": { target: "http://localhost:3001", changeOrigin: true },
+      // No /uploads proxy: uploads live in public/uploads and are served as
+      // static files, so they work with or without the API running. Proxying
+      // them shadowed the static copy and 502'd whenever the API was down.
     },
   },
   preview: {

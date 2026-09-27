@@ -5,8 +5,8 @@ import SiteFooter from "@/components/SiteFooter";
 function PageHero() {
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
-      <img
-        src="https://images.unsplash.com/photo-1671883240914-22753874f0de?w=1600&h=900&fit=crop&auto=format"
+      <img decoding="async"
+        src="/assets/slider/mbp-img3.jpg"
         alt="Milne Bay Province landscape"
         className="absolute inset-0 w-full h-full object-cover object-center opacity-40"
       />
@@ -74,8 +74,8 @@ function MissionSection() {
           </div>
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-xl">
-              <img
-                src="https://images.unsplash.com/photo-1615608178738-37d47d27c13d?w=800&h=600&fit=crop&auto=format"
+              <img loading="lazy" decoding="async"
+                src="/assets/education_programs/map/milne_bay_map.jpg"
                 alt="Students in classroom"
                 className="w-full h-96 object-cover"
               />

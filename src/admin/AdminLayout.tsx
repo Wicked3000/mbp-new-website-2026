@@ -55,7 +55,7 @@ export default function AdminLayout() {
           }`}
         >
           <div className="px-5 py-5 border-b border-white/10 flex items-center gap-3">
-            <img
+            <img loading="lazy" decoding="async"
               src="/assets/logo/mbp-logo-bg-removed.png"
               className="w-9 h-9 bg-white rounded-full p-1 object-contain"
               alt="logo"

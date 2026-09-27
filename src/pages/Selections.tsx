@@ -521,8 +521,8 @@ function normalizeGrade11Rows(data: unknown): Grade11Row[] {
 function PageHero() {
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
-      <img
-        src="https://images.unsplash.com/photo-1587440871870-84826771b576?w=1600&h=900&fit=crop&auto=format"
+      <img decoding="async"
+        src="/assets/education_programs/map/milne_bay_map.jpg"
         alt="Students checking results"
         className="absolute inset-0 w-full h-full object-cover object-center opacity-40"
       />

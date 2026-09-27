@@ -84,8 +84,8 @@ export default function NoticesPage() {
       <SiteHeader />
 
       <section className="relative h-[320px] sm:h-[380px] overflow-hidden bg-[#0B2545]">
-        <img
-          src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&h=600&fit=crop&auto=format"
+        <img decoding="async"
+          src="/assets/slider/mbp-img1.jpg"
           alt="Notice Board"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />

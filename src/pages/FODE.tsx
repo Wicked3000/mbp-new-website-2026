@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import fodeImg from "../../assets/fode/fode-img.jpg";
-import fodeBannerImg from "../../assets/fode/fode-banner-img.jpg";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 function PageHero() {
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
-      <img
-        src={fodeBannerImg}
+      <img decoding="async"
+        src="/assets/fode/fode-banner-img.jpg"
         alt="FODE learning materials"
         className="absolute inset-0 w-full h-full object-cover object-[50%_100%] opacity-40"
       />
@@ -114,8 +112,8 @@ function OverviewSection() {
 
           <div className="space-y-6">
             <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
-              <img
-                src={fodeImg}
+              <img loading="lazy" decoding="async"
+                src="/assets/fode/fode-img.jpg"
                 alt="Study centre"
                 className="w-full h-72 object-cover object-[50%_90%]"
               />

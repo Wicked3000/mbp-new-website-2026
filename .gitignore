@@ -16,6 +16,7 @@ logs/
 .tmp-*
 /.plugins/
 /.opencode-skills/
-/server/uploads/
+# NOTE: public/uploads/ is deliberately NOT ignored. Admin uploads have to be
+# committed (via git-lfs) or they are missing from the deployed build.
 query
 tmp

@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import vetImg from "../../assets/vet/vet-img.png";
-import vetBanner from "../../assets/vet/vet-banner.png";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 function PageHero() {
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0D9488]">
-      <img
-        src={vetBanner}
+      <img decoding="async"
+        src="/assets/vet/vet-banner.jpg"
         alt="VET training workshop"
         className="absolute inset-0 w-full h-full object-cover object-[50%_40%] opacity-40"
       />
@@ -116,7 +114,7 @@ function OverviewSection() {
 
           <div className="space-y-6">
             <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
-              <img src={vetImg} alt="Workshop training" className="w-full h-64 object-cover" />
+              <img loading="lazy" decoding="async" src="/assets/vet/vet-img.jpg" alt="Workshop training" className="w-full h-64 object-cover" />
               <div className="p-6">
                 <h3
                   className="text-xl font-bold text-[#0B2545] mb-3"

@@ -12,7 +12,7 @@ const FALLBACK = [
     title: "Grade 8 and Grade 10 Examination Timetable Released",
     excerpt:
       "The Division of Education has officially released the 2026 examination timetable for all Grade 8 and Grade 10 students across Milne Bay Province.",
-    img: "https://images.unsplash.com/photo-1627423896085-e3e694d88e40?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/education_programs/basic/banner.jpg",
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const FALLBACK = [
     title: "New VET Training Centres to Open in Alotau and Samarai",
     excerpt:
       "Two new Vocational Education and Training centres are set to open in Term 4, expanding skills-based learning opportunities for youth across the province.",
-    img: "https://images.unsplash.com/photo-1632215861513-130b66fe97f4?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/education_programs/vet/banner.jpg",
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ const FALLBACK = [
     title: "School Subsidy Payment Schedule for Term 4 Now Available",
     excerpt:
       "Head teachers and school boards are advised to collect the Term 4 subsidy payment schedules from the Division office by 5 October 2026.",
-    img: "https://images.unsplash.com/photo-1632932693914-89b90ae3d16d?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/slider/mbp-img1.jpg",
   },
 ];
 
@@ -80,7 +80,7 @@ export default function NewsDetail() {
     >
       <SiteHeader />
       <div className="relative h-[360px] sm:h-[420px] overflow-hidden bg-[#0B2545]">
-        <img
+        <img decoding="async"
           src={item.img}
           alt={item.title}
           className="absolute inset-0 w-full h-full object-cover"
@@ -177,7 +177,7 @@ export default function NewsDetail() {
                   to={`/news/${n.id}`}
                   className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all group"
                 >
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={n.img}
                     alt={n.title}
                     className="h-36 w-full object-cover group-hover:scale-105 transition-transform duration-700"

@@ -286,7 +286,7 @@ export default function NewsManager() {
               {filtered.map((r, i) => (
                 <tr key={r.id} className={`border-b ${i % 2 === 0 ? "bg-white" : "bg-[#F8F6F1]"}`}>
                   <td className="px-4 py-3">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={r.img}
                       alt={r.title}
                       className="w-16 h-10 object-cover rounded-lg border border-gray-200"
@@ -516,7 +516,7 @@ export default function NewsManager() {
               </div>
               <div className="w-full sm:w-48 h-28 rounded-xl border border-gray-200 bg-[#F8F6F1] overflow-hidden grid place-items-center shrink-0">
                 {preview ? (
-                  <img src={preview} alt="preview" className="w-full h-full object-cover" />
+                  <img loading="lazy" decoding="async" src={preview} alt="preview" className="w-full h-full object-cover" />
                 ) : (
                   <span className="text-xs text-gray-400">No preview</span>
                 )}

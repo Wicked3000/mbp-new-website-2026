@@ -9,6 +9,7 @@
     "dev:all": "concurrently \"npm run dev:api\" \"npm run dev\"",
     "build": "vite build",
     "preview": "vite preview",
+    "deploy": "vite build",
     "format": "oxfmt"
   },
   "dependencies": {

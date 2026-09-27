@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
@@ -13,7 +13,7 @@ const FALLBACK_NEWS = [
     title: "Grade 8 and Grade 10 Examination Timetable Released",
     excerpt:
       "The Division of Education has officially released the 2026 examination timetable for all Grade 8 and Grade 10 students across Milne Bay Province.",
-    img: "https://images.unsplash.com/photo-1627423896085-e3e694d88e40?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/education_programs/basic/banner.jpg",
     is_published: 1,
   },
   {
@@ -24,7 +24,7 @@ const FALLBACK_NEWS = [
     title: "New VET Training Centres to Open in Alotau and Samarai",
     excerpt:
       "Two new Vocational Education and Training centres are set to open in Term 4, expanding skills-based learning opportunities for youth across the province.",
-    img: "https://images.unsplash.com/photo-1632215861513-130b66fe97f4?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/education_programs/vet/banner.jpg",
     is_published: 1,
   },
   {
@@ -35,7 +35,7 @@ const FALLBACK_NEWS = [
     title: "School Subsidy Payment Schedule for Term 4 Now Available",
     excerpt:
       "Head teachers and school boards are advised to collect the Term 4 subsidy payment schedules from the Division office by 5 October 2026.",
-    img: "https://images.unsplash.com/photo-1632932693914-89b90ae3d16d?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/slider/mbp-img1.jpg",
     is_published: 1,
   },
 ];
@@ -49,7 +49,7 @@ const EXTERNAL_NEWS = [
     title: "National Department of Education Launches New Standards-Based Curriculum Resources",
     excerpt:
       "NDoE has released updated SBC teaching guides for Grades 3-8, now available for download via the Curriculum Division portal.",
-    img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/slider/mbp-img2.jpg",
     href: "https://education.gov.pg",
     external: true,
   },
@@ -61,7 +61,7 @@ const EXTERNAL_NEWS = [
     title: "Teaching Service Commission Opens 2027 Teacher Registration",
     excerpt:
       "All teachers must renew registration by 30 November 2026. TSC Online portal now handles e-registration and payroll queries.",
-    img: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/education_programs/fode/banner.jpg",
     href: "https://tsc.gov.pg",
     external: true,
   },
@@ -73,7 +73,7 @@ const EXTERNAL_NEWS = [
     title: "UNICEF PNG Supports WASH Improvements in Milne Bay Schools",
     excerpt:
       "50 schools in Milne Bay will receive new water and sanitation facilities under the Australia-PNG Partnership, improving attendance and health.",
-    img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/education_programs/map/milne_bay_map.jpg",
     href: "https://unicef.org/png",
     external: true,
   },
@@ -85,15 +85,72 @@ const EXTERNAL_NEWS = [
     title: "World Bank Funds New Elementary Classrooms in Remote Islands",
     excerpt:
       "K18M investment will build 40 classrooms across Samarai-Murua and Kiriwina-Goodenough, targeting vernacular early learning.",
-    img: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/slider/mbp-img3.jpg",
     href: "https://worldbank.org",
     external: true,
   },
 ];
 
+type Tab = "latest" | "previous" | "external";
+
+const TAB_LABELS: Record<Tab, string> = {
+  latest: "Latest News",
+  previous: "Previous News",
+  external: "External Education News",
+};
+
+function NoResults({
+  query,
+  tab,
+  counts,
+  onSwitch,
+}: {
+  query: string;
+  tab: Tab;
+  counts: Record<Tab, number>;
+  onSwitch: (t: Tab) => void;
+}) {
+  const elsewhere = (Object.keys(TAB_LABELS) as Tab[]).filter(
+    (t) => t !== tab && counts[t] > 0,
+  );
+  return (
+    <div className="col-span-full text-center py-16 bg-white rounded-2xl border border-gray-100 text-gray-500">
+      <p className="text-[#0B2545] font-bold">
+        {query ? <>No matches for &ldquo;{query}&rdquo; in {TAB_LABELS[tab]}.</> : null}
+      </p>
+      {query && elsewhere.length > 0 ? (
+        <>
+          <p className="mt-2 text-sm">
+            {elsewhere.length === 1 ? "There is a match in" : "There are matches in"}{" "}
+            {elsewhere.map((t, i) => (
+              <span key={t}>
+                {i > 0 ? (elsewhere.length === 2 ? " and " : ", ") : ""}
+                <button
+                  onClick={() => onSwitch(t)}
+                  className="font-bold text-[#0D9488] hover:underline"
+                >
+                  {TAB_LABELS[t]}
+                </button>
+              </span>
+            ))}
+            .
+          </p>
+        </>
+      ) : (
+        <p className="mt-2 text-sm">Try a different search term, or clear the search field.</p>
+      )}
+    </div>
+  );
+}
+
 export default function NewsPage() {
-  const [tab, setTab] = useState<"latest" | "previous" | "external">("latest");
-  const [q, setQ] = useState("");
+  const [tab, setTab] = useState<Tab>("latest");
+  // Driven by the URL so header search results are shareable and survive reload.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const q = searchParams.get("q") ?? "";
+  const setQ = (value: string) => {
+    setSearchParams(value ? { q: value } : {}, { replace: true });
+  };
   const { data } = useEntity("news", FALLBACK_NEWS as any);
   const all = useMemo(() => {
     const list = (data as any[]).filter((n: any) => n.is_published !== 0);
@@ -113,6 +170,11 @@ export default function NewsPage() {
   const filteredExternal = EXTERNAL_NEWS.filter(
     (n) => !q || `${n.title} ${n.excerpt}`.toLowerCase().includes(q.toLowerCase()),
   );
+  const matchCounts = {
+    latest: filteredLatest.length,
+    previous: filteredPrevious.length,
+    external: filteredExternal.length,
+  };
 
   return (
     <div
@@ -122,8 +184,8 @@ export default function NewsPage() {
       <SiteHeader />
 
       <section className="relative h-[320px] sm:h-[380px] overflow-hidden bg-[#0B2545]">
-        <img
-          src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&h=600&fit=crop&auto=format"
+        <img decoding="async"
+          src="/assets/slider/mbp-img2.jpg"
           alt="News"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />
@@ -197,9 +259,7 @@ export default function NewsPage() {
         {tab === "latest" && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredLatest.length === 0 && (
-              <div className="col-span-full text-center py-16 bg-white rounded-2xl border border-gray-100 text-gray-500">
-                No latest news found.
-              </div>
+              <NoResults query={q} tab="latest" counts={matchCounts} onSwitch={setTab} />
             )}
             {filteredLatest.map((n: any) => (
               <Link
@@ -208,7 +268,7 @@ export default function NewsPage() {
                 className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all group"
               >
                 <div className="relative h-48 overflow-hidden bg-[#0B2545]">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={n.img}
                     alt={n.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
@@ -240,9 +300,7 @@ export default function NewsPage() {
         {tab === "previous" && (
           <div className="space-y-4">
             {filteredPrevious.length === 0 && (
-              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 text-gray-500">
-                No previous news. Check Latest or External.
-              </div>
+              <NoResults query={q} tab="previous" counts={matchCounts} onSwitch={setTab} />
             )}
             {filteredPrevious.map((n: any) => (
               <Link
@@ -250,7 +308,7 @@ export default function NewsPage() {
                 to={`/news/${n.id}`}
                 className="flex flex-col sm:flex-row gap-4 bg-white rounded-2xl p-4 border border-gray-100 hover:shadow-md hover:border-[#0D9488]/20 transition-all group"
               >
-                <img
+                <img loading="lazy" decoding="async"
                   src={n.img}
                   alt={n.title}
                   className="w-full sm:w-40 h-28 object-cover rounded-xl shrink-0"
@@ -282,6 +340,9 @@ export default function NewsPage() {
 
         {tab === "external" && (
           <div className="grid sm:grid-cols-2 gap-6">
+            {filteredExternal.length === 0 && (
+              <NoResults query={q} tab="external" counts={matchCounts} onSwitch={setTab} />
+            )}
             {filteredExternal.map((n: any) => (
               <a
                 key={n.id}
@@ -291,7 +352,7 @@ export default function NewsPage() {
                 className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all group"
               >
                 <div className="relative h-48 overflow-hidden">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={n.img}
                     alt={n.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"

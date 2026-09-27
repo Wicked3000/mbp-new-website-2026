@@ -1,6 +1,5 @@
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
-import whatsappCartoon from "../assets/whatsapp/whatsapp-cartoon-img.png";
 import AboutPage from "./pages/About";
 import BasicEducationPage from "./pages/BasicEducation";
 import PostPrimaryPage from "./pages/PostPrimary";
@@ -12,6 +11,8 @@ import NewsPage from "./pages/News";
 import NewsDetail from "./pages/NewsDetail";
 import NoticesPage from "./pages/Notices";
 import AccessibilityPage from "./pages/Accessibility";
+import PrivacyPage from "./pages/Privacy";
+import TermsPage from "./pages/Terms";
 import DownloadsPage from "./pages/Downloads";
 import CalendarPage from "./pages/Calendar";
 import { api } from "@/lib/api";
@@ -74,7 +75,7 @@ const NEWS = [
     title: "Grade 8 and Grade 10 Examination Timetable Released",
     excerpt:
       "The Division of Education has officially released the 2026 examination timetable for all Grade 8 and Grade 10 students across Milne Bay Province.",
-    img: "https://images.unsplash.com/photo-1627423896085-e3e694d88e40?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/education_programs/basic/banner.jpg",
     color: "bg-[#0D9488]",
   },
   {
@@ -83,7 +84,7 @@ const NEWS = [
     title: "New VET Training Centres to Open in Alotau and Samarai",
     excerpt:
       "Two new Vocational Education and Training centres are set to open in Term 4, expanding skills-based learning opportunities for youth across the province.",
-    img: "https://images.unsplash.com/photo-1632215861513-130b66fe97f4?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/education_programs/vet/banner.jpg",
     color: "bg-[#C9A84C] text-[#0B2545]",
   },
   {
@@ -92,7 +93,7 @@ const NEWS = [
     title: "School Subsidy Payment Schedule for Term 4 Now Available",
     excerpt:
       "Head teachers and school boards are advised to collect the Term 4 subsidy payment schedules from the Division office by 5 October 2026.",
-    img: "https://images.unsplash.com/photo-1632932693914-89b90ae3d16d?w=600&h=380&fit=crop&auto=format",
+    img: "/assets/slider/mbp-img1.jpg",
     color: "bg-[#0B2545]",
   },
 ];
@@ -106,7 +107,7 @@ const PROGRAMS = [
     color: "bg-[#0B2545]",
     accent: "bg-teal-500",
     href: "/basic",
-    img: "/assets/education_programs/basic/banner.png",
+    img: "/assets/education_programs/basic/banner.jpg",
   },
   {
     code: "02",
@@ -116,7 +117,7 @@ const PROGRAMS = [
     color: "bg-[#163663]",
     accent: "bg-amber-400",
     href: "/post",
-    img: "/assets/education_programs/post/banner.png",
+    img: "/assets/education_programs/post/banner.jpg",
   },
   {
     code: "03",
@@ -126,7 +127,7 @@ const PROGRAMS = [
     color: "bg-[#0D9488]",
     accent: "bg-amber-300",
     href: "/vet",
-    img: "/assets/education_programs/vet/banner.png",
+    img: "/assets/education_programs/vet/banner.jpg",
   },
   {
     code: "04",
@@ -136,7 +137,7 @@ const PROGRAMS = [
     color: "bg-[#0B2545]",
     accent: "bg-teal-400",
     href: "/fode",
-    img: "/assets/education_programs/fode/banner.png",
+    img: "/assets/education_programs/fode/banner.jpg",
   },
 ];
 
@@ -161,15 +162,15 @@ const NOTICES = [
 
 const HERO_FALLBACK = [
   {
-    src: "/assets/slider/mbp-img1.png",
+    src: "/assets/slider/mbp-img1.jpg",
     alt: "Milne Bay students and community learning",
   },
   {
-    src: "/assets/slider/mbp-img2.png",
+    src: "/assets/slider/mbp-img2.jpg",
     alt: "Milne Bay Province schools and education",
   },
   {
-    src: "/assets/slider/mbp-img3.png",
+    src: "/assets/slider/mbp-img3.jpg",
     alt: "Milne Bay coastal education community",
   },
 ];
@@ -505,7 +506,7 @@ function NewsSection() {
                   className="sm:col-span-2 bg-white rounded-[18px] overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col sm:flex-row"
                 >
                   <div className="relative sm:w-[52%] h-56 sm:h-auto bg-[#0B2545] overflow-hidden shrink-0">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={normNews[0].img}
                       alt={normNews[0].title}
                       className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
@@ -544,7 +545,7 @@ function NewsSection() {
                   className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
                 >
                   <div className="relative h-40 bg-[#0B2545] overflow-hidden">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={n.img}
                       alt={n.title}
                       className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700"
@@ -772,8 +773,8 @@ function StatsSection() {
   }));
   return (
     <section className="relative py-12 sm:py-14 px-4 overflow-hidden">
-      <img
-        src="/assets/background-img-stats/background-login.png"
+      <img decoding="async"
+        src="/assets/background-img-stats/background-login.jpg"
         alt=""
         aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover object-center"
@@ -810,8 +811,8 @@ function AboutMissionSection() {
         <div className="grid lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-6 relative">
             <div className="rounded-[22px] overflow-hidden shadow-[0_20px_60px_rgba(11,37,69,0.12)] border border-white">
-              <img
-                src="https://images.unsplash.com/photo-1671883240914-22753874f0de?w=800&h=560&fit=crop&auto=format"
+              <img loading="lazy" decoding="async"
+                src="/assets/slider/mbp-img3.jpg"
                 alt="Milne Bay students"
                 className="w-full h-[380px] object-cover"
               />
@@ -1003,11 +1004,8 @@ function LeadershipSection() {
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5">
             <div className="relative rounded-[22px] overflow-hidden shadow-[0_20px_60px_rgba(11,37,69,0.12)] border border-white bg-white">
-              <img
-                src={
-                  leader?.photo ||
-                  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=900&fit=crop&auto=format"
-                }
+              <img loading="lazy" decoding="async"
+                src={leader?.photo || "/assets/logo/mbp-logo-bg-removed.png"}
                 alt={leader?.name || "Provincial Education Advisor"}
                 className="w-full h-[460px] object-cover object-top"
               />
@@ -1231,7 +1229,7 @@ function PartnersSection() {
                       className="w-52 h-28 rounded-2xl bg-white border border-gray-100 flex flex-col items-center justify-center gap-2 p-3 text-center hover:shadow-md hover:border-[#0D9488]/20 transition-all group"
                     >
                       {partner.logo ? (
-                        <img
+                        <img loading="lazy" decoding="async"
                           src={partner.logo}
                           alt={`${partner.name} logo`}
                           className="h-11 w-full object-contain transition-transform group-hover:scale-105"
@@ -1309,8 +1307,8 @@ function HelpCTASection() {
                 <div className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-[#C9A84C]/20 blur-2xl" />
                 <div className="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-[#0D9488]/30 blur-2xl" />
                 <div className="relative flex items-center justify-center">
-                  <img
-                    src={whatsappCartoon}
+                  <img loading="lazy" decoding="async"
+                    src="/assets/whatsapp/whatsapp-cartoon-img.png"
                     alt="Person holding a phone with WhatsApp"
                     className="h-64 w-full object-contain object-bottom drop-shadow-[0_20px_18px_rgba(0,0,0,0.28)] sm:h-72"
                   />
@@ -1467,6 +1465,8 @@ export default function App() {
       <Route path="/fode" element={<FODEPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/accessibility" element={<AccessibilityPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/terms" element={<TermsPage />} />
       <Route path="/downloads" element={<DownloadsPage />} />
       <Route path="/calendar" element={<CalendarPage />} />
       <Route path="/selections" element={<SelectionsPage />} />

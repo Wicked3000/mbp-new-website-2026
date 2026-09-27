@@ -6,8 +6,8 @@ import SiteFooter from "@/components/SiteFooter";
 function PageHero() {
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
-      <img
-        src="https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=1600&h=900&fit=crop&auto=format"
+      <img decoding="async"
+        src="/assets/education_programs/basic/banner.jpg"
         alt="Elementary school students in Milne Bay"
         className="absolute inset-0 w-full h-full object-cover object-center opacity-40"
       />
@@ -115,8 +115,8 @@ function OverviewSection() {
 
           <div className="space-y-6">
             <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
-              <img
-                src="https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=800&h=500&fit=crop&auto=format"
+              <img loading="lazy" decoding="async"
+                src="/assets/education_programs/basic/banner.jpg"
                 alt="Students in classroom"
                 className="w-full h-64 object-cover"
               />

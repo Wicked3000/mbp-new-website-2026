@@ -324,7 +324,7 @@ export default function Crud({
                   </div>
                   {form[f.key] && (
                     <div className="w-full sm:w-56 shrink-0">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={form[f.key]}
                         alt="Selected preview"
                         className="w-full h-32 object-cover rounded-xl border border-gray-200 bg-[#F8F6F1]"

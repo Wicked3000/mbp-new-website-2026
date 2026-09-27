@@ -29,7 +29,7 @@ export default function Login() {
       <div className="w-full max-w-[420px]">
         <div className="bg-white rounded-[20px] shadow-xl overflow-hidden">
           <div className="bg-gradient-to-r from-[#0B2545] to-[#0D9488] p-6 text-white text-center">
-            <img
+            <img loading="lazy" decoding="async"
               src="/assets/logo/mbp-logo-bg-removed.png"
               alt="logo"
               className="w-12 h-12 mx-auto bg-white rounded-full p-1 object-contain"

@@ -5,8 +5,8 @@ import SiteFooter from "@/components/SiteFooter";
 function PageHero() {
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
-      <img
-        src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&h=900&fit=crop&auto=format"
+      <img decoding="async"
+        src="/assets/slider/mbp-img1.jpg"
         alt="Inclusive education"
         className="absolute inset-0 w-full h-full object-cover object-center opacity-40"
       />

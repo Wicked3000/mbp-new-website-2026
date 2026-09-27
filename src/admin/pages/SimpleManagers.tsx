@@ -402,7 +402,7 @@ export function PartnersManager() {
           label: "Logo",
           render: (value) =>
             value ? (
-              <img src={value} alt="Partner logo" className="h-9 w-16 object-contain" />
+              <img loading="lazy" decoding="async" src={value} alt="Partner logo" className="h-9 w-16 object-contain" />
             ) : (
               <span className="text-xs text-gray-400">No logo</span>
             ),
