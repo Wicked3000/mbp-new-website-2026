@@ -10,7 +10,7 @@ export default function LeadershipManager() {
         { key: "title", label: "Title", required: true },
         { key: "bio", label: "Bio", type: "textarea", required: true },
         { key: "icon", label: "Icon emoji", placeholder: "👨‍💼" },
-        { key: "photo", label: "Photo URL" },
+        { key: "photo", label: "Photo", type: "image" },
         { key: "sort_order", label: "Order", type: "number" },
       ]}
       columns={[

@@ -8,6 +8,7 @@
     "dev:api": "node server/index.js",
     "dev:all": "concurrently \"npm run dev:api\" \"npm run dev\"",
     "build": "vite build",
+    "export:seeds": "node scripts/export-seeds.mjs",
     "preview": "vite preview",
     "deploy": "vite build",
     "format": "oxfmt"

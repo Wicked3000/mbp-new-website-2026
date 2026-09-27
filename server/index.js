@@ -793,6 +793,25 @@ app.post("/auth/login.php", (req, res) => {
   app.handle(req, res);
 });
 
+// The client builds URLs as `${VITE_API_BASE}${path}` and the path carries a
+// ".php" suffix, so a VITE_API_BASE that itself ends in /api produces
+// /api/<route>.php. Register that shape too, otherwise login, the contact form
+// and the dashboard 404 depending on how VITE_API_BASE is configured.
+const phpAliases = [
+  ["post", "/api/auth/login.php", "/api/auth/login"],
+  ["post", "/api/contact.php", "/api/contact"],
+  ["get", "/api/stats/dashboard.php", "/api/stats/dashboard"],
+  ["get", "/api/health.php", "/api/health"],
+  ["post", "/api/upload.php", "/api/upload"],
+  ["get", "/api/auth/me.php", "/api/auth/me"],
+];
+for (const [method, from, to] of phpAliases) {
+  app[method](from, (req, res) => {
+    req.url = to;
+    app.handle(req, res);
+  });
+}
+
 app.use((req, res) => res.status(404).json({ error: "Not found" }));
 
 Promise.all([

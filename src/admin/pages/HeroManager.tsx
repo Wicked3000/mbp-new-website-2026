@@ -303,24 +303,6 @@ export default function HeroManager() {
 
           <div className="sm:col-span-2">
             <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
-              Image URL (auto-filled after upload)
-            </label>
-            <input
-              value={form.src}
-              onChange={(e) => {
-                setForm({ ...form, src: e.target.value });
-                setPreview(e.target.value);
-              }}
-              placeholder="Will be filled after device upload or paste https://..."
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
-            />
-            <div className="text-xs text-gray-400 mt-1">
-              You can also paste a URL manually, but device upload is preferred.
-            </div>
-          </div>
-
-          <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
               Alt text *
             </label>
             <input
