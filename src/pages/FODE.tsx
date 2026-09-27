@@ -66,7 +66,7 @@ function OverviewSection() {
             <p className="text-gray-600 leading-relaxed mb-4 text-lg">
               FODE provides the same national curriculum and examinations as conventional schools,
               delivered through flexible distance learning. The Division operates 12 study centres
-              across all 17 districts, serving 3,500+ students annually.
+              across all 4 districts, serving 3,500+ students annually.
             </p>
             <p className="text-gray-600 leading-relaxed mb-6">
               Students include Grade 10/12 upgraders, remote island learners, working adults, and
@@ -651,7 +651,7 @@ function SelectionListsSection() {
           </h3>
           <p className="text-gray-600 mb-4">
             The Alotau FODE Centre is the main provincial centre. Additional correspondence sites
-            across the 17 districts support remote learners.
+            across the 4 districts support remote learners.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

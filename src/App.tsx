@@ -13,6 +13,9 @@ import NoticesPage from "./pages/Notices";
 import AccessibilityPage from "./pages/Accessibility";
 import PrivacyPage from "./pages/Privacy";
 import TermsPage from "./pages/Terms";
+import DistrictDetailPage from "./pages/DistrictDetail";
+import DistrictsPage from "./pages/Districts";
+import SchoolDetailPage from "./pages/SchoolDetail";
 import DownloadsPage from "./pages/Downloads";
 import CalendarPage from "./pages/Calendar";
 import { api } from "@/lib/api";
@@ -29,6 +32,7 @@ import EventsManager from "@/admin/pages/EventsManager";
 import ProgramsManager from "@/admin/pages/ProgramsManager";
 import StatsManager from "@/admin/pages/StatsManager";
 import DistrictsManager from "@/admin/pages/DistrictsManager";
+import SchoolsManager from "@/admin/pages/SchoolsManager";
 import LeadershipManager from "@/admin/pages/LeadershipManager";
 import SelectionsManager from "@/admin/pages/SelectionsManager";
 import MessagesManager from "@/admin/pages/MessagesManager";
@@ -52,7 +56,7 @@ const QUICK_LINKS = [
     icon: "school",
     label: "School Directory",
     desc: "Find schools in Milne Bay",
-    href: "/basic#schools",
+    href: "/districts",
   },
   {
     icon: "file",
@@ -201,7 +205,13 @@ function HeroSection() {
 
   return (
     <section
-      className="relative overflow-hidden bg-[#07192E]"
+      // Leaves the sticky header (~6.6rem) plus a deliberate ~4.9rem slice of
+      // the QuickLinksStrip below it, so at scroll 0 you see the nav, the hero
+      // AND the top of the next section rather than a full-bleed hero you have
+      // to scroll past. svh avoids the jump when mobile browser chrome
+      // collapses. Short viewports (landscape phones) drop the floor entirely
+      // so the CTAs stay reachable.
+      className="relative overflow-hidden bg-[#07192E] flex items-center min-h-[26rem] supports-[height:100svh]:min-h-[max(26rem,calc(100svh-11.5rem))] [@media(max-height:560px)]:min-h-0"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-label="Hero slider"
@@ -221,7 +231,10 @@ function HeroSection() {
           />
         ))}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-r from-[#07192E]/60 via-[#0B2545]/40 to-[#0B2545]/10" />
+      {/* Scrim. Narrow screens stack the copy full-bleed, so a vertical wash
+          keeps the text readable; from sm up there is room for the horizontal
+          one and it reads better. */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#07192E]/75 via-[#07192E]/40 to-[#07192E]/75 sm:bg-gradient-to-r sm:from-[#07192E]/60 sm:via-[#0B2545]/40 sm:to-[#0B2545]/10" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#07192E]/45 via-transparent to-transparent" />
       <div
         className="absolute inset-0 opacity-[0.04]"
@@ -247,28 +260,39 @@ function HeroSection() {
         ›
       </button>
 
-      {/* Dots */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+      {/* Dots. Each button keeps a 24px+ hit area via padding while the inner
+          bar stays small, and the row clears the iOS home indicator. */}
+      <div className="absolute left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bottom-[calc(1.25rem+env(safe-area-inset-bottom))] [@media(max-height:560px)]:bottom-3">
         {list.map((_: any, i: number) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
             aria-label={`Go to slide ${i + 1}`}
-            className={`transition-all rounded-full ${
-              i === current ? "w-8 h-2.5 bg-[#C9A84C]" : "w-2.5 h-2.5 bg-white/50 hover:bg-white/80"
-            }`}
-          />
+            aria-current={i === current}
+            className="p-1.5 grid place-items-center"
+          >
+            <span
+              className={`block rounded-full transition-all ${
+                i === current ? "w-8 h-2.5 bg-[#C9A84C]" : "w-2.5 h-2.5 bg-white/50 hover:bg-white/80"
+              }`}
+            />
+          </button>
         ))}
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-14 sm:py-16 lg:py-20">
+      {/* Centred by the section's flex layout. Extra bottom padding reserves
+          the strip the absolutely-positioned dots occupy, so they never sit on
+          the buttons. */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-10 pb-16 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20 [@media(max-height:560px)]:pt-6 [@media(max-height:560px)]:pb-14">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/15 text-[#E2C47A] text-[11px] font-bold uppercase tracking-[0.14em] px-3 py-1.5 rounded-full mb-5">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/15 text-[#E2C47A] text-[11px] font-bold uppercase tracking-[0.14em] px-3 py-1.5 rounded-full mb-5 [@media(max-height:560px)]:mb-3">
             <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse inline-block" />
             Milne Bay Province • Papua New Guinea
           </div>
           <h1
-            className="text-[40px] sm:text-[54px] lg:text-[62px] font-bold text-white leading-[0.95] tracking-tight"
+            // Fluid rather than stepped: 32px on a 320px phone up to 62px on
+            // desktop, with no breakpoint where the size jumps.
+            className="font-bold text-white leading-[0.95] tracking-tight text-[clamp(2rem,8vw,3.875rem)] [@media(max-height:560px)]:text-[clamp(1.5rem,5vw,2rem)]"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Quality Education
@@ -276,13 +300,13 @@ function HeroSection() {
               for Every Child
             </span>
           </h1>
-          <p className="text-blue-100/90 text-[17px] leading-relaxed mt-4 max-w-xl font-light">
+          <p className="text-blue-100/90 leading-relaxed mt-4 max-w-xl font-light text-[clamp(0.95rem,3.6vw,1.0625rem)] [@media(max-height:560px)]:mt-2 [@media(max-height:560px)]:text-sm">
             The Division of Education oversees and supports all levels of schooling from elementary
             through post-secondary across{" "}
-            <span className="text-white font-semibold">17 districts & 312 schools.</span>
+            <span className="text-white font-semibold">4 districts across the province.</span>
           </p>
 
-          <div className="flex flex-wrap gap-3 mt-8">
+          <div className="flex flex-wrap gap-3 mt-6 sm:mt-8 [@media(max-height:560px)]:mt-4">
             <Link
               to="/basic"
               className="inline-flex items-center gap-2 bg-[#C9A84C] text-[#0B2545] font-bold px-6 py-3 rounded-full hover:bg-[#d4b45e] transition-colors shadow-md"
@@ -1095,21 +1119,25 @@ function LeadershipSection() {
 
 function DistrictsSection() {
   const FALLBACK = [
-    { name: "Alotau", schools: 42, type: "Urban" },
-    { name: "Samarai-Murua", schools: 22, type: "Island" },
-    { name: "Esa'ala", schools: 15, type: "Island" },
-    { name: "Kiriwina-Goodenough", schools: 18, type: "Island" },
-    { name: "Huhu", schools: 21, type: "Rural" },
-    { name: "Rabaruana", schools: 28, type: "Rural" },
-    { name: "Losuia", schools: 17, type: "Island" },
-    { name: "Dobu", schools: 16, type: "Island" },
+    { name: "Alotau", capital: "Alotau / Rabaraba", schools: 42, type: "Urban", students: "6,800+", sort_order: 1 },
+    { name: "Samarai-Murua", capital: "Misima", schools: 22, type: "Island", students: "1,900+", sort_order: 2 },
+    { name: "Esa'ala", capital: "Esa'ala", schools: 15, type: "Island", students: "1,600+", sort_order: 3 },
+    { name: "Kiriwina-Goodenough", capital: "Losuia", schools: 18, type: "Island", students: "2,100+", sort_order: 4 },
   ];
   const { data } = useEntity("districts", FALLBACK as any);
-  const districts = (data as any[]).slice(0, 8);
+  // All four districts fit in one row, so they are all shown here. /districts
+  // remains the searchable directory. The preview count is kept as a guard in
+  // case more districts are ever published.
+  const PREVIEW_COUNT = 4;
+  const allDistricts = (data as any[])
+    .slice()
+    .sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+  const districts = allDistricts.slice(0, PREVIEW_COUNT);
+  const remaining = allDistricts.length - districts.length;
   return (
-    <section className="py-14 sm:py-16 px-4 bg-white">
+    <section className="py-14 sm:py-16 px-4 bg-white scroll-mt-28" id="coverage">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
+        <div className="mb-10">
           <div>
             <span className="inline-flex items-center gap-2 text-[#0D9488] text-[11px] font-bold uppercase tracking-[0.14em]">
               <span className="w-6 h-[2px] bg-[#0D9488] inline-block" /> Coverage
@@ -1121,41 +1149,56 @@ function DistrictsSection() {
               Every District, Every Learner
             </h2>
             <p className="text-gray-500 mt-3 max-w-xl text-[15px] leading-relaxed">
-              312 schools across 17 districts, from mainland highlands to remote atolls. Find a
-              school near you.
+              Schools across the 4 districts of Milne Bay, from the mainland highlands to the
+              remote atolls. Find a school near you.
             </p>
+            {remaining > 0 && (
+              <p className="text-gray-400 mt-2 text-[13px]">
+                Showing {districts.length} of {allDistricts.length} districts.
+              </p>
+            )}
           </div>
-          <Link
-            to="/basic#schools"
-            className="inline-flex items-center gap-2 bg-[#0B2545] text-white font-bold px-5 py-2.5 rounded-full hover:bg-[#163663] transition-colors text-sm shadow-sm"
-          >
-            School Directory →
-          </Link>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {districts.map((d) => (
             <Link
               key={d.name}
-              to="/basic#schools"
-              className="group rounded-2xl border border-gray-100 bg-[#F8F6F1] p-5 hover:bg-white hover:shadow-lg hover:border-[#0D9488]/20 hover:-translate-y-1 transition-all"
+              to={`/districts/${d.id ?? d.name}`}
+              className="group rounded-2xl border border-gray-100 bg-[#F8F6F1] overflow-hidden hover:bg-white hover:shadow-lg hover:border-[#0D9488]/20 hover:-translate-y-1 transition-all"
             >
-              <div className="flex items-start justify-between">
-                <div className="w-10 h-10 rounded-xl bg-[#0B2545] text-white grid place-items-center text-sm group-hover:bg-[#0D9488] transition-colors">
-                  🏫
-                </div>
-                <span className="text-xs font-bold uppercase tracking-wider bg-white border border-gray-100 px-2 py-1 rounded-full text-gray-600">
+              {/* District thumbnail, uploaded via /admin/districts. Falls back to
+                  the school icon so a card is never left with a hole in it. */}
+              <div className="relative h-28 overflow-hidden bg-[#0B2545]">
+                {d.img ? (
+                  <img
+                    src={d.img}
+                    alt={`${d.name} district`}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="absolute inset-0 grid place-items-center text-2xl">🏫</div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07192E]/70 to-transparent" />
+                <span className="absolute top-2 left-2 text-[10px] font-bold uppercase tracking-wider bg-white/90 text-[#0B2545] px-2 py-1 rounded-full">
                   {d.type}
                 </span>
               </div>
-              <div className="mt-4 font-bold text-[#0B2545] group-hover:text-[#0D9488] transition-colors">
-                {d.name}
-              </div>
-              <div className="text-sm text-gray-500">
-                {d.schools} schools • {d.schools * 110}+ students
-              </div>
-              <div className="mt-3 text-xs font-bold text-[#0B2545] group-hover:text-[#0D9488] flex items-center gap-1">
-                View schools{" "}
-                <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+              <div className="p-5 pt-4">
+                <div className="font-bold text-[#0B2545] group-hover:text-[#0D9488] transition-colors">
+                  {d.name}
+                </div>
+                {/* Use the admin-editable figure; only fall back to an estimate
+                    when the field is empty. */}
+                <div className="text-sm text-gray-500">
+                  {d.schools} schools
+                  {d.students ? ` • ${d.students} students` : ""}
+                </div>
+                <div className="mt-3 text-xs font-bold text-[#0B2545] group-hover:text-[#0D9488] flex items-center gap-1">
+                  View schools{" "}
+                  <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                </div>
               </div>
             </Link>
           ))}
@@ -1166,12 +1209,13 @@ function DistrictsSection() {
             <div>
               <div className="font-bold">Need help locating a school?</div>
               <div className="text-blue-200 text-sm">
-                Search by district, level, or name with contact details and enrolment info.
+                Browse all 4 districts, then open a school for full contact, enrolment and
+                staffing details.
               </div>
             </div>
           </div>
           <Link
-            to="/basic#schools"
+            to="/districts"
             className="bg-[#C9A84C] text-[#0B2545] font-bold px-5 py-2.5 rounded-full hover:bg-[#d4b45e] transition-colors text-sm shrink-0"
           >
             Find a School
@@ -1473,6 +1517,9 @@ export default function App() {
       <Route path="/news" element={<NewsPage />} />
       <Route path="/news/:id" element={<NewsDetail />} />
       <Route path="/notices" element={<NoticesPage />} />
+      <Route path="/districts" element={<DistrictsPage />} />
+      <Route path="/districts/:id" element={<DistrictDetailPage />} />
+      <Route path="/schools/:id" element={<SchoolDetailPage />} />
 
       <Route path="/admin/login" element={<Login />} />
       <Route
@@ -1491,6 +1538,7 @@ export default function App() {
         <Route path="programs" element={<ProgramsManager />} />
         <Route path="stats" element={<StatsManager />} />
         <Route path="districts" element={<DistrictsManager />} />
+        <Route path="schools" element={<SchoolsManager />} />
         <Route path="leadership" element={<LeadershipManager />} />
         <Route path="selections" element={<SelectionsManager />} />
         <Route path="messages" element={<MessagesManager />} />

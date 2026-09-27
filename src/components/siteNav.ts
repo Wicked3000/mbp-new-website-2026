@@ -13,7 +13,7 @@ export const MAIN_NAV = [
 // Free-text searches go to /news?q= instead.
 export const SEARCH_SUGGESTIONS = [
   { label: "Term Dates", to: "/calendar" },
-  { label: "School Directory", to: "/basic#schools" },
+  { label: "School Directory", to: "/districts" },
   { label: "Grade 8 Exam Timetable", to: "/notices" },
   { label: "Teacher Relief Grants", to: "/notices" },
   { label: "VET Centres Alotau", to: "/vet#centres" },

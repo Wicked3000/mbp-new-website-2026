@@ -99,11 +99,22 @@ DROP TABLE IF EXISTS districts;
 CREATE TABLE districts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(80) NOT NULL UNIQUE,
+  capital VARCHAR(120) DEFAULT NULL,
   schools INT NOT NULL DEFAULT 0,
   type VARCHAR(40) NOT NULL,
   students VARCHAR(40) NOT NULL DEFAULT '0',
+  img TEXT DEFAULT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
+
+-- Existing databases: ALTER TABLE districts
+--   ADD COLUMN capital VARCHAR(120) DEFAULT NULL,
+--   ADD COLUMN img TEXT DEFAULT NULL,
+--   ADD COLUMN sort_order INT NOT NULL DEFAULT 0;
+
+-- Milne Bay Province has FOUR districts. The district capital is shown on the
+-- district page and in the directory.
 
 -- Schools (optional detailed)
 DROP TABLE IF EXISTS schools;
@@ -116,8 +127,99 @@ CREATE TABLE schools (
   level VARCHAR(60) NOT NULL DEFAULT 'Primary',
   capacity INT DEFAULT 0,
   enrolled INT DEFAULT 0,
+  img TEXT DEFAULT NULL,
+  head_teacher VARCHAR(160) DEFAULT NULL,
+  contact VARCHAR(160) DEFAULT NULL,
+  location VARCHAR(160) DEFAULT NULL,
+  male INT NOT NULL DEFAULT 0,
+  female INT NOT NULL DEFAULT 0,
+  teachers INT NOT NULL DEFAULT 0,
+  staff INT NOT NULL DEFAULT 0,
+  lat DECIMAL(10,7) DEFAULT NULL,
+  lng DECIMAL(10,7) DEFAULT NULL,
+  -- Contact & address
+  email VARCHAR(160) DEFAULT NULL,
+  address TEXT DEFAULT NULL,
+  alt_phone VARCHAR(60) DEFAULT NULL,
+  contact_person VARCHAR(160) DEFAULT NULL,
+  -- Identity
+  code VARCHAR(60) DEFAULT NULL,
+  established INT DEFAULT NULL,
+  day_boarding VARCHAR(40) DEFAULT 'Day',
+  category VARCHAR(60) DEFAULT 'Government',
+  -- Facilities
+  classrooms INT NOT NULL DEFAULT 0,
+  land_hectares DECIMAL(7,2) DEFAULT NULL,
+  has_library VARCHAR(3) DEFAULT 'No',
+  has_computer_lab VARCHAR(3) DEFAULT 'No',
+  has_science_lab VARCHAR(3) DEFAULT 'No',
+  has_sports_field VARCHAR(3) DEFAULT 'No',
+  has_boarding VARCHAR(3) DEFAULT 'No',
+  -- Staffing
+  principal VARCHAR(160) DEFAULT NULL,
+  teachers_male INT NOT NULL DEFAULT 0,
+  teachers_female INT NOT NULL DEFAULT 0,
+  untrained_teachers INT NOT NULL DEFAULT 0,
+  admin_officers INT NOT NULL DEFAULT 0,
+  support_staff INT NOT NULL DEFAULT 0,
+  -- Academics
+  streams TEXT DEFAULT NULL,
+  exam_centre VARCHAR(80) DEFAULT NULL,
+  extracurricular TEXT DEFAULT NULL,
+  -- Students & logistics
+  day_students INT NOT NULL DEFAULT 0,
+  boarders INT NOT NULL DEFAULT 0,
+  transport TEXT DEFAULT NULL,
+  uniform TEXT DEFAULT NULL,
+  fees TEXT DEFAULT NULL,
+  notes TEXT DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (district_id) REFERENCES districts(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
+
+-- Existing databases: run the statements below in place of a fresh import.
+-- ALTER TABLE schools
+--   ADD COLUMN img TEXT DEFAULT NULL,
+--   ADD COLUMN head_teacher VARCHAR(160) DEFAULT NULL,
+--   ADD COLUMN contact VARCHAR(160) DEFAULT NULL,
+--   ADD COLUMN location VARCHAR(160) DEFAULT NULL,
+--   ADD COLUMN male INT NOT NULL DEFAULT 0,
+--   ADD COLUMN female INT NOT NULL DEFAULT 0,
+--   ADD COLUMN teachers INT NOT NULL DEFAULT 0,
+--   ADD COLUMN staff INT NOT NULL DEFAULT 0,
+--   ADD COLUMN lat DECIMAL(10,7) DEFAULT NULL,
+--   ADD COLUMN lng DECIMAL(10,7) DEFAULT NULL,
+--   ADD COLUMN email VARCHAR(160) DEFAULT NULL,
+--   ADD COLUMN address TEXT DEFAULT NULL,
+--   ADD COLUMN alt_phone VARCHAR(60) DEFAULT NULL,
+--   ADD COLUMN contact_person VARCHAR(160) DEFAULT NULL,
+--   ADD COLUMN code VARCHAR(60) DEFAULT NULL,
+--   ADD COLUMN established INT DEFAULT NULL,
+--   ADD COLUMN day_boarding VARCHAR(40) DEFAULT 'Day',
+--   ADD COLUMN category VARCHAR(60) DEFAULT 'Government',
+--   ADD COLUMN classrooms INT NOT NULL DEFAULT 0,
+--   ADD COLUMN land_hectares DECIMAL(7,2) DEFAULT NULL,
+--   ADD COLUMN has_library VARCHAR(3) DEFAULT 'No',
+--   ADD COLUMN has_computer_lab VARCHAR(3) DEFAULT 'No',
+--   ADD COLUMN has_science_lab VARCHAR(3) DEFAULT 'No',
+--   ADD COLUMN has_sports_field VARCHAR(3) DEFAULT 'No',
+--   ADD COLUMN has_boarding VARCHAR(3) DEFAULT 'No',
+--   ADD COLUMN principal VARCHAR(160) DEFAULT NULL,
+--   ADD COLUMN teachers_male INT NOT NULL DEFAULT 0,
+--   ADD COLUMN teachers_female INT NOT NULL DEFAULT 0,
+--   ADD COLUMN untrained_teachers INT NOT NULL DEFAULT 0,
+--   ADD COLUMN admin_officers INT NOT NULL DEFAULT 0,
+--   ADD COLUMN support_staff INT NOT NULL DEFAULT 0,
+--   ADD COLUMN streams TEXT DEFAULT NULL,
+--   ADD COLUMN exam_centre VARCHAR(80) DEFAULT NULL,
+--   ADD COLUMN extracurricular TEXT DEFAULT NULL,
+--   ADD COLUMN day_students INT NOT NULL DEFAULT 0,
+--   ADD COLUMN boarders INT NOT NULL DEFAULT 0,
+--   ADD COLUMN transport TEXT DEFAULT NULL,
+--   ADD COLUMN uniform TEXT DEFAULT NULL,
+--   ADD COLUMN fees TEXT DEFAULT NULL,
+--   ADD COLUMN notes TEXT DEFAULT NULL,
+--   ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 -- Leadership
 DROP TABLE IF EXISTS leadership;
@@ -263,15 +365,25 @@ INSERT INTO stats (value_text,label,sub,sort_order) VALUES
 ('2,140','Teachers','Qualified staff',3),
 ('17','Districts','Covered',4);
 
-INSERT INTO districts (name,schools,type,students) VALUES
-('Alotau',42,'Urban','6,800+'),
-('Samarai-Murua',22,'Island','1,900+'),
-('Esa\'ala',15,'Island','1,600+'),
-('Kiriwina-Goodenough',18,'Island','2,100+'),
-('Huhu',21,'Rural','2,300+'),
-('Rabaruana',28,'Rural','3,200+'),
-('Losuia',17,'Island','1,700+'),
-('Dobu',16,'Island','1,800+');
+-- Milne Bay Province has FOUR districts. Do not add rows for settlements or
+-- islands (Losuia, Rabaruana, Dobu, Huhu ...) - those are towns, not districts.
+INSERT INTO districts (name,capital,schools,type,students,sort_order) VALUES
+('Alotau','Alotau / Rabaraba',42,'Urban','6,800+',1),
+('Samarai-Murua','Misima',22,'Island','1,900+',2),
+('Esa\'ala','Esa\'ala',15,'Island','1,600+',3),
+('Kiriwina-Goodenough','Losuia',18,'Island','2,100+',4);
+
+-- Schools. Names match those already referenced by the selection lists so the
+-- two features stay consistent. district_id is resolved by name below.
+INSERT INTO schools (district_id,name,district,type,level,capacity,enrolled,male,female,teachers,staff,head_teacher,contact,location) VALUES
+((SELECT id FROM districts WHERE name='Alotau'),'Alotau Primary School','Alotau','Provincial Primary','Primary',420,398,206,192,24,31,'Mr. Peter G. Wai','+675 641 1234 ext. 101','Alotau Town'),
+((SELECT id FROM districts WHERE name='Alotau'),'Alotau Secondary School','Alotau','Provincial High','Secondary',250,248,126,122,17,23,'Ms. Grace L. Kila','+675 641 1234 ext. 103','Alotau Town'),
+((SELECT id FROM districts WHERE name='Alotau'),'Cameron Secondary School','Alotau','National High','Secondary',300,298,152,146,21,29,'Dr. John K. Boro','+675 641 1234 ext. 104','Alotau'),
+((SELECT id FROM districts WHERE name='Alotau'),'Bwesiruru Secondary','Alotau','Provincial High','Secondary',180,178,92,86,13,17,'Mr. Amos L. Kila','+675 641 1234 ext. 105','Bwesiruru'),
+((SELECT id FROM districts WHERE name='Alotau'),'Hagita Secondary School','Alotau','Provincial High','Secondary',160,158,80,78,12,15,'Ms. Ruth M. Tama','+675 641 1234 ext. 106','Hagita'),
+((SELECT id FROM districts WHERE name='Kiriwina-Goodenough'),'Kiriwina Secondary School','Kiriwina-Goodenough','Provincial High','Secondary',120,118,61,57,9,12,'Mr. Joseph B. Kam','+675 641 1234 ext. 107','Kiriwina');
+-- lat/lng are intentionally NULL: enter the real coordinates for each school in
+-- /admin/schools and the Google Maps link appears on the district page.
 
 INSERT INTO leadership (name,title,bio,icon,sort_order) VALUES
 ('Dr. John K. Boro','Provincial Education Advisor','Over 25 years in educational leadership across PNG. Holds a PhD in Educational Administration from UPNG.','👨‍💼',1),

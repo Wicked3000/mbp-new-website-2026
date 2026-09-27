@@ -106,6 +106,16 @@ export const LeadershipIcon = (p: Props) =>
       <path d="M15.5 18a5 5 0 0 1 6 0" />
     </>,
   );
+export const SchoolIcon = (p: Props) =>
+  wrap(
+    p,
+    <>
+      <path d="M3 21h18" />
+      <path d="M5 21V9l7-5 7 5v12" />
+      <path d="M10 21v-5h4v5" />
+      <path d="M9.5 11h5" />
+    </>,
+  );
 export const SelectionsIcon = (p: Props) =>
   wrap(
     p,

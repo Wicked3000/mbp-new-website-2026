@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -71,7 +72,7 @@ function OverviewSection() {
               literacy, numeracy, and life skills that form the bedrock of all future learning.
             </p>
             <p className="text-gray-600 leading-relaxed mb-6">
-              The Division oversees 312 schools across 17 districts, serving over 35,000 students
+              The Division oversees schools across all 4 districts of Milne Bay Province
               with a teaching workforce of 1,800+ qualified educators. Our schools span from urban
               Alotau to remote island communities in Samarai-Murua, ensuring every child has access
               to quality basic education.
@@ -301,59 +302,45 @@ function CurriculumSection() {
   );
 }
 
+const DISTRICTS_FALLBACK = [
+  { id: 1, name: "Alotau", schools: 42, students: "6,800+", type: "Urban" },
+  { id: 2, name: "Samarai-Murua", schools: 22, students: "1,900+", type: "Island" },
+  { id: 3, name: "Esa'ala", schools: 15, students: "1,600+", type: "Island" },
+  { id: 4, name: "Kiriwina-Goodenough", schools: 18, students: "2,100+", type: "Island" },
+  { id: 5, name: "Huhu", schools: 21, students: "2,300+", type: "Rural" },
+  { id: 6, name: "Rabaruana", schools: 28, students: "3,200+", type: "Rural" },
+  { id: 7, name: "Losuia", schools: 17, students: "1,700+", type: "Island" },
+  { id: 8, name: "Dobu", schools: 16, students: "1,800+", type: "Island" },
+  { id: 9, name: "Wanigela", schools: 12, students: "1,100+", type: "Rural" },
+  { id: 10, name: "Agaivaro", schools: 19, students: "2,000+", type: "Rural" },
+  { id: 11, name: "Duau", schools: 14, students: "1,400+", type: "Rural" },
+  { id: 12, name: "Guasopa", schools: 11, students: "1,000+", type: "Remote" },
+  { id: 13, name: "Kokoda", schools: 13, students: "1,200+", type: "Remote" },
+  { id: 14, name: "Maramatana", schools: 10, students: "900+", type: "Remote" },
+  { id: 15, name: "Misi", schools: 12, students: "1,100+", type: "Rural" },
+  { id: 16, name: "Sibonai", schools: 11, students: "950+", type: "Remote" },
+  { id: 17, name: "West Ferguson", schools: 11, students: "1,050+", type: "Remote" },
+];
+
 function SchoolsSection() {
-  const DISTRICTS = [
-    { name: "Alotau", schools: 42, students: "6,800+", type: "Urban / Rural" },
-    {
-      name: "Kiriwina-Goodenough",
-      schools: 18,
-      students: "2,100+",
-      type: "Island",
-    },
-    {
-      name: "Samarai-Murua",
-      schools: 22,
-      students: "1,900+",
-      type: "Remote Islands",
-    },
-    {
-      name: "Esa'ala",
-      schools: 15,
-      students: "1,600+",
-      type: "Island / Coastal",
-    },
-    {
-      name: "Rabaruana",
-      schools: 28,
-      students: "3,200+",
-      type: "Mainland Rural",
-    },
-    {
-      name: "Wanigela",
-      schools: 12,
-      students: "1,100+",
-      type: "Remote Mainland",
-    },
-    { name: "Agaivaro", schools: 19, students: "2,000+", type: "Rural" },
-    { name: "Dobu", schools: 16, students: "1,800+", type: "Island" },
-    { name: "Duau", schools: 14, students: "1,400+", type: "Rural" },
-    { name: "Guasopa", schools: 11, students: "1,000+", type: "Remote" },
-    { name: "Huhu", schools: 21, students: "2,300+", type: "Rural" },
-    { name: "Kokoda", schools: 13, students: "1,200+", type: "Remote" },
-    { name: "Losuia", schools: 17, students: "1,700+", type: "Island" },
-    { name: "Maramatana", schools: 10, students: "900+", type: "Remote" },
-    { name: "Misi", schools: 12, students: "1,100+", type: "Rural" },
-    { name: "Sibonai", schools: 11, students: "950+", type: "Remote" },
-    { name: "West Ferguson", schools: 11, students: "1,050+", type: "Remote" },
-  ];
+  // Admin-managed via /admin/districts, so additions and edits appear here
+  // rather than needing a code change.
+  const { data } = useEntity("districts", DISTRICTS_FALLBACK as any);
 
   const [district, setDistrict] = useState("");
-
   const [query, setQuery] = useState("");
+
+  const districts = useMemo(
+    () =>
+      (data as any[])
+        .slice()
+        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)),
+    [data],
+  );
 
   const normalizedQuery = query.trim().toLowerCase();
 
-  const filteredDistricts = DISTRICTS.filter(
+  const filteredDistricts = districts.filter(
     (d) =>
       (district === "" || d.name === district) &&
       `${d.name} ${d.type}`.toLowerCase().includes(normalizedQuery),
@@ -371,7 +358,7 @@ function SchoolsSection() {
               className="text-4xl font-bold text-[#0B2545] mt-2"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Schools Across 17 Districts
+              Schools Across 4 Districts
             </h2>
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
@@ -382,7 +369,7 @@ function SchoolsSection() {
               className="px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-teal-500"
             >
               <option value="">All Districts</option>
-              {DISTRICTS.map((d) => (
+              {districts.map((d) => (
                 <option key={d.name} value={d.name}>
                   {d.name}
                 </option>
@@ -425,17 +412,14 @@ function SchoolsSection() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDistrict(d.name);
-
-                        setQuery("");
-                      }}
+                    {/* Now navigates to that district's school list instead of
+                        re-filtering the district table it sits in. */}
+                    <Link
+                      to={`/districts/${d.id ?? d.name}`}
                       className="text-teal-600 hover:text-teal-800 font-medium text-sm"
                     >
                       View Schools →
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}

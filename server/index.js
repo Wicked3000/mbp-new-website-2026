@@ -103,6 +103,89 @@ async function ensureSelectionGrade11Columns() {
   }
 }
 
+// The Coverage section shows a district thumbnail, so districts needs an `img`
+// column. Added on boot so an existing database picks it up without manual SQL.
+async function ensureDistrictsColumns() {
+  const columns = [
+    { name: "capital", ddl: "capital VARCHAR(120) DEFAULT NULL" },
+    { name: "img", ddl: "img TEXT DEFAULT NULL" },
+    { name: "sort_order", ddl: "sort_order INT NOT NULL DEFAULT 0" },
+  ];
+  try {
+    for (const column of columns) {
+      const [rows] = await pool.query(
+        "SELECT COUNT(*) AS count FROM information_schema.columns WHERE table_schema = ? AND table_name = 'districts' AND column_name = ?",
+        [DB.database, column.name],
+      );
+      if (Number(rows[0]?.count) === 0)
+        await pool.query(`ALTER TABLE districts ADD COLUMN ${column.ddl}`);
+    }
+  } catch (error) {
+    console.error("Unable to ensure districts columns:", error.message);
+  }
+}
+
+// The district detail page shows school photos and contact details, so schools
+// needs those columns. Added on boot so an existing database picks them up.
+async function ensureSchoolsColumns() {
+  // The school profile page renders all of these, so they are added on boot and
+  // an existing database picks them up without manual SQL.
+  const columns = [
+    { name: "img", ddl: "img TEXT DEFAULT NULL" },
+    { name: "head_teacher", ddl: "head_teacher VARCHAR(160) DEFAULT NULL" },
+    { name: "contact", ddl: "contact VARCHAR(160) DEFAULT NULL" },
+    { name: "location", ddl: "location VARCHAR(160) DEFAULT NULL" },
+    { name: "male", ddl: "male INT NOT NULL DEFAULT 0" },
+    { name: "female", ddl: "female INT NOT NULL DEFAULT 0" },
+    { name: "teachers", ddl: "teachers INT NOT NULL DEFAULT 0" },
+    { name: "staff", ddl: "staff INT NOT NULL DEFAULT 0" },
+    { name: "lat", ddl: "lat DECIMAL(10,7) DEFAULT NULL" },
+    { name: "lng", ddl: "lng DECIMAL(10,7) DEFAULT NULL" },
+    { name: "email", ddl: "email VARCHAR(160) DEFAULT NULL" },
+    { name: "address", ddl: "address TEXT DEFAULT NULL" },
+    { name: "alt_phone", ddl: "alt_phone VARCHAR(60) DEFAULT NULL" },
+    { name: "contact_person", ddl: "contact_person VARCHAR(160) DEFAULT NULL" },
+    { name: "code", ddl: "code VARCHAR(60) DEFAULT NULL" },
+    { name: "established", ddl: "established INT DEFAULT NULL" },
+    { name: "day_boarding", ddl: "day_boarding VARCHAR(40) DEFAULT 'Day'" },
+    { name: "category", ddl: "category VARCHAR(60) DEFAULT 'Government'" },
+    { name: "classrooms", ddl: "classrooms INT NOT NULL DEFAULT 0" },
+    { name: "land_hectares", ddl: "land_hectares DECIMAL(7,2) DEFAULT NULL" },
+    { name: "has_library", ddl: "has_library VARCHAR(3) DEFAULT 'No'" },
+    { name: "has_computer_lab", ddl: "has_computer_lab VARCHAR(3) DEFAULT 'No'" },
+    { name: "has_science_lab", ddl: "has_science_lab VARCHAR(3) DEFAULT 'No'" },
+    { name: "has_sports_field", ddl: "has_sports_field VARCHAR(3) DEFAULT 'No'" },
+    { name: "has_boarding", ddl: "has_boarding VARCHAR(3) DEFAULT 'No'" },
+    { name: "principal", ddl: "principal VARCHAR(160) DEFAULT NULL" },
+    { name: "teachers_male", ddl: "teachers_male INT NOT NULL DEFAULT 0" },
+    { name: "teachers_female", ddl: "teachers_female INT NOT NULL DEFAULT 0" },
+    { name: "untrained_teachers", ddl: "untrained_teachers INT NOT NULL DEFAULT 0" },
+    { name: "admin_officers", ddl: "admin_officers INT NOT NULL DEFAULT 0" },
+    { name: "support_staff", ddl: "support_staff INT NOT NULL DEFAULT 0" },
+    { name: "streams", ddl: "streams TEXT DEFAULT NULL" },
+    { name: "exam_centre", ddl: "exam_centre VARCHAR(80) DEFAULT NULL" },
+    { name: "extracurricular", ddl: "extracurricular TEXT DEFAULT NULL" },
+    { name: "day_students", ddl: "day_students INT NOT NULL DEFAULT 0" },
+    { name: "boarders", ddl: "boarders INT NOT NULL DEFAULT 0" },
+    { name: "transport", ddl: "transport TEXT DEFAULT NULL" },
+    { name: "uniform", ddl: "uniform TEXT DEFAULT NULL" },
+    { name: "fees", ddl: "fees TEXT DEFAULT NULL" },
+    { name: "notes", ddl: "notes TEXT DEFAULT NULL" },
+  ];
+  try {
+    for (const column of columns) {
+      const [rows] = await pool.query(
+        "SELECT COUNT(*) AS count FROM information_schema.columns WHERE table_schema = ? AND table_name = 'schools' AND column_name = ?",
+        [DB.database, column.name],
+      );
+      if (Number(rows[0]?.count) === 0)
+        await pool.query(`ALTER TABLE schools ADD COLUMN ${column.ddl}`);
+    }
+  } catch (error) {
+    console.error("Unable to ensure schools columns:", error.message);
+  }
+}
+
 // Uploads live inside public/ so that Vite copies them into the build output.
 // Without this, anything uploaded through the admin panel exists only on this
 // machine and 404s once the built site is deployed.
@@ -379,11 +462,59 @@ const MAP = {
   stats: { table: "stats", cols: ["value_text", "label", "sub", "sort_order"] },
   districts: {
     table: "districts",
-    cols: ["name", "schools", "type", "students"],
+    cols: ["name", "capital", "schools", "type", "students", "img", "sort_order"],
   },
   schools: {
     table: "schools",
-    cols: ["district_id", "name", "district", "type", "level", "capacity", "enrolled"],
+    cols: [
+      "district_id",
+      "name",
+      "district",
+      "type",
+      "level",
+      "capacity",
+      "enrolled",
+      "img",
+      "head_teacher",
+      "contact",
+      "location",
+      "male",
+      "female",
+      "teachers",
+      "staff",
+      "lat",
+      "lng",
+      "email",
+      "address",
+      "alt_phone",
+      "contact_person",
+      "code",
+      "established",
+      "day_boarding",
+      "category",
+      "classrooms",
+      "land_hectares",
+      "has_library",
+      "has_computer_lab",
+      "has_science_lab",
+      "has_sports_field",
+      "has_boarding",
+      "principal",
+      "teachers_male",
+      "teachers_female",
+      "untrained_teachers",
+      "admin_officers",
+      "support_staff",
+      "streams",
+      "exam_centre",
+      "extracurricular",
+      "day_students",
+      "boarders",
+      "transport",
+      "uniform",
+      "fees",
+      "notes",
+    ],
   },
   leadership: {
     table: "leadership",
@@ -666,6 +797,8 @@ app.use((req, res) => res.status(404).json({ error: "Not found" }));
 
 Promise.all([
   ensurePartnerLogoColumn(),
+  ensureDistrictsColumns(),
+  ensureSchoolsColumns(),
   ensureWhatsAppSubscribersTable(),
   ensureSelectionStudentsTable(),
   ensureSelectionGrade11Columns(),
