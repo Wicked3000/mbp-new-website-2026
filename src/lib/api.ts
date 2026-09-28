@@ -882,6 +882,126 @@ const SEEDS: Record<string, any[]> = {
       "program": "basic",
       "created_at": {},
       "sort_order": 8
+    },
+    {
+      "id": 33,
+      "name": "2026 Grade 9 Selection List",
+      "type": "PDF",
+      "size_text": "2.4 MB",
+      "category": "Selection Lists",
+      "description": "Grade 9 selection list",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 1
+    },
+    {
+      "id": 34,
+      "name": "2026 Grade 11 Selection List",
+      "type": "PDF",
+      "size_text": "3.1 MB",
+      "category": "Selection Lists",
+      "description": "Grade 11 selection list",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 2
+    },
+    {
+      "id": 35,
+      "name": "Post Primary Handbook 2026",
+      "type": "PDF",
+      "size_text": "3.1 MB",
+      "category": "Policy",
+      "description": "Post Primary programme handbook",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 3
+    },
+    {
+      "id": 36,
+      "name": "Grade 10 & 12 Exam Specifications",
+      "type": "PDF",
+      "size_text": "4.2 MB",
+      "category": "Assessment",
+      "description": "National examination specifications",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 4
+    },
+    {
+      "id": 37,
+      "name": "Stream Selection Guidelines",
+      "type": "PDF",
+      "size_text": "1.8 MB",
+      "category": "Guidance",
+      "description": "Guidelines for choosing a stream",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 5
+    },
+    {
+      "id": 38,
+      "name": "Secondary Curriculum: Grades 9–12",
+      "type": "PDF",
+      "size_text": "22.4 MB",
+      "category": "Curriculum",
+      "description": "Secondary curriculum for Grades 9 to 12",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 6
+    },
+    {
+      "id": 39,
+      "name": "School Learning Improvement Plan Template",
+      "type": "DOCX",
+      "size_text": "920 KB",
+      "category": "Planning",
+      "description": "SLIP planning template for schools",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 7
+    },
+    {
+      "id": 40,
+      "name": "Career Guidance Resource Kit",
+      "type": "PDF",
+      "size_text": "5.6 MB",
+      "category": "Guidance",
+      "description": "Career guidance resources for students",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 8
+    },
+    {
+      "id": 41,
+      "name": "Boarding School Standards",
+      "type": "PDF",
+      "size_text": "2.7 MB",
+      "category": "Infrastructure",
+      "description": "Standards for boarding facilities",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 9
+    },
+    {
+      "id": 42,
+      "name": "Teacher Subject Panel Minutes 2025",
+      "type": "PDF",
+      "size_text": "1.4 MB",
+      "category": "Professional Dev",
+      "description": "Subject panel meeting minutes",
+      "file_path": "",
+      "program": "post",
+      "created_at": {},
+      "sort_order": 10
     }
   ],
   "selections_grade9": [
@@ -1489,6 +1609,518 @@ const SEEDS: Record<string, any[]> = {
       "heading": "Common Questions",
       "blurb": null,
       "sort_order": 5
+    }
+  ],
+  "post_hero": [
+    {
+      "id": 1,
+      "eyebrow": "Program 02 - Post Primary",
+      "title": "Post Primary",
+      "subtitle": "Grades 9 – 12",
+      "description": "Secondary education pathways preparing students for tertiary admission, technical training, and employment across Milne Bay's 24 secondary and national high schools.",
+      "banner": "/assets/education_programs/post/banner.jpg",
+      "alt": "Secondary school students",
+      "sort_order": 1
+    }
+  ],
+  "post_overview": [
+    {
+      "id": 1,
+      "eyebrow": "Program Overview",
+      "heading": "Pathways to Future Success",
+      "intro": "Post Primary Education in Milne Bay covers Grades 9–12, providing critical pathways for students transitioning from basic education. The Division oversees 24 secondary and national high schools serving 13,000+ students.",
+      "body": "Students can choose from academic streams leading to university, technical pathways into VET, or flexible learning through FODE. Our schools span urban centers and remote districts, with boarding facilities at key locations.",
+      "features_title": "Key Features",
+      "sort_order": 1
+    }
+  ],
+  "post_overview_cards": [
+    {
+      "id": 1,
+      "icon": "🎓",
+      "title": "Lower Secondary (Grades 9–10)",
+      "desc": "Broad curriculum with core subjects plus electives; Grade 10 National Examination for certification",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "🏫",
+      "title": "Upper Secondary (Grades 11–12)",
+      "desc": "Specialised streams: Science, Humanities, Business, Technical; Grade 12 Exam for tertiary entry",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "🔬",
+      "title": "STEM Focus Schools",
+      "desc": "Enhanced science & mathematics at Cameron & Alotau Secondary for university pathways",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "🛠️",
+      "title": "Technical Secondary",
+      "desc": "Trade-focused curriculum at selected schools with VET articulation pathways",
+      "sort_order": 4
+    }
+  ],
+  "post_overview_features": [
+    {
+      "id": 1,
+      "feature": "Free tuition under Government TFF policy (Grades 9–12)",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "feature": "National curriculum with provincial contextualization",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "feature": "Grade 10 & 12 National Examinations",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "feature": "School-based assessment contributing to final grades",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "feature": "Career guidance & tertiary application support",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "feature": "Boarding facilities at 8 provincial high schools",
+      "sort_order": 6
+    }
+  ],
+  "post_overview_stats": [
+    {
+      "id": 1,
+      "value_text": "24",
+      "label": "Schools",
+      "color": "bg-[#163663]",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "value_text": "13,200+",
+      "label": "Students",
+      "color": "bg-[#0B2545]",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "value_text": "420",
+      "label": "Teachers",
+      "color": "bg-amber-600",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "value_text": "8",
+      "label": "Boarding Schools",
+      "color": "bg-amber-700",
+      "sort_order": 4
+    }
+  ],
+  "post_streams": [
+    {
+      "id": 1,
+      "name": "Science Stream",
+      "grades": "11–12",
+      "subjects": "Physics, Chemistry, Biology, Adv. Math, English, ICT",
+      "icon": "🔬",
+      "color": "bg-blue-500",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Humanities Stream",
+      "grades": "11–12",
+      "subjects": "History, Geography, Economics, Legal Studies, English, Language",
+      "icon": "📜",
+      "color": "bg-green-500",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Business Stream",
+      "grades": "11–12",
+      "subjects": "Accounting, Business Studies, Economics, Math, English, ICT",
+      "icon": "💼",
+      "color": "bg-purple-500",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "Technical Stream",
+      "grades": "11–12",
+      "subjects": "Tech Drawing, Applied Tech, Math, English, Physics, VET modules",
+      "icon": "⚙️",
+      "color": "bg-orange-500",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "name": "Core Subjects (Gr 9–10)",
+      "grades": "9–10",
+      "subjects": "English, Math, Science, Social Science, Personal Dev, Making a Living",
+      "icon": "📚",
+      "color": "bg-teal-500",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "name": "Electives (Gr 9–10)",
+      "grades": "9–10",
+      "subjects": "Agriculture, Home Economics, Design Tech, ICT, Visual Arts, Music",
+      "icon": "🎨",
+      "color": "bg-pink-500",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "name": "Flexible Learning (FODE)",
+      "grades": "9–12",
+      "subjects": "All streams via distance mode; same curriculum & examinations",
+      "icon": "💻",
+      "color": "bg-indigo-500",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "name": "Career Education",
+      "grades": "9–12",
+      "subjects": "Career planning, tertiary applications, work experience, life skills",
+      "icon": "🎯",
+      "color": "bg-cyan-500",
+      "sort_order": 8
+    }
+  ],
+  "post_assessment": [
+    {
+      "id": 1,
+      "icon": "📋",
+      "heading": "Assessment & Certification",
+      "bullet": "Grade 10 National Exam: English, Math, Science, Social Science, Personal Development",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "📋",
+      "heading": "Assessment & Certification",
+      "bullet": "Grade 12 National Exam: Stream-specific subjects (5–6 papers per stream)",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "📋",
+      "heading": "Assessment & Certification",
+      "bullet": "School-based assessment (30%) + National exam (70%) = Final grade",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "📋",
+      "heading": "Assessment & Certification",
+      "bullet": "Certificates: Grade 10 Certificate, Higher School Certificate (Grade 12)",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "icon": "📋",
+      "heading": "Assessment & Certification",
+      "bullet": "Tertiary entry via Grade 12 results + STAT-P for universities",
+      "sort_order": 5
+    }
+  ],
+  "post_pathways": [
+    {
+      "id": 1,
+      "title": "University Entrance",
+      "desc": "Grade 12 Higher School Certificate with required subject combinations for UPNG, DWU, PAU, and overseas universities. STAT-P testing available.",
+      "icon": "🎓",
+      "color": "bg-blue-500",
+      "stats": "65% of Grade 12 grads",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "title": "Technical & VET Articulation",
+      "desc": "Direct entry into VET certificate/diploma programs. Technical stream students receive credit recognition. Partnerships with 4 provincial VET centres.",
+      "icon": "🔧",
+      "color": "bg-orange-500",
+      "stats": "20% transition to VET",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "title": "Teacher Education",
+      "desc": "Primary teacher training at PNGEI & DWU. Secondary teacher education at UPNG & DWU. Division coordinates selections annually.",
+      "icon": "👨‍🏫",
+      "color": "bg-green-500",
+      "stats": "120+ teachers/year",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "title": "Health & Nursing",
+      "desc": "Entry to nursing colleges (St. Mary's, Mendi, Lae) and community health worker programs. Science stream prerequisite.",
+      "icon": "🏥",
+      "color": "bg-red-500",
+      "stats": "80+ health workers/yr",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "title": "Police & Defence Forces",
+      "desc": "Grade 12 certificate minimum for officer cadet programs. Physical fitness & leadership from school programs valued.",
+      "icon": "🛡️",
+      "color": "bg-gray-700",
+      "stats": "40+ recruits/year",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "title": "Maritime & Fisheries",
+      "desc": "National Fisheries College & maritime training. Island district students given priority. Business/Technical streams relevant.",
+      "icon": "⚓",
+      "color": "bg-cyan-500",
+      "stats": "25+ cadets/year",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "title": "Agriculture & Rural Dev",
+      "desc": "University of Natural Resources (UNRE) & agriculture colleges. Making a Living subject provides foundation.",
+      "icon": "🌱",
+      "color": "bg-lime-600",
+      "stats": "30+ agriculture students",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "title": "FODE & Distance Upgrading",
+      "desc": "Grade 10/12 upgrades via FODE for missed exams or improved marks. Flexible for working students.",
+      "icon": "📚",
+      "color": "bg-indigo-500",
+      "stats": "500+ FODE enrolments",
+      "sort_order": 8
+    }
+  ],
+  "post_initiatives": [
+    {
+      "id": 1,
+      "title": "STEM Excellence Program",
+      "desc": "Enhanced labs, specialist teachers, and industry partnerships at Cameron & Alotau Secondary. Target: 50% Science stream enrolment.",
+      "icon": "🔬",
+      "status": "Active",
+      "color": "bg-blue-500",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "title": "Grade 12 Exam Preparation",
+      "desc": "Holiday revision camps, past paper workshops, and online resources. 2025 pass rate target: 85%+ across all streams.",
+      "icon": "📝",
+      "status": "Active",
+      "color": "bg-green-500",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "title": "Career Guidance Expansion",
+      "desc": "Trained career counsellors in 15 schools. Annual Provincial Career Expo. Tertiary application workshops for all Grade 12s.",
+      "icon": "🎯",
+      "status": "Scaling",
+      "color": "bg-amber-500",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "title": "Boarding Facility Upgrades",
+      "desc": "K2.5M investment in dormitory renovations, water/sanitation, and dining facilities at 8 boarding schools (2024–2026).",
+      "icon": "🏠",
+      "status": "Active",
+      "color": "bg-teal-500",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "title": "Digital Learning Platforms",
+      "desc": "Moodle LMS deployment at 10 schools. Offline content servers for remote schools. Teacher training in blended delivery.",
+      "icon": "💻",
+      "status": "Pilot",
+      "color": "bg-purple-500",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "title": "School-Based Assessment Quality",
+      "desc": "Standardised SBA moderation across all 24 schools. External marker calibration. Data-driven intervention for at-risk students.",
+      "icon": "📊",
+      "status": "Active",
+      "color": "bg-indigo-500",
+      "sort_order": 6
+    }
+  ],
+  "post_support": [
+    {
+      "id": 1,
+      "icon": "📄",
+      "title": "Curriculum & Exam Resources",
+      "desc": "Syllabuses, exam specs, past papers, marking guides distributed annually",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "🏗️",
+      "title": "Infrastructure & Maintenance",
+      "desc": "TFF infrastructure component, SLIP grants, boarding facility funding",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "👨‍🏫",
+      "title": "Teacher Development",
+      "desc": "In-service training, subject panels, HOD leadership programs, certification",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "📊",
+      "title": "Data & Quality Assurance",
+      "desc": "EMIS, school inspections, exam analysis, performance dashboards",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "icon": "🎓",
+      "title": "Student Support Services",
+      "desc": "Career guidance, counselling, scholarship info, tertiary applications",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "icon": "🚨",
+      "title": "Emergency & Resilience",
+      "desc": "Disaster recovery, psychosocial support, temporary learning spaces",
+      "sort_order": 6
+    }
+  ],
+  "post_support_contact": [
+    {
+      "id": 1,
+      "heading": "Post Primary Helpdesk",
+      "body": "Assistance with enrolments, subject selection, exam queries, tertiary applications, and school transfers.",
+      "phone_label": "Provincial Post Primary Officer",
+      "phone_value": "+675 641 1234 (ext. 3)",
+      "email_label": "Email",
+      "email_value": "post.primary@mbpeducation.gov.pg",
+      "office_label": "Office",
+      "office_value": "Division of Education, Alotau",
+      "button_label": "Submit Enquiry",
+      "button_href": "/contact",
+      "sort_order": 1
+    }
+  ],
+  "post_faq": [
+    {
+      "id": 1,
+      "q": "How does my child get into a secondary school?",
+      "a": "Placement is based on Grade 8 Examination results. Students apply through the national online selection system (Grade 9 Selection). The Division manages provincial quotas for each school.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "q": "What is the difference between National High and Provincial High schools?",
+      "a": "National High Schools (e.g., Cameron) are centrally funded, selective entry, and offer all streams. Provincial High Schools are provincially funded, serve local catchments, and may offer limited streams based on resources.",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "q": "Can my child change streams in Grade 11?",
+      "a": "Stream changes are possible in the first 4 weeks of Grade 11 with principal approval and subject teacher assessment. After this, changes are not permitted due to assessment requirements.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "q": "What if my child fails the Grade 10 Exam?",
+      "a": "Students can repeat Grade 10 at their school, enrol in FODE to upgrade, or enter VET certificate programs. The Division provides counselling on alternative pathways.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "q": "Are there scholarships for Grade 12 graduates?",
+      "a": "Yes: TESAS (tertiary), HECAS, and provincial government scholarships. The Division coordinates nominations. Criteria: academic merit, financial need, priority workforce areas.",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "q": "How do I get my Grade 12 certificate reissued?",
+      "a": "Apply through Measurement Services Division (NDoE) with statutory declaration, police report (if lost), and K30 fee. Processing: 4–6 weeks. Contact Post Primary helpdesk for assistance.",
+      "sort_order": 6
+    }
+  ],
+  "post_section_headings": [
+    {
+      "id": 1,
+      "skey": "curriculum",
+      "eyebrow": "Curriculum & Streams",
+      "heading": "Diverse Learning Pathways",
+      "blurb": "Students choose streams at Grade 11 based on Grade 10 results, interests, and career goals. All streams meet national certification requirements.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "skey": "selections",
+      "eyebrow": "2026 Selection Lists",
+      "heading": "Grade 9 & Grade 11 Selections",
+      "blurb": "Published selection lists for the current intake year, by school and position.",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "skey": "pathways",
+      "eyebrow": "Post-Grade 12 Pathways",
+      "heading": "Where Our Students Go",
+      "blurb": "Post Primary education opens multiple pathways. The Division tracks graduate destinations to align programs with provincial workforce needs.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "skey": "initiatives",
+      "eyebrow": "Key Initiatives",
+      "heading": "Driving Quality & Access",
+      "blurb": "Targeted programs improving outcomes, expanding pathways, and modernizing secondary education across the province.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "skey": "support",
+      "eyebrow": "Support & Resources",
+      "heading": "Empowering Schools & Students",
+      "blurb": "Comprehensive support ensuring every secondary school delivers quality education and every student can access their chosen pathway.",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "skey": "downloads",
+      "eyebrow": "Resources",
+      "heading": "Documents & Downloads",
+      "blurb": null,
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "skey": "faq",
+      "eyebrow": "Frequently Asked",
+      "heading": "Common Questions",
+      "blurb": null,
+      "sort_order": 7
     }
   ]
 };

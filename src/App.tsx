@@ -36,6 +36,7 @@ import SchoolsManager from "@/admin/pages/SchoolsManager";
 import LeadershipManager from "@/admin/pages/LeadershipManager";
 import SelectionsManager from "@/admin/pages/SelectionsManager";
 import BasicEducationManager from "@/admin/pages/BasicEducationManager";
+import PostPrimaryManager from "@/admin/pages/PostPrimaryManager";
 import MessagesManager from "@/admin/pages/MessagesManager";
 import WhatsAppSubscribersManager from "@/admin/pages/WhatsAppSubscribersManager";
 import SettingsManager from "@/admin/pages/SettingsManager";
@@ -1548,6 +1549,7 @@ export default function App() {
         <Route path="partners" element={<PartnersManager />} />
         <Route path="downloads" element={<DownloadsManager />} />
         <Route path="basic-education" element={<BasicEducationManager />} />
+        <Route path="post-primary" element={<PostPrimaryManager />} />
         <Route path="settings" element={<SettingsManager />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

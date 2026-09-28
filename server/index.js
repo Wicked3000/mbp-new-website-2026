@@ -198,6 +198,133 @@ async function ensureBasicEducationTables() {
   }
 }
 
+// The Post Primary page sections. Same shape as the Basic Education set; see
+// backend/database/post_primary_sections.sql for the seeded content.
+async function ensurePostPrimaryTables() {
+  const tables = [
+    `CREATE TABLE IF NOT EXISTS post_hero (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      eyebrow VARCHAR(160) NOT NULL DEFAULT '',
+      title VARCHAR(160) NOT NULL DEFAULT '',
+      subtitle VARCHAR(160) NOT NULL DEFAULT '',
+      description TEXT,
+      banner VARCHAR(255) DEFAULT NULL,
+      alt VARCHAR(255) NOT NULL DEFAULT '',
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_overview (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      eyebrow VARCHAR(160) NOT NULL DEFAULT '',
+      heading VARCHAR(255) NOT NULL DEFAULT '',
+      intro TEXT,
+      body TEXT,
+      features_title VARCHAR(160) NOT NULL DEFAULT '',
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_overview_cards (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      title VARCHAR(255) NOT NULL DEFAULT '',
+      \`desc\` TEXT,
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_post_overview_cards_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_overview_features (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      feature TEXT NOT NULL,
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_post_overview_features_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_overview_stats (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      value_text VARCHAR(80) NOT NULL DEFAULT '',
+      label VARCHAR(120) NOT NULL DEFAULT '',
+      color VARCHAR(60) NOT NULL DEFAULT 'bg-[#163663]',
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_post_overview_stats_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_streams (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(160) NOT NULL DEFAULT '',
+      grades VARCHAR(40) NOT NULL DEFAULT '',
+      subjects TEXT,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      color VARCHAR(60) NOT NULL DEFAULT 'bg-blue-500',
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_post_streams_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_assessment (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      heading VARCHAR(255) NOT NULL DEFAULT '',
+      bullet TEXT,
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_pathways (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255) NOT NULL DEFAULT '',
+      \`desc\` TEXT,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      color VARCHAR(60) NOT NULL DEFAULT 'bg-blue-500',
+      stats VARCHAR(120) NOT NULL DEFAULT '',
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_post_pathways_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_initiatives (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255) NOT NULL DEFAULT '',
+      \`desc\` TEXT,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      status VARCHAR(60) NOT NULL DEFAULT '',
+      color VARCHAR(60) NOT NULL DEFAULT 'bg-amber-500',
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_post_initiatives_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_support (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      title VARCHAR(255) NOT NULL DEFAULT '',
+      \`desc\` TEXT,
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_post_support_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_support_contact (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      heading VARCHAR(255) NOT NULL DEFAULT '',
+      body TEXT,
+      phone_label VARCHAR(160) NOT NULL DEFAULT '',
+      phone_value VARCHAR(120) NOT NULL DEFAULT '',
+      email_label VARCHAR(160) NOT NULL DEFAULT '',
+      email_value VARCHAR(190) NOT NULL DEFAULT '',
+      office_label VARCHAR(160) NOT NULL DEFAULT '',
+      office_value VARCHAR(255) NOT NULL DEFAULT '',
+      button_label VARCHAR(120) NOT NULL DEFAULT '',
+      button_href VARCHAR(255) NOT NULL DEFAULT '/contact',
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_faq (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      q TEXT NOT NULL,
+      a TEXT,
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_post_faq_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS post_section_headings (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      skey VARCHAR(80) NOT NULL UNIQUE,
+      eyebrow VARCHAR(160) NOT NULL DEFAULT '',
+      heading VARCHAR(255) NOT NULL DEFAULT '',
+      blurb TEXT,
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+  ];
+  try {
+    for (const ddl of tables) await pool.query(ddl);
+  } catch (error) {
+    console.error("Unable to ensure Post Primary tables:", error.message);
+  }
+}
+
 // downloads gained program/sort_order so documents can be scoped to one
 // programme page instead of always showing in the shared listing.
 async function ensureDownloadsProgramColumns() {
@@ -726,6 +853,71 @@ const MAP = {
     table: "basic_section_headings",
     cols: ["skey", "eyebrow", "heading", "blurb", "sort_order"],
   },
+  // Post Primary page sections, same shape as the basic_* set.
+  post_hero: {
+    table: "post_hero",
+    cols: ["eyebrow", "title", "subtitle", "description", "banner", "alt", "sort_order"],
+  },
+  post_overview: {
+    table: "post_overview",
+    cols: ["eyebrow", "heading", "intro", "body", "features_title", "sort_order"],
+  },
+  post_overview_cards: {
+    table: "post_overview_cards",
+    cols: ["icon", "title", "desc", "sort_order"],
+  },
+  post_overview_features: {
+    table: "post_overview_features",
+    cols: ["feature", "sort_order"],
+  },
+  post_overview_stats: {
+    table: "post_overview_stats",
+    cols: ["value_text", "label", "color", "sort_order"],
+  },
+  post_streams: {
+    table: "post_streams",
+    cols: ["name", "grades", "subjects", "icon", "color", "sort_order"],
+  },
+  post_assessment: {
+    table: "post_assessment",
+    cols: ["icon", "heading", "bullet", "sort_order"],
+  },
+  post_pathways: {
+    table: "post_pathways",
+    cols: ["title", "desc", "icon", "color", "stats", "sort_order"],
+  },
+  post_initiatives: {
+    table: "post_initiatives",
+    cols: ["title", "desc", "icon", "status", "color", "sort_order"],
+  },
+  post_support: {
+    table: "post_support",
+    cols: ["icon", "title", "desc", "sort_order"],
+  },
+  post_support_contact: {
+    table: "post_support_contact",
+    cols: [
+      "heading",
+      "body",
+      "phone_label",
+      "phone_value",
+      "email_label",
+      "email_value",
+      "office_label",
+      "office_value",
+      "button_label",
+      "button_href",
+      "sort_order",
+    ],
+  },
+  post_faq: {
+    table: "post_faq",
+    cols: ["q", "a", "sort_order"],
+  },
+  post_section_headings: {
+    table: "post_section_headings",
+    cols: ["skey", "eyebrow", "heading", "blurb", "sort_order"],
+  },
   selections_grade9: {
     table: "selections_grade9",
     cols: ["school", "district", "type", "capacity", "placed", "stream", "cutoff"],
@@ -805,6 +997,20 @@ const publicRead = new Set([
   "basic_support_contact",
   "basic_faq",
   "basic_section_headings",
+  // Post Primary page sections.
+  "post_hero",
+  "post_overview",
+  "post_overview_cards",
+  "post_overview_features",
+  "post_overview_stats",
+  "post_streams",
+  "post_assessment",
+  "post_pathways",
+  "post_initiatives",
+  "post_support",
+  "post_support_contact",
+  "post_faq",
+  "post_section_headings",
 ]);
 
 app.all("/api/entities", async (req, res) => {
@@ -1026,6 +1232,7 @@ Promise.all([
   ensureSelectionStudentsTable(),
   ensureSelectionGrade11Columns(),
   ensureBasicEducationTables(),
+  ensurePostPrimaryTables(),
   ensureDownloadsProgramColumns(),
 ]).finally(() => {
   app.listen(PORT, () =>

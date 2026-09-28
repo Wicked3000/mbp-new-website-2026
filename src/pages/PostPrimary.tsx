@@ -1,15 +1,27 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 function PageHero() {
+  const FALLBACK = {
+    eyebrow: "Program 02 - Post Primary",
+    title: "Post Primary",
+    subtitle: "Grades 9 – 12",
+    description:
+      "Secondary education pathways preparing students for tertiary admission, technical training, and employment across Milne Bay's 24 secondary and national high schools.",
+    banner: "/assets/education_programs/post/banner.jpg",
+    alt: "Secondary school students",
+  };
+  const { data } = useEntity("post_hero", [FALLBACK]);
+  const hero = { ...FALLBACK, ...(data?.[0] || {}) };
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#163663]">
       <img decoding="async"
-        src="/assets/education_programs/post/banner.jpg"
-        alt="Secondary school students"
+        src={hero.banner}
+        alt={hero.alt}
         className="absolute inset-0 w-full h-full object-cover object-center opacity-40"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-[#163663]/90 via-[#163663]/70 to-[#0B2545]/40" />
@@ -17,18 +29,17 @@ function PageHero() {
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
-            Program 02 - Post Primary
+            {hero.eyebrow}
           </div>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-5"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Post Primary
-            <span className="block text-amber-400">Grades 9 – 12</span>
+            {hero.title}
+            <span className="block text-amber-400">{hero.subtitle}</span>
           </h1>
           <p className="text-amber-100 text-lg leading-relaxed max-w-2xl">
-            Secondary education pathways preparing students for tertiary admission, technical
-            training, and employment across Milne Bay's 24 secondary and national high schools.
+            {hero.description}
           </p>
           <div className="flex flex-wrap gap-4 mt-8">
             <Link
@@ -51,53 +62,75 @@ function PageHero() {
 }
 
 function OverviewSection() {
+  const OVERVIEW_FALLBACK = {
+    eyebrow: "Program Overview",
+    heading: "Pathways to Future Success",
+    intro:
+      "Post Primary Education in Milne Bay covers Grades 9–12, providing critical pathways for students transitioning from basic education. The Division oversees 24 secondary and national high schools serving 13,000+ students.",
+    body: "Students can choose from academic streams leading to university, technical pathways into VET, or flexible learning through FODE. Our schools span urban centers and remote districts, with boarding facilities at key locations.",
+    features_title: "Key Features",
+  };
+  const CARDS_FALLBACK = [
+    {
+      icon: "🎓",
+      title: "Lower Secondary (Grades 9–10)",
+      desc: "Broad curriculum with core subjects plus electives; Grade 10 National Examination for certification",
+    },
+    {
+      icon: "🏫",
+      title: "Upper Secondary (Grades 11–12)",
+      desc: "Specialised streams: Science, Humanities, Business, Technical; Grade 12 Exam for tertiary entry",
+    },
+    {
+      icon: "🔬",
+      title: "STEM Focus Schools",
+      desc: "Enhanced science & mathematics at Cameron & Alotau Secondary for university pathways",
+    },
+    {
+      icon: "🛠️",
+      title: "Technical Secondary",
+      desc: "Trade-focused curriculum at selected schools with VET articulation pathways",
+    },
+  ];
+  const FEATURES_FALLBACK = [
+    { feature: "Free tuition under Government TFF policy (Grades 9–12)" },
+    { feature: "National curriculum with provincial contextualization" },
+    { feature: "Grade 10 & 12 National Examinations" },
+    { feature: "School-based assessment contributing to final grades" },
+    { feature: "Career guidance & tertiary application support" },
+    { feature: "Boarding facilities at 8 provincial high schools" },
+  ];
+  const STATS_FALLBACK = [
+    { value_text: "24", label: "Schools", color: "bg-[#163663]" },
+    { value_text: "13,200+", label: "Students", color: "bg-[#0B2545]" },
+    { value_text: "420", label: "Teachers", color: "bg-amber-600" },
+    { value_text: "8", label: "Boarding Schools", color: "bg-amber-700" },
+  ];
+
+  const { data: overviewRows } = useEntity("post_overview", [OVERVIEW_FALLBACK]);
+  const { data: cards } = useEntity("post_overview_cards", CARDS_FALLBACK);
+  const { data: features } = useEntity("post_overview_features", FEATURES_FALLBACK);
+  const { data: stats } = useEntity("post_overview_stats", STATS_FALLBACK);
+  const overview = { ...OVERVIEW_FALLBACK, ...(overviewRows?.[0] || {}) };
+
   return (
     <section id="overview" className="bg-[#F8F6F1] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
             <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
-              Program Overview
+              {overview.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-[#0B2545] mt-2 mb-6 leading-tight"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Pathways to Future Success
+              {overview.heading}
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-4 text-lg">
-              Post Primary Education in Milne Bay covers Grades 9–12, providing critical pathways
-              for students transitioning from basic education. The Division oversees 24 secondary
-              and national high schools serving 13,000+ students.
-            </p>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              Students can choose from academic streams leading to university, technical pathways
-              into VET, or flexible learning through FODE. Our schools span urban centers and remote
-              districts, with boarding facilities at key locations.
-            </p>
+            <p className="text-gray-600 leading-relaxed mb-4 text-lg">{overview.intro}</p>
+            <p className="text-gray-600 leading-relaxed mb-6">{overview.body}</p>
             <div className="space-y-4">
-              {[
-                {
-                  icon: "🎓",
-                  title: "Lower Secondary (Grades 9–10)",
-                  desc: "Broad curriculum with core subjects plus electives; Grade 10 National Examination for certification",
-                },
-                {
-                  icon: "🏫",
-                  title: "Upper Secondary (Grades 11–12)",
-                  desc: "Specialised streams: Science, Humanities, Business, Technical; Grade 12 Exam for tertiary entry",
-                },
-                {
-                  icon: "🔬",
-                  title: "STEM Focus Schools",
-                  desc: "Enhanced science & mathematics at Cameron & Alotau Secondary for university pathways",
-                },
-                {
-                  icon: "🛠️",
-                  title: "Technical Secondary",
-                  desc: "Trade-focused curriculum at selected schools with VET articulation pathways",
-                },
-              ].map((item) => (
+              {cards.map((item: any) => (
                 <div
                   key={item.title}
                   className="flex gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-amber-200 hover:shadow-md transition-all"
@@ -124,20 +157,13 @@ function OverviewSection() {
                   className="text-xl font-bold text-[#0B2545] mb-3"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  Key Features
+                  {overview.features_title}
                 </h3>
                 <ul className="space-y-3">
-                  {[
-                    "Free tuition under Government TFF policy (Grades 9–12)",
-                    "National curriculum with provincial contextualization",
-                    "Grade 10 & 12 National Examinations",
-                    "School-based assessment contributing to final grades",
-                    "Career guidance & tertiary application support",
-                    "Boarding facilities at 8 provincial high schools",
-                  ].map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm">
+                  {features.map((row: any, i: number) => (
+                    <li key={i} className="flex items-start gap-3 text-sm">
                       <span className="text-amber-400 shrink-0">✓</span>
-                      <span className="text-gray-700">{f}</span>
+                      <span className="text-gray-700">{row.feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -145,22 +171,13 @@ function OverviewSection() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
-              {[
-                { value: "24", label: "Schools", color: "bg-[#163663]" },
-                { value: "13,200+", label: "Students", color: "bg-[#0B2545]" },
-                { value: "420", label: "Teachers", color: "bg-amber-600" },
-                {
-                  value: "8",
-                  label: "Boarding Schools",
-                  color: "bg-amber-700",
-                },
-              ].map((s) => (
+              {stats.map((s: any) => (
                 <div key={s.label} className={`${s.color} rounded-xl p-5 text-white text-center`}>
                   <div
                     className="text-3xl font-bold"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
-                    {s.value}
+                    {s.value_text}
                   </div>
                   <div className="text-amber-100 text-sm uppercase tracking-wider">{s.label}</div>
                 </div>
@@ -174,7 +191,7 @@ function OverviewSection() {
 }
 
 function CurriculumSection() {
-  const STREAMS = [
+  const STREAMS_FALLBACK = [
     {
       name: "Science Stream",
       grades: "11–12",
@@ -232,28 +249,48 @@ function CurriculumSection() {
       color: "bg-cyan-500",
     },
   ];
+  const ASSESSMENT_FALLBACK = [
+    { icon: "📋", heading: "Assessment & Certification", bullet: "Grade 10 National Exam: English, Math, Science, Social Science, Personal Development" },
+    { icon: "📋", heading: "Assessment & Certification", bullet: "Grade 12 National Exam: Stream-specific subjects (5–6 papers per stream)" },
+    { icon: "📋", heading: "Assessment & Certification", bullet: "School-based assessment (30%) + National exam (70%) = Final grade" },
+    { icon: "📋", heading: "Assessment & Certification", bullet: "Certificates: Grade 10 Certificate, Higher School Certificate (Grade 12)" },
+    { icon: "📋", heading: "Assessment & Certification", bullet: "Tertiary entry via Grade 12 results + STAT-P for universities" },
+  ];
+  const { data: streams } = useEntity("post_streams", STREAMS_FALLBACK);
+  const { data: assessment } = useEntity("post_assessment", ASSESSMENT_FALLBACK);
+  const { data: headings } = useEntity("post_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "curriculum") || {
+      eyebrow: "Curriculum & Streams",
+      heading: "Diverse Learning Pathways",
+      blurb: "Students choose streams at Grade 11 based on Grade 10 results, interests, and career goals. All streams meet national certification requirements.",
+    };
+  // The callout rendered its icon and heading once, above the bullet list, so
+  // they are taken from the first row rather than repeated per bullet.
+  const assessmentHead = assessment[0] || { icon: "📋", heading: "Assessment & Certification" };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
-            Curriculum & Streams
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Diverse Learning Pathways
+            {heading.heading}
           </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
-            Students choose streams at Grade 11 based on Grade 10 results, interests, and career
-            goals. All streams meet national certification requirements.
-          </p>
+          {heading.blurb && (
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
+              {heading.blurb}
+            </p>
+          )}
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {STREAMS.map((s) => (
+          {streams.map((s: any) => (
             <div
               key={s.name}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-amber-300 hover:shadow-lg transition-all"
@@ -277,35 +314,20 @@ function CurriculumSection() {
 
         <div className="mt-12 p-6 bg-amber-50 rounded-xl border border-amber-100">
           <div className="flex items-start gap-4">
-            <div className="text-3xl shrink-0">📋</div>
+            <div className="text-3xl shrink-0">{assessmentHead.icon}</div>
             <div>
               <h3
                 className="text-xl font-bold text-[#0B2545] mb-2"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
-                Assessment & Certification
+                {assessmentHead.heading}
               </h3>
               <ul className="space-y-2 text-gray-700 text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-amber-500">•</span> Grade 10 National Exam: English, Math,
-                  Science, Social Science, Personal Development
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-amber-500">•</span> Grade 12 National Exam: Stream-specific
-                  subjects (5–6 papers per stream)
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-amber-500">•</span> School-based assessment (30%) + National
-                  exam (70%) = Final grade
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-amber-500">•</span> Certificates: Grade 10 Certificate,
-                  Higher School Certificate (Grade 12)
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-amber-500">•</span> Tertiary entry via Grade 12 results +
-                  STAT-P for universities
-                </li>
+                {assessment.map((row: any, i: number) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-amber-500">•</span> {row.bullet}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -315,483 +337,10 @@ function CurriculumSection() {
   );
 }
 
-const GRADE9_DATA: Record<
-  string,
-  {
-    no: number;
-    primary: string;
-    surname: string;
-    firstName: string;
-    gender: string;
-  }[]
-> = {
-  "Cameron Secondary School": [
-    {
-      no: 1,
-      primary: "ALOTAU",
-      surname: "GUMBAL",
-      firstName: "SHANNON",
-      gender: "F",
-    },
-    {
-      no: 2,
-      primary: "ALOTAU",
-      surname: "PAIVA",
-      firstName: "KIVU",
-      gender: "F",
-    },
-    {
-      no: 3,
-      primary: "ALOTAU",
-      surname: "MOABE",
-      firstName: "JESHARELLA",
-      gender: "F",
-    },
-    {
-      no: 4,
-      primary: "ALOTAU",
-      surname: "GAWA",
-      firstName: "JACKIE MARIE",
-      gender: "M",
-    },
-    {
-      no: 5,
-      primary: "ALOTAU",
-      surname: "TAU",
-      firstName: "ELIZABETH",
-      gender: "F",
-    },
-    {
-      no: 6,
-      primary: "ALOTAU",
-      surname: "WARA",
-      firstName: "MICHAEL",
-      gender: "M",
-    },
-    {
-      no: 7,
-      primary: "ALOTAU",
-      surname: "KILA",
-      firstName: "GRACE",
-      gender: "F",
-    },
-    {
-      no: 8,
-      primary: "ALOTAU",
-      surname: "MOSE",
-      firstName: "DAVID",
-      gender: "M",
-    },
-    {
-      no: 9,
-      primary: "ALOTAU",
-      surname: "TARI",
-      firstName: "MARGARET",
-      gender: "F",
-    },
-    {
-      no: 10,
-      primary: "ALOTAU",
-      surname: "BORO",
-      firstName: "JOHN",
-      gender: "M",
-    },
-  ],
-  "Cape Vogel High School": [
-    {
-      no: 1,
-      primary: "CAPE VOGEL",
-      surname: "KAPA",
-      firstName: "JAMES",
-      gender: "M",
-    },
-    {
-      no: 2,
-      primary: "CAPE VOGEL",
-      surname: "WAI",
-      firstName: "MARY",
-      gender: "F",
-    },
-    {
-      no: 3,
-      primary: "CAPE VOGEL",
-      surname: "TOLA",
-      firstName: "PETER",
-      gender: "M",
-    },
-    {
-      no: 4,
-      primary: "CAPE VOGEL",
-      surname: "GURA",
-      firstName: "HELEN",
-      gender: "F",
-    },
-  ],
-  "Duau High School": [
-    {
-      no: 1,
-      primary: "DUAU",
-      surname: "MAI",
-      firstName: "JOSEPH",
-      gender: "M",
-    },
-    { no: 2, primary: "DUAU", surname: "KILA", firstName: "ANNA", gender: "F" },
-    { no: 3, primary: "DUAU", surname: "VAI", firstName: "PAUL", gender: "M" },
-  ],
-  "Holy Name Secondary School": [
-    {
-      no: 1,
-      primary: "ALOTAU",
-      surname: "JOHN",
-      firstName: "MATTHEW",
-      gender: "M",
-    },
-    {
-      no: 2,
-      primary: "ALOTAU",
-      surname: "PAUL",
-      firstName: "MARK",
-      gender: "M",
-    },
-    {
-      no: 3,
-      primary: "ALOTAU",
-      surname: "LUKE",
-      firstName: "JOHN",
-      gender: "M",
-    },
-    {
-      no: 4,
-      primary: "ALOTAU",
-      surname: "MARK",
-      firstName: "LUKE",
-      gender: "M",
-    },
-  ],
-  "Hagita Secondary School": [
-    {
-      no: 1,
-      primary: "HAGITA",
-      surname: "WASO",
-      firstName: "PETER",
-      gender: "M",
-    },
-    {
-      no: 2,
-      primary: "HAGITA",
-      surname: "GARI",
-      firstName: "DAVID",
-      gender: "M",
-    },
-    {
-      no: 3,
-      primary: "HAGITA",
-      surname: "KORA",
-      firstName: "SUSAN",
-      gender: "F",
-    },
-  ],
-  "Kiriwina High School": [
-    {
-      no: 1,
-      primary: "KIRIWINA",
-      surname: "BULA",
-      firstName: "JOHN",
-      gender: "M",
-    },
-    {
-      no: 2,
-      primary: "KIRIWINA",
-      surname: "TOVUE",
-      firstName: "MARY",
-      gender: "F",
-    },
-    {
-      no: 3,
-      primary: "KIRIWINA",
-      surname: "GWALI",
-      firstName: "HELEN",
-      gender: "F",
-    },
-  ],
-  "Kuiaro High School": [
-    {
-      no: 1,
-      primary: "KUIARO",
-      surname: "VALI",
-      firstName: "THOMAS",
-      gender: "M",
-    },
-    {
-      no: 2,
-      primary: "KUIARO",
-      surname: "MOI",
-      firstName: "JENNY",
-      gender: "F",
-    },
-  ],
-  "Misima High School": [
-    {
-      no: 1,
-      primary: "MISIMA",
-      surname: "KEWA",
-      firstName: "ROSE",
-      gender: "F",
-    },
-    {
-      no: 2,
-      primary: "MISIMA",
-      surname: "UVA",
-      firstName: "HENRY",
-      gender: "M",
-    },
-  ],
-  "Santa Maria Secondary School": [
-    {
-      no: 1,
-      primary: "SANTA MARIA",
-      surname: "BOGA",
-      firstName: "PAUL",
-      gender: "M",
-    },
-    {
-      no: 2,
-      primary: "SANTA MARIA",
-      surname: "KILA",
-      firstName: "GRACE",
-      gender: "F",
-    },
-  ],
-  "Suau High School": [
-    {
-      no: 1,
-      primary: "SUAU",
-      surname: "TARI",
-      firstName: "MARGARET",
-      gender: "F",
-    },
-    { no: 2, primary: "SUAU", surname: "BORO", firstName: "JOHN", gender: "M" },
-  ],
-  "Wesley Secondary School": [
-    {
-      no: 1,
-      primary: "WESLEY",
-      surname: "WAI",
-      firstName: "PETER",
-      gender: "M",
-    },
-    {
-      no: 2,
-      primary: "WESLEY",
-      surname: "GARI",
-      firstName: "DAVID",
-      gender: "M",
-    },
-  ],
-  "Woodlark Junior School": [
-    {
-      no: 1,
-      primary: "WOODLARK",
-      surname: "MOI",
-      firstName: "JENNY",
-      gender: "F",
-    },
-    {
-      no: 2,
-      primary: "WOODLARK",
-      surname: "UVA",
-      firstName: "HENRY",
-      gender: "M",
-    },
-  ],
-  "Yeleyamba Junior High School": [
-    {
-      no: 1,
-      primary: "YELEYAMBA",
-      surname: "KEWA",
-      firstName: "ROSE",
-      gender: "F",
-    },
-    {
-      no: 2,
-      primary: "YELEYAMBA",
-      surname: "BULA",
-      firstName: "JOHN",
-      gender: "M",
-    },
-  ],
-};
-
-const GRADE11_DATA: Record<
-  string,
-  {
-    name: string;
-    gender: string;
-    slfNo: string;
-    transferredFrom: string;
-  }[]
-> = {
-  "Cameron Secondary School": [
-    {
-      name: "ABENDAN CHELSIE",
-      gender: "F",
-      slfNo: "25546001002",
-      transferredFrom: "",
-    },
-    {
-      name: "ABENDAN ADRIAN",
-      gender: "M",
-      slfNo: "25546001001",
-      transferredFrom: "",
-    },
-    {
-      name: "AHUTA ANDREW",
-      gender: "M",
-      slfNo: "25546001005",
-      transferredFrom: "",
-    },
-    {
-      name: "AIA NATASHA",
-      gender: "F",
-      slfNo: "25546001006",
-      transferredFrom: "",
-    },
-    {
-      name: "BAI RAYMOND",
-      gender: "M",
-      slfNo: "25546001007",
-      transferredFrom: "",
-    },
-    {
-      name: "DAGA GRACE",
-      gender: "F",
-      slfNo: "25546001008",
-      transferredFrom: "",
-    },
-  ],
-  "Duau High School": [
-    {
-      name: "KILA JOSEPH",
-      gender: "M",
-      slfNo: "25546002001",
-      transferredFrom: "DUAU HIGH",
-    },
-    {
-      name: "VAI ANNA",
-      gender: "F",
-      slfNo: "25546002002",
-      transferredFrom: "DUAU HIGH",
-    },
-    {
-      name: "MAI PAUL",
-      gender: "M",
-      slfNo: "25546002003",
-      transferredFrom: "DUAU HIGH",
-    },
-  ],
-  "Holy Name Secondary School": [
-    {
-      name: "JOHN MATTHEW",
-      gender: "M",
-      slfNo: "25546003001",
-      transferredFrom: "HOLY NAME SEC",
-    },
-    {
-      name: "PAUL MARK",
-      gender: "M",
-      slfNo: "25546003002",
-      transferredFrom: "HOLY NAME SEC",
-    },
-    {
-      name: "LUKE JOHN",
-      gender: "M",
-      slfNo: "25546003003",
-      transferredFrom: "HOLY NAME SEC",
-    },
-  ],
-  "Hagita Secondary School": [
-    {
-      name: "WASO PETER",
-      gender: "M",
-      slfNo: "25546004001",
-      transferredFrom: "HAGITA SEC",
-    },
-    {
-      name: "GARI DAVID",
-      gender: "M",
-      slfNo: "25546004002",
-      transferredFrom: "HAGITA SEC",
-    },
-    {
-      name: "KORA SUSAN",
-      gender: "F",
-      slfNo: "25546004003",
-      transferredFrom: "HAGITA SEC",
-    },
-  ],
-  "Kiriwina High School": [
-    {
-      name: "BULA JOHN",
-      gender: "M",
-      slfNo: "25546005001",
-      transferredFrom: "KIRIWINA HIGH",
-    },
-    {
-      name: "TOVUE MARY",
-      gender: "F",
-      slfNo: "25546005002",
-      transferredFrom: "KIRIWINA HIGH",
-    },
-    {
-      name: "GWALI HELEN",
-      gender: "F",
-      slfNo: "25546005003",
-      transferredFrom: "KIRIWINA HIGH",
-    },
-  ],
-  "Misima High School": [
-    {
-      name: "KEWA ROSE",
-      gender: "F",
-      slfNo: "25546006001",
-      transferredFrom: "MISIMA HIGH",
-    },
-    {
-      name: "UVA HENRY",
-      gender: "M",
-      slfNo: "25546006002",
-      transferredFrom: "MISIMA HIGH",
-    },
-  ],
-  "Santa Maria Secondary School": [
-    {
-      name: "BOGA PAUL",
-      gender: "M",
-      slfNo: "25546007001",
-      transferredFrom: "SANTA MARIA SEC",
-    },
-    {
-      name: "KILA GRACE",
-      gender: "F",
-      slfNo: "25546007002",
-      transferredFrom: "SANTA MARIA SEC",
-    },
-  ],
-  "Wesley Secondary School": [
-    {
-      name: "WAI PETER",
-      gender: "M",
-      slfNo: "25546008001",
-      transferredFrom: "WESLEY SEC",
-    },
-    {
-      name: "GARI DAVID",
-      gender: "M",
-      slfNo: "25546008002",
-      transferredFrom: "WESLEY SEC",
-    },
-  ],
-};
+// Selection lists hold minors' names, so there is deliberately no bundled
+// copy: the rows come from the selection_students table, which the API
+// restricts to authenticated admins. The section renders an empty state
+// until an admin adds students through /admin/selections.
 
 type SelectionStudent = {
   id?: number;
@@ -807,30 +356,7 @@ type SelectionStudent = {
   transferred_from?: string;
 };
 
-const FALLBACK_SELECTION_STUDENTS: SelectionStudent[] = [
-  ...Object.entries(GRADE9_DATA).flatMap(([school, students]) =>
-    students.map((student) => ({
-      grade_level: 9,
-      school,
-      position_no: student.no,
-      primary_school: student.primary,
-      surname: student.surname,
-      first_name: student.firstName,
-      gender: student.gender,
-    })),
-  ),
-  ...Object.entries(GRADE11_DATA).flatMap(([school, students]) =>
-    students.map((student, index) => ({
-      grade_level: 11,
-      school,
-      position_no: index + 1,
-      gender: student.gender,
-      student_name: student.name,
-      slf_no: student.slfNo,
-      transferred_from: student.transferredFrom,
-    })),
-  ),
-];
+const FALLBACK_SELECTION_STUDENTS: SelectionStudent[] = [];
 
 function SchoolsSection() {
   const SCHOOLS = [
@@ -1448,7 +974,7 @@ function SelectionListsSection() {
 }
 
 function PathwaysSection() {
-  const PATHWAYS = [
+  const PATHWAYS_FALLBACK = [
     {
       title: "University Entrance",
       desc: "Grade 12 Higher School Certificate with required subject combinations for UPNG, DWU, PAU, and overseas universities. STAT-P testing available.",
@@ -1506,27 +1032,36 @@ function PathwaysSection() {
       stats: "500+ FODE enrolments",
     },
   ];
+  const { data: pathways } = useEntity("post_pathways", PATHWAYS_FALLBACK);
+  const { data: headings } = useEntity("post_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "pathways") || {
+      eyebrow: "Post-Grade 12 Pathways",
+      heading: "Where Our Students Go",
+      blurb: "Post Primary education opens multiple pathways. The Division tracks graduate destinations to align programs with provincial workforce needs.",
+    };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
-            Post-Grade 12 Pathways
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Where Our Students Go
+            {heading.heading}
           </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
-            Post Primary education opens multiple pathways. The Division tracks graduate
-            destinations to align programs with provincial workforce needs.
-          </p>
+          {heading.blurb && (
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
+              {heading.blurb}
+            </p>
+          )}
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {PATHWAYS.map((p) => (
+          {pathways.map((p: any) => (
             <div
               key={p.title}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-amber-200 hover:shadow-lg transition-all"
@@ -1551,7 +1086,7 @@ function PathwaysSection() {
 }
 
 function InitiativesSection() {
-  const INITIATIVES = [
+  const INITIATIVES_FALLBACK = [
     {
       title: "STEM Excellence Program",
       desc: "Enhanced labs, specialist teachers, and industry partnerships at Cameron & Alotau Secondary. Target: 50% Science stream enrolment.",
@@ -1595,27 +1130,36 @@ function InitiativesSection() {
       color: "bg-indigo-500",
     },
   ];
+  const { data: initiatives } = useEntity("post_initiatives", INITIATIVES_FALLBACK);
+  const { data: headings } = useEntity("post_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "initiatives") || {
+      eyebrow: "Key Initiatives",
+      heading: "Driving Quality & Access",
+      blurb: "Targeted programs improving outcomes, expanding pathways, and modernizing secondary education across the province.",
+    };
 
   return (
     <section className="bg-[#F8F6F1] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
-            Key Initiatives
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Driving Quality & Access
+            {heading.heading}
           </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
-            Targeted programs improving outcomes, expanding pathways, and modernizing secondary
-            education across the province.
-          </p>
+          {heading.blurb && (
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
+              {heading.blurb}
+            </p>
+          )}
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {INITIATIVES.map((i) => (
+          {initiatives.map((i: any) => (
             <div
               key={i.title}
               className="bg-white rounded-xl p-6 border border-gray-100 hover:border-amber-200 hover:shadow-lg transition-all"
@@ -1644,57 +1188,80 @@ function InitiativesSection() {
 }
 
 function SupportSection() {
+  const SUPPORT_FALLBACK = [
+    {
+      icon: "📄",
+      title: "Curriculum & Exam Resources",
+      desc: "Syllabuses, exam specs, past papers, marking guides distributed annually",
+    },
+    {
+      icon: "🏗️",
+      title: "Infrastructure & Maintenance",
+      desc: "TFF infrastructure component, SLIP grants, boarding facility funding",
+    },
+    {
+      icon: "👨‍🏫",
+      title: "Teacher Development",
+      desc: "In-service training, subject panels, HOD leadership programs, certification",
+    },
+    {
+      icon: "📊",
+      title: "Data & Quality Assurance",
+      desc: "EMIS, school inspections, exam analysis, performance dashboards",
+    },
+    {
+      icon: "🎓",
+      title: "Student Support Services",
+      desc: "Career guidance, counselling, scholarship info, tertiary applications",
+    },
+    {
+      icon: "🚨",
+      title: "Emergency & Resilience",
+      desc: "Disaster recovery, psychosocial support, temporary learning spaces",
+    },
+  ];
+  const CONTACT_FALLBACK = {
+    heading: "Post Primary Helpdesk",
+    body: "Assistance with enrolments, subject selection, exam queries, tertiary applications, and school transfers.",
+    phone_label: "Provincial Post Primary Officer",
+    phone_value: "+675 641 1234 (ext. 3)",
+    email_label: "Email",
+    email_value: "post.primary@mbpeducation.gov.pg",
+    office_label: "Office",
+    office_value: "Division of Education, Alotau",
+    button_label: "Submit Enquiry",
+    button_href: "/contact",
+  };
+  const { data: support } = useEntity("post_support", SUPPORT_FALLBACK);
+  const { data: contactRows } = useEntity("post_support_contact", [CONTACT_FALLBACK]);
+  const { data: headings } = useEntity("post_section_headings", []);
+  const contact = { ...CONTACT_FALLBACK, ...(contactRows?.[0] || {}) };
+  const heading =
+    headings.find((h: any) => h.skey === "support") || {
+      eyebrow: "Support & Resources",
+      heading: "Empowering Schools & Students",
+      blurb: "Comprehensive support ensuring every secondary school delivers quality education and every student can access their chosen pathway.",
+    };
+
   return (
     <section className="bg-[#163663] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8">
           <div>
             <span className="text-amber-400 text-xs font-bold uppercase tracking-widest">
-              Support & Resources
+              {heading.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-white mt-2 mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Empowering Schools & Students
+              {heading.heading}
             </h2>
-            <p className="text-amber-100 leading-relaxed mb-8">
-              Comprehensive support ensuring every secondary school delivers quality education and
-              every student can access their chosen pathway.
-            </p>
+            {heading.blurb && (
+              <p className="text-amber-100 leading-relaxed mb-8">{heading.blurb}</p>
+            )}
             <div className="space-y-4">
-              {[
-                {
-                  icon: "📄",
-                  title: "Curriculum & Exam Resources",
-                  desc: "Syllabuses, exam specs, past papers, marking guides distributed annually",
-                },
-                {
-                  icon: "🏗️",
-                  title: "Infrastructure & Maintenance",
-                  desc: "TFF infrastructure component, SLIP grants, boarding facility funding",
-                },
-                {
-                  icon: "👨‍🏫",
-                  title: "Teacher Development",
-                  desc: "In-service training, subject panels, HOD leadership programs, certification",
-                },
-                {
-                  icon: "📊",
-                  title: "Data & Quality Assurance",
-                  desc: "EMIS, school inspections, exam analysis, performance dashboards",
-                },
-                {
-                  icon: "🎓",
-                  title: "Student Support Services",
-                  desc: "Career guidance, counselling, scholarship info, tertiary applications",
-                },
-                {
-                  icon: "🚨",
-                  title: "Emergency & Resilience",
-                  desc: "Disaster recovery, psychosocial support, temporary learning spaces",
-                },
-              ].map((item) => (
+              {support.map((item: any) => (
                 <div
                   key={item.title}
                   className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-amber-500/50 hover:bg-white/10 transition-all"
@@ -1714,41 +1281,38 @@ function SupportSection() {
               className="text-2xl font-bold text-white mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Post Primary Helpdesk
+              {contact.heading}
             </h3>
-            <p className="text-amber-200 mb-6">
-              Assistance with enrolments, subject selection, exam queries, tertiary applications,
-              and school transfers.
-            </p>
+            <p className="text-amber-200 mb-6">{contact.body}</p>
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-white">
                 <span className="text-amber-400 text-xl">📞</span>
                 <div>
-                  <div className="text-sm text-amber-200">Provincial Post Primary Officer</div>
-                  <div className="font-semibold">+675 641 1234 (ext. 3)</div>
+                  <div className="text-sm text-amber-200">{contact.phone_label}</div>
+                  <div className="font-semibold">{contact.phone_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
                 <span className="text-amber-400 text-xl">✉️</span>
                 <div>
-                  <div className="text-sm text-amber-200">Email</div>
-                  <div className="font-semibold">post.primary@mbpeducation.gov.pg</div>
+                  <div className="text-sm text-amber-200">{contact.email_label}</div>
+                  <div className="font-semibold">{contact.email_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
                 <span className="text-amber-400 text-xl">📍</span>
                 <div>
-                  <div className="text-sm text-amber-200">Office</div>
-                  <div className="font-semibold">Division of Education, Alotau</div>
+                  <div className="text-sm text-amber-200">{contact.office_label}</div>
+                  <div className="font-semibold">{contact.office_value}</div>
                 </div>
               </div>
             </div>
             <div className="mt-6 pt-6 border-t border-white/10">
               <Link
-                to="/contact"
+                to={contact.button_href}
                 className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-[#0B2545] font-semibold px-6 py-3 rounded transition-colors"
               >
-                Submit Enquiry →
+                {contact.button_label} →
               </Link>
             </div>
           </div>
@@ -1759,68 +1323,29 @@ function SupportSection() {
 }
 
 function DownloadsSection() {
-  const DOWNLOADS = [
-    {
-      name: "2026 Grade 9 Selection List",
-      type: "PDF",
-      size: "2.4 MB",
-      category: "Selection Lists",
-    },
-    {
-      name: "2026 Grade 11 Selection List",
-      type: "PDF",
-      size: "3.1 MB",
-      category: "Selection Lists",
-    },
-    {
-      name: "Post Primary Handbook 2026",
-      type: "PDF",
-      size: "3.1 MB",
-      category: "Policy",
-    },
-    {
-      name: "Grade 10 & 12 Exam Specifications",
-      type: "PDF",
-      size: "4.2 MB",
-      category: "Assessment",
-    },
-    {
-      name: "Stream Selection Guidelines",
-      type: "PDF",
-      size: "1.8 MB",
-      category: "Guidance",
-    },
-    {
-      name: "Secondary Curriculum: Grades 9–12",
-      type: "PDF",
-      size: "22.4 MB",
-      category: "Curriculum",
-    },
-    {
-      name: "School Learning Improvement Plan Template",
-      type: "DOCX",
-      size: "920 KB",
-      category: "Planning",
-    },
-    {
-      name: "Career Guidance Resource Kit",
-      type: "PDF",
-      size: "5.6 MB",
-      category: "Guidance",
-    },
-    {
-      name: "Boarding School Standards",
-      type: "PDF",
-      size: "2.7 MB",
-      category: "Infrastructure",
-    },
-    {
-      name: "Teacher Subject Panel Minutes 2025",
-      type: "PDF",
-      size: "1.4 MB",
-      category: "Professional Dev",
-    },
+  const DOWNLOADS_FALLBACK = [
+    { name: "2026 Grade 9 Selection List", type: "PDF", size_text: "2.4 MB", category: "Selection Lists" },
+    { name: "2026 Grade 11 Selection List", type: "PDF", size_text: "3.1 MB", category: "Selection Lists" },
+    { name: "Post Primary Handbook 2026", type: "PDF", size_text: "3.1 MB", category: "Policy" },
+    { name: "Grade 10 & 12 Exam Specifications", type: "PDF", size_text: "4.2 MB", category: "Assessment" },
+    { name: "Stream Selection Guidelines", type: "PDF", size_text: "1.8 MB", category: "Guidance" },
+    { name: "Secondary Curriculum: Grades 9–12", type: "PDF", size_text: "22.4 MB", category: "Curriculum" },
+    { name: "School Learning Improvement Plan Template", type: "DOCX", size_text: "920 KB", category: "Planning" },
+    { name: "Career Guidance Resource Kit", type: "PDF", size_text: "5.6 MB", category: "Guidance" },
+    { name: "Boarding School Standards", type: "PDF", size_text: "2.7 MB", category: "Infrastructure" },
+    { name: "Teacher Subject Panel Minutes 2025", type: "PDF", size_text: "1.4 MB", category: "Professional Dev" },
   ];
+  const { data: downloads } = useEntity("downloads", []);
+  // The downloads table is shared with /downloads and /basic; this section shows
+  // only the documents scoped to Post Primary.
+  const scoped = downloads.filter((d: any) => d.program === "post");
+  const docs = scoped.length ? scoped : DOWNLOADS_FALLBACK;
+  const { data: headings } = useEntity("post_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "downloads") || {
+      eyebrow: "Resources",
+      heading: "Documents & Downloads",
+    };
 
   return (
     <section className="py-16 px-4 bg-[#F8F6F1]">
@@ -1828,13 +1353,13 @@ function DownloadsSection() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
             <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
-              Resources
+              {heading.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-[#0B2545] mt-2"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Documents & Downloads
+              {heading.heading}
             </h2>
           </div>
           <Link
@@ -1845,10 +1370,10 @@ function DownloadsSection() {
           </Link>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {DOWNLOADS.map((doc) => (
+          {docs.map((doc: any) => (
             <Link
               key={doc.name}
-              to="/contact"
+              to="/downloads"
               className="bg-white rounded-xl p-5 border border-gray-100 hover:border-amber-300 hover:shadow-lg transition-all flex items-start gap-4"
             >
               <div
@@ -1863,7 +1388,7 @@ function DownloadsSection() {
                   {doc.category}
                 </span>
                 <h3 className="text-[#0B2545] font-semibold text-sm mt-1 truncate">{doc.name}</h3>
-                <div className="text-gray-500 text-xs mt-1">{doc.size}</div>
+                <div className="text-gray-500 text-xs mt-1">{doc.size_text}</div>
               </div>
               <span className="text-amber-500 shrink-0">→</span>
             </Link>
@@ -1875,7 +1400,7 @@ function DownloadsSection() {
 }
 
 function FAQSection() {
-  const FAQS = [
+  const FAQS_FALLBACK = [
     {
       q: "How does my child get into a secondary school?",
       a: "Placement is based on Grade 8 Examination results. Students apply through the national online selection system (Grade 9 Selection). The Division manages provincial quotas for each school.",
@@ -1901,23 +1426,30 @@ function FAQSection() {
       a: "Apply through Measurement Services Division (NDoE) with statutory declaration, police report (if lost), and K30 fee. Processing: 4–6 weeks. Contact Post Primary helpdesk for assistance.",
     },
   ];
+  const { data: faqs } = useEntity("post_faq", FAQS_FALLBACK);
+  const { data: headings } = useEntity("post_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "faq") || {
+      eyebrow: "Frequently Asked",
+      heading: "Common Questions",
+    };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
-            Frequently Asked
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Common Questions
+            {heading.heading}
           </h2>
         </div>
         <div className="space-y-4">
-          {FAQS.map((faq, i) => (
+          {faqs.map((faq: any, i: number) => (
             <details
               key={i}
               className="group bg-[#F8F6F1] rounded-xl border border-gray-100 overflow-hidden"
