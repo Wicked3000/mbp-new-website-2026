@@ -22,12 +22,15 @@ export default function DistrictDetailPage() {
 
   const schools = useMemo(() => {
     const list = schoolData as any[];
-    // Prefer the FK, but fall back to the denormalised name so rows entered
-    // before district_id was set still appear under the right district.
-    const mine = list.filter(
-      (s) =>
-        (district?.id && String(s.district_id) === String(district.id)) ||
-        (s.district || "").toLowerCase() === (district?.name || "").toLowerCase(),
+    // The foreign key wins whenever it is set, and the name is only consulted
+    // for rows that predate it. Matching on both at once would list a school
+    // under two districts: the admin edits the district by name, so a school
+    // moved to another district keeps its old district_id and would satisfy
+    // the FK for the old district and the name for the new one.
+    const mine = list.filter((s) =>
+      s.district_id != null && s.district_id !== ""
+        ? String(s.district_id) === String(district?.id)
+        : (s.district || "").toLowerCase() === (district?.name || "").toLowerCase(),
     );
     const term = q.trim().toLowerCase();
     return mine

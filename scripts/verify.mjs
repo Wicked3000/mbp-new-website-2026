@@ -9,6 +9,8 @@
 import mysql from "mysql2/promise";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import fs from "node:fs";
+import path from "node:path";
 
 dotenv.config();
 const DB = {
@@ -217,6 +219,31 @@ const [urls] = await pool.query(
   [DB.database],
 );
 pass(`${urls[0].c} text columns scanned for stale localhost URLs`);
+
+// schools carry both a district_id and a denormalised district name. The
+// district pages match on the id whenever it is set, so a row where the two
+// disagree is filed under the wrong district - or, before the FK was made to
+// win, under two at once. Surfaced here because the admin edits them as
+// separate fields and nothing else would complain.
+const [schoolRows] = await pool.query(
+  "SELECT s.id, s.name, s.district, s.district_id, d.name AS expected " +
+    "FROM schools s LEFT JOIN districts d ON d.id = s.district_id " +
+    "WHERE s.district_id IS NOT NULL AND s.district_id <> '' " +
+    "AND (d.id IS NULL OR LOWER(s.district) <> LOWER(d.name))",
+);
+schoolRows.length
+  ? fail(`schools where district_id and district disagree: ${schoolRows.map((r) => `${r.name} (id ${r.district_id} -> ${r.expected ?? "no such district"}, name "${r.district}")`).join("; ")}`)
+  : pass("every school's district_id agrees with its district name");
+
+// A school image must point at a file the site can serve, or the detail page
+// renders its fallback for a photo the admin has already uploaded.
+const [badImgs] = await pool.query(
+  "SELECT id, name, img FROM schools WHERE img LIKE '/uploads/%'",
+);
+const missingImgs = badImgs.filter((r) => !fs.existsSync(path.join("public", r.img)));
+missingImgs.length
+  ? fail(`${missingImgs.length} school photo(s) not on disk: ${missingImgs.map((r) => `${r.name} -> ${r.img}`).join(", ")}`)
+  : pass(`${badImgs.length} school photos resolve to a real file`);
 
 await pool.end();
 console.log(failures ? `\n${failures} FAILURE(S)\n` : "\nAll checks passed.\n");

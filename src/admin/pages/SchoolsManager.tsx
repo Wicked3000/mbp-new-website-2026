@@ -21,6 +21,16 @@ export default function SchoolsManager() {
     const names = (data as any[]).map((d) => d?.name).filter(Boolean);
     return names.length ? names : DISTRICT_FALLBACK;
   }, [data]);
+  // The district pages match a school on district_id when it is set, so the
+  // foreign key has to be editable or it silently goes stale when a school is
+  // moved by name. Kept as a separate field rather than derived inside Crud,
+  // which has no notion of two columns that must agree.
+  const districtIdOptions = useMemo(() => {
+    const pairs = (data as any[])
+      .filter((d) => d?.id != null && d?.name)
+      .map((d) => ({ label: d.name, value: String(d.id) }));
+    return pairs.length ? pairs : [];
+  }, [data]);
 
   return (
     <Crud
@@ -38,6 +48,15 @@ export default function SchoolsManager() {
       fields={[
         { key: "name", label: "School name", required: true },
         { key: "district", label: "District", type: "select", options: districtOptions, required: true },
+        {
+          key: "district_id",
+          label: "District ID",
+          type: "select",
+          options: districtIdOptions,
+          // Must name the same district as the field above. The district pages
+          // match on this when it is set, so the two disagreeing puts the
+          // school in the wrong place, or in two places.
+        },
         {
           key: "type",
           label: "School type",
