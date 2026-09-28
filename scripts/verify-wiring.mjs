@@ -145,6 +145,28 @@ for (const page of PAGES) {
 }
 if (!nameFails) pass("none of the known student/trainee names appear in page source");
 
+// Hardcoded image paths are checked too: an image that gets converted from
+// .png to .jpg leaves a reference pointing at a file that no longer exists, and
+// the section then renders an empty box with no build error.
+console.log("\n[hardcoded asset paths resolve to real files]");
+const assetFails = [];
+function walk(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = `${dir}/${e.name}`;
+    if (e.isDirectory()) walk(p);
+    else if (/\.(tsx?|jsx?|css|html)$/.test(e.name)) {
+      const src = fs.readFileSync(p, "utf8");
+      for (const m of src.matchAll(/["'`](\/assets\/[^"'`\s?#]+)["'`]/g)) {
+        if (!fs.existsSync(`public${m[1]}`)) assetFails.push(`${p}: ${m[1]}`);
+      }
+    }
+  }
+}
+walk("src");
+assetFails.length
+  ? fail(`${assetFails.length} broken asset reference(s): ${assetFails.join(", ")}`)
+  : pass("every hardcoded /assets path exists in public/");
+
 console.log(`\n${seen.size} distinct entities wired across the five pages`);
 await pool.end();
 console.log(failures ? `\n${failures} FAILURE(S)\n` : "\nAll wiring checks passed.\n");

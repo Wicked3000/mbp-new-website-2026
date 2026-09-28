@@ -64,7 +64,7 @@ export const PROGRAMS = [
     color: "bg-[#0B2545]",
     accent: "bg-teal-500",
     href: "/basic",
-    img: "/assets/education_programs/basic/banner.png",
+    img: "/assets/education_programs/basic/banner.jpg",
   },
   {
     code: "02",
@@ -74,7 +74,7 @@ export const PROGRAMS = [
     color: "bg-[#163663]",
     accent: "bg-amber-400",
     href: "/post",
-    img: "/assets/education_programs/post/banner.png",
+    img: "/assets/education_programs/post/banner.jpg",
   },
   {
     code: "03",
@@ -84,7 +84,7 @@ export const PROGRAMS = [
     color: "bg-[#0D9488]",
     accent: "bg-amber-300",
     href: "/vet",
-    img: "/assets/education_programs/vet/banner.png",
+    img: "/assets/education_programs/vet/banner.jpg",
   },
   {
     code: "04",
@@ -94,7 +94,7 @@ export const PROGRAMS = [
     color: "bg-[#0B2545]",
     accent: "bg-teal-400",
     href: "/fode",
-    img: "/assets/education_programs/fode/banner.png",
+    img: "/assets/education_programs/fode/banner.jpg",
   },
 ];
 
@@ -119,15 +119,15 @@ export const NOTICES = [
 
 export const HERO_FALLBACK = [
   {
-    src: "/assets/slider/mbp-img1.png",
+    src: "/assets/slider/mbp-img1.jpg",
     alt: "Milne Bay students and community learning",
   },
   {
-    src: "/assets/slider/mbp-img2.png",
+    src: "/assets/slider/mbp-img2.jpg",
     alt: "Milne Bay Province schools and education",
   },
   {
-    src: "/assets/slider/mbp-img3.png",
+    src: "/assets/slider/mbp-img3.jpg",
     alt: "Milne Bay coastal education community",
   },
 ];

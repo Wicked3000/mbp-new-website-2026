@@ -1,4 +1,5 @@
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 import { STATS } from "./fallbackData";
 
 export function StatsSection() {
@@ -10,8 +11,11 @@ export function StatsSection() {
   }));
   return (
     <section className="relative py-12 sm:py-14 px-4 overflow-hidden">
+      {/* The image and overlays are absolute and full-bleed, so only the content
+          column is revealed. Wrapping the whole section would transform the
+          background along with it and expose the page behind at the edges. */}
       <img
-        src="/assets/background-img-stats/background-login.png"
+        src="/assets/background-img-stats/background-login.jpg"
         alt=""
         aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover object-center"
@@ -19,7 +23,7 @@ export function StatsSection() {
       <div className="absolute inset-0 bg-[#07192E]/75" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#0B2545]/60 via-[#0B2545]/30 to-[#0D9488]/25" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-      <div className="max-w-7xl mx-auto relative">
+      <Reveal className="max-w-7xl mx-auto relative">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-x-0 lg:divide-x divide-white/10">
           {list.map((s: any) => (
             <div key={s.label} className="py-2">
@@ -36,7 +40,7 @@ export function StatsSection() {
             </div>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
