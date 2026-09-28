@@ -42,6 +42,7 @@ const NAV = [
   { label: "Basic Education Page", icon: ProgramsIcon, to: "/admin/basic-education" },
   { label: "Post Primary Page", icon: ProgramsIcon, to: "/admin/post-primary" },
   { label: "VET Page", icon: ProgramsIcon, to: "/admin/vet" },
+  { label: "FODE Page", icon: ProgramsIcon, to: "/admin/fode" },
   { label: "Settings", icon: SettingsIcon, to: "/admin/settings" },
 ] as const;
 

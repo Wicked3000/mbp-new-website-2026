@@ -1,14 +1,27 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 function PageHero() {
+  const FALLBACK = {
+    eyebrow: "Program 04 - Flexible Open & Distance Education",
+    title: "Flexible Open &",
+    subtitle: " Distance Education (FODE)",
+    description:
+      "Quality secondary education for remote communities, working adults, and students needing flexible pathways - learning without boundaries across Milne Bay Province.",
+    banner: "/assets/fode/fode-banner-img.jpg",
+    alt: "FODE learning materials",
+  };
+  const { data } = useEntity("fode_hero", [FALLBACK]);
+  const hero = { ...FALLBACK, ...(data?.[0] || {}) };
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
       <img decoding="async"
-        src="/assets/fode/fode-banner-img.jpg"
-        alt="FODE learning materials"
+        src={hero.banner}
+        alt={hero.alt}
         className="absolute inset-0 w-full h-full object-cover object-[50%_100%] opacity-40"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-[#0B2545]/90 via-[#0B2545]/70 to-[#163663]/40" />
@@ -16,17 +29,17 @@ function PageHero() {
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 bg-teal-400/20 border border-teal-400/40 text-teal-300 text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-teal-400 inline-block" />
-            Program 04 - Flexible Open & Distance Education
+            {hero.eyebrow}
           </div>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-5"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Flexible Open &<span className="block text-teal-400"> Distance Education (FODE)</span>
+            {hero.title}
+            <span className="block text-teal-400">{hero.subtitle}</span>
           </h1>
           <p className="text-teal-100 text-lg leading-relaxed max-w-2xl">
-            Quality secondary education for remote communities, working adults, and students needing
-            flexible pathways - learning without boundaries across Milne Bay Province.
+            {hero.description}
           </p>
           <div className="flex flex-wrap gap-4 mt-8">
             <Link
@@ -49,53 +62,59 @@ function PageHero() {
 }
 
 function OverviewSection() {
+  const OVERVIEW_FALLBACK = {
+    eyebrow: "Program Overview",
+    heading: "Education Without Boundaries",
+    intro:
+      "FODE provides the same national curriculum and examinations as conventional schools, delivered through flexible distance learning. The Division operates 12 study centres across all 4 districts, serving 3,500+ students annually.",
+    body: "Students include Grade 10/12 upgraders, remote island learners, working adults, and those who missed conventional schooling. All courses lead to nationally recognized Grade 10 and Grade 12 certificates.",
+    features_title: "Key Features",
+  };
+  const CARDS_FALLBACK = [
+    { icon: "📚", title: "Same National Curriculum", desc: "Identical syllabus, textbooks, and examinations as classroom-based schools" },
+    { icon: "⏰", title: "Flexible Scheduling", desc: "Study at your own pace; no fixed timetables - ideal for working students and parents" },
+    { icon: "🏝️", title: "Remote Access", desc: "Study centres on islands and mainland; materials delivered by boat, plane, and digital platforms" },
+    { icon: "🎓", title: "National Certification", desc: "Grade 10 & 12 certificates identical to conventional schools; accepted for tertiary entry" },
+  ];
+  const FEATURES_FALLBACK = [
+    { feature: "Free tuition under Government FODE subsidy" },
+    { feature: "12 study centres + 25+ correspondence sites" },
+    { feature: "Print & digital materials (Moodle LMS, offline apps)" },
+    { feature: "Tutor support via phone, WhatsApp, and centre visits" },
+    { feature: "Same Grade 10/12 National Exams as conventional schools" },
+    { feature: "Credit transfer to/from conventional and VET pathways" },
+  ];
+  const STATS_FALLBACK = [
+    { value_text: "12", label: "Study Centres", color: "bg-[#0B2545]" },
+    { value_text: "3,500+", label: "Active Students", color: "bg-[#163663]" },
+    { value_text: "25+", label: "Correspondence Sites", color: "bg-teal-600" },
+    { value_text: "92%", label: "Exam Pass Rate", color: "bg-teal-700" },
+  ];
+
+  const { data: overviewRows } = useEntity("fode_overview", [OVERVIEW_FALLBACK]);
+  const { data: cards } = useEntity("fode_overview_cards", CARDS_FALLBACK);
+  const { data: features } = useEntity("fode_overview_features", FEATURES_FALLBACK);
+  const { data: stats } = useEntity("fode_overview_stats", STATS_FALLBACK);
+  const overview = { ...OVERVIEW_FALLBACK, ...(overviewRows?.[0] || {}) };
+
   return (
     <section id="overview" className="bg-[#F8F6F1] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-              Program Overview
+              {overview.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-[#0B2545] mt-2 mb-6 leading-tight"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Education Without Boundaries
+              {overview.heading}
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-4 text-lg">
-              FODE provides the same national curriculum and examinations as conventional schools,
-              delivered through flexible distance learning. The Division operates 12 study centres
-              across all 4 districts, serving 3,500+ students annually.
-            </p>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              Students include Grade 10/12 upgraders, remote island learners, working adults, and
-              those who missed conventional schooling. All courses lead to nationally recognized
-              Grade 10 and Grade 12 certificates.
-            </p>
+            <p className="text-gray-600 leading-relaxed mb-4 text-lg">{overview.intro}</p>
+            <p className="text-gray-600 leading-relaxed mb-6">{overview.body}</p>
             <div className="space-y-4">
-              {[
-                {
-                  icon: "📚",
-                  title: "Same National Curriculum",
-                  desc: "Identical syllabus, textbooks, and examinations as classroom-based schools",
-                },
-                {
-                  icon: "⏰",
-                  title: "Flexible Scheduling",
-                  desc: "Study at your own pace; no fixed timetables - ideal for working students and parents",
-                },
-                {
-                  icon: "🏝️",
-                  title: "Remote Access",
-                  desc: "Study centres on islands and mainland; materials delivered by boat, plane, and digital platforms",
-                },
-                {
-                  icon: "🎓",
-                  title: "National Certification",
-                  desc: "Grade 10 & 12 certificates identical to conventional schools; accepted for tertiary entry",
-                },
-              ].map((item) => (
+              {cards.map((item: any) => (
                 <div
                   key={item.title}
                   className="flex gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all"
@@ -122,20 +141,13 @@ function OverviewSection() {
                   className="text-xl font-bold text-[#0B2545] mb-3"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  Key Features
+                  {overview.features_title}
                 </h3>
                 <ul className="space-y-3">
-                  {[
-                    "Free tuition under Government FODE subsidy",
-                    "12 study centres + 25+ correspondence sites",
-                    "Print & digital materials (Moodle LMS, offline apps)",
-                    "Tutor support via phone, WhatsApp, and centre visits",
-                    "Same Grade 10/12 National Exams as conventional schools",
-                    "Credit transfer to/from conventional and VET pathways",
-                  ].map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm">
+                  {features.map((row: any, i: number) => (
+                    <li key={i} className="flex items-start gap-3 text-sm">
                       <span className="text-teal-400 shrink-0">✓</span>
-                      <span className="text-gray-700">{f}</span>
+                      <span className="text-gray-700">{row.feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -143,26 +155,13 @@ function OverviewSection() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
-              {[
-                { value: "12", label: "Study Centres", color: "bg-[#0B2545]" },
-                {
-                  value: "3,500+",
-                  label: "Active Students",
-                  color: "bg-[#163663]",
-                },
-                {
-                  value: "25+",
-                  label: "Correspondence Sites",
-                  color: "bg-teal-600",
-                },
-                { value: "92%", label: "Exam Pass Rate", color: "bg-teal-700" },
-              ].map((s) => (
+              {stats.map((s: any) => (
                 <div key={s.label} className={`${s.color} rounded-xl p-5 text-white text-center`}>
                   <div
                     className="text-3xl font-bold"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
-                    {s.value}
+                    {s.value_text}
                   </div>
                   <div className="text-teal-100 text-sm uppercase tracking-wider">{s.label}</div>
                 </div>
@@ -176,84 +175,45 @@ function OverviewSection() {
 }
 
 function ProgramsSection() {
-  const PROGRAMS = [
-    {
-      name: "Grade 10 Upgrade",
-      level: "Grade 10",
-      duration: "12–18 months",
-      subjects: "English, Math, Science, Social Science, Personal Development, Business Studies",
-      icon: "📖",
-      color: "bg-blue-500",
-      target: "Grade 8/9 leavers seeking Grade 10 cert",
-    },
-    {
-      name: "Grade 12 Upgrade",
-      level: "Grade 12",
-      duration: "18–24 months",
-      subjects: "English (A/L), Math (A/L), Science, Social Science, plus 2 electives per stream",
-      icon: "🎓",
-      color: "bg-purple-500",
-      target: "Grade 10 holders seeking Grade 12 cert",
-    },
-    {
-      name: "Matriculation Program",
-      level: "Pre-University",
-      duration: "12 months",
-      subjects: "English, Math, Science, Humanities - university preparation stream",
-      icon: "🏛️",
-      color: "bg-indigo-500",
-      target: "Grade 12 grads improving marks for uni",
-    },
-    {
-      name: "Adult Literacy & Numeracy",
-      level: "Foundation",
-      duration: "6–12 months",
-      subjects: "Basic literacy, numeracy, digital skills, life skills",
-      icon: "📝",
-      color: "bg-green-500",
-      target: "Adults with limited formal education",
-    },
-    {
-      name: "VET Pathway Courses",
-      level: "Certificate",
-      duration: "6–12 months",
-      subjects: "Trade theory modules aligned with VET NC1 - practical at nearest centre",
-      icon: "🔧",
-      color: "bg-orange-500",
-      target: "FODE students entering trades",
-    },
-    {
-      name: "Teacher Upgrading",
-      level: "Professional",
-      duration: "12–18 months",
-      subjects: "Curriculum, pedagogy, assessment - for untrained teachers",
-      icon: "👨‍🏫",
-      color: "bg-teal-500",
-      target: "In-service teachers without certification",
-    },
+  const PROGRAMS_FALLBACK = [
+    { name: "Grade 10 Upgrade", level: "Grade 10", duration: "12–18 months", subjects: "English, Math, Science, Social Science, Personal Development, Business Studies", icon: "📖", color: "bg-blue-500", target: "Grade 8/9 leavers seeking Grade 10 cert" },
+    { name: "Grade 12 Upgrade", level: "Grade 12", duration: "18–24 months", subjects: "English (A/L), Math (A/L), Science, Social Science, plus 2 electives per stream", icon: "🎓", color: "bg-purple-500", target: "Grade 10 holders seeking Grade 12 cert" },
+    { name: "Matriculation Program", level: "Pre-University", duration: "12 months", subjects: "English, Math, Science, Humanities - university preparation stream", icon: "🏛️", color: "bg-indigo-500", target: "Grade 12 grads improving marks for uni" },
+    { name: "Adult Literacy & Numeracy", level: "Foundation", duration: "6–12 months", subjects: "Basic literacy, numeracy, digital skills, life skills", icon: "📝", color: "bg-green-500", target: "Adults with limited formal education" },
+    { name: "VET Pathway Courses", level: "Certificate", duration: "6–12 months", subjects: "Trade theory modules aligned with VET NC1 - practical at nearest centre", icon: "🔧", color: "bg-orange-500", target: "FODE students entering trades" },
+    { name: "Teacher Upgrading", level: "Professional", duration: "12–18 months", subjects: "Curriculum, pedagogy, assessment - for untrained teachers", icon: "👨‍🏫", color: "bg-teal-500", target: "In-service teachers without certification" },
   ];
+  const { data: programs } = useEntity("fode_programs", PROGRAMS_FALLBACK);
+  const { data: headings } = useEntity("fode_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "programs") || {
+      eyebrow: "Study Programs",
+      heading: "Flexible Learning Pathways",
+      blurb: "Six program types serving diverse learners - from school leavers to working adults. All use the national curriculum with flexible delivery.",
+    };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-            Study Programs
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Flexible Learning Pathways
+            {heading.heading}
           </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
-            Six program types serving diverse learners - from school leavers to working adults. All
-            use the national curriculum with flexible delivery.
-          </p>
+          {heading.blurb && (
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
+              {heading.blurb}
+            </p>
+          )}
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROGRAMS.map((p) => (
+          {programs.map((p: any) => (
             <div
               key={p.name}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all"
@@ -282,171 +242,35 @@ function ProgramsSection() {
 
 const FODE_CENTRE = "Alotau FODE Centre";
 
-const FODE_SELECTION_DATA = {
-  "Alotau FODE Centre": [
-    {
-      no: 1,
-      primary: "LELEHOA",
-      surname: "EMASI",
-      firstName: "TAIMO",
-      gender: "F",
-    },
-    {
-      no: 2,
-      primary: "LELEHOA",
-      surname: "JOHN",
-      firstName: "MADNEY",
-      gender: "F",
-    },
-    {
-      no: 3,
-      primary: "LELEHOA",
-      surname: "KAILELEDI",
-      firstName: "WINNIEFRED",
-      gender: "F",
-    },
-    {
-      no: 4,
-      primary: "LELEHOA",
-      surname: "OWEN",
-      firstName: "ROSEANN",
-      gender: "F",
-    },
-    {
-      no: 5,
-      primary: "LELEHOA",
-      surname: "RICHARD",
-      firstName: "HINALEBONAI",
-      gender: "F",
-    },
-    {
-      no: 6,
-      primary: "LELEHOA",
-      surname: "TOMMY",
-      firstName: "MORRIS",
-      gender: "M",
-    },
-    {
-      no: 7,
-      primary: "RABE",
-      surname: "BRADFORD",
-      firstName: "EMBELLINA",
-      gender: "F",
-    },
-  ],
-};
+// Student names are deliberately absent: selection_students is admin-only on
+// the API, so no copy of it belongs in the public bundle. The section below
+// loads rows from the authenticated API instead.
 
 function CentresSection() {
-  const CENTRES = [
-    {
-      name: "Alotau FODE Centre",
-      district: "Alotau",
-      type: "Main Centre",
-      students: "850+",
-      facilities: "Admin, Library, Computer Lab, Tutorial Rooms",
-      coordinator: "Ms. Grace Kila",
-      icon: "🏢",
-    },
-    {
-      name: "Kiriwina FODE Centre",
-      district: "Kiriwina-Goodenough",
-      type: "Island Centre",
-      students: "320+",
-      facilities: "Solar Power, Satellite Internet, Tutorial Room",
-      coordinator: "Mr. John Bula",
-      icon: "🏝️",
-    },
-    {
-      name: "Losuia FODE Centre",
-      district: "Losuia",
-      type: "Island Centre",
-      students: "280+",
-      facilities: "Library, Computer Lab, Staff Housing",
-      coordinator: "Ms. Mary Tovue",
-      icon: "🌊",
-    },
-    {
-      name: "Esa'ala FODE Centre",
-      district: "Esa'ala",
-      type: "Island Centre",
-      students: "240+",
-      facilities: "Tutorial Room, Solar, Boat Access",
-      coordinator: "Mr. Peter Waso",
-      icon: "⚓",
-    },
-    {
-      name: "Samarai FODE Centre",
-      district: "Samarai-Murua",
-      type: "Island Centre",
-      students: "190+",
-      facilities: "Library, Tutorial Room, Internet",
-      coordinator: "Ms. Helen Gwali",
-      icon: "🏝️",
-    },
-    {
-      name: "Rabaruana FODE Centre",
-      district: "Rabaruana",
-      type: "Mainland Centre",
-      students: "410+",
-      facilities: "Admin, Library, Lab, Dormitory",
-      coordinator: "Mr. David Gari",
-      icon: "🏫",
-    },
-    {
-      name: "Wanigela FODE Centre",
-      district: "Wanigela",
-      type: "Remote Centre",
-      students: "160+",
-      facilities: "Tutorial Room, Solar, Radio Link",
-      coordinator: "Ms. Susan Kora",
-      icon: "📡",
-    },
-    {
-      name: "Agaivaro FODE Centre",
-      district: "Agaivaro",
-      type: "Rural Centre",
-      students: "220+",
-      facilities: "Library, Computer Access, Tutorial Room",
-      coordinator: "Mr. Thomas Vali",
-      icon: "🌿",
-    },
-    {
-      name: "Dobu FODE Centre",
-      district: "Dobu",
-      type: "Island Centre",
-      students: "180+",
-      facilities: "Tutorial Room, Solar Power",
-      coordinator: "Ms. Jenny Moi",
-      icon: "🏝️",
-    },
-    {
-      name: "Huhu FODE Centre",
-      district: "Huhu",
-      type: "Rural Centre",
-      students: "280+",
-      facilities: "Library, Tutorial Room, Internet",
-      coordinator: "Mr. Paul Boga",
-      icon: "🏫",
-    },
-    {
-      name: "Misima FODE Centre",
-      district: "Samarai-Murua",
-      type: "Remote Island",
-      students: "150+",
-      facilities: "Tutorial Room, Satellite Link",
-      coordinator: "Ms. Rose Kewa",
-      icon: "📡",
-    },
-    {
-      name: "Rossel Island FODE",
-      district: "Samarai-Murua",
-      type: "Remote Island",
-      students: "90+",
-      facilities: "Basic Tutorial Room, Radio",
-      coordinator: "Mr. Henry Uva",
-      icon: "📻",
-    },
+  const CENTRES_FALLBACK = [
+    { name: "Alotau FODE Centre", district: "Alotau", centre_type: "Main Centre", students: "850+", facilities: "Admin, Library, Computer Lab, Tutorial Rooms", coordinator: "Ms. Grace Kila", icon: "🏢" },
+    { name: "Kiriwina FODE Centre", district: "Kiriwina-Goodenough", centre_type: "Island Centre", students: "320+", facilities: "Solar Power, Satellite Internet, Tutorial Room", coordinator: "Mr. John Bula", icon: "🏝️" },
+    { name: "Losuia FODE Centre", district: "Losuia", centre_type: "Island Centre", students: "280+", facilities: "Library, Computer Lab, Staff Housing", coordinator: "Ms. Mary Tovue", icon: "🌊" },
+    { name: "Esa'ala FODE Centre", district: "Esa'ala", centre_type: "Island Centre", students: "240+", facilities: "Tutorial Room, Solar, Boat Access", coordinator: "Mr. Peter Waso", icon: "⚓" },
+    { name: "Samarai FODE Centre", district: "Samarai-Murua", centre_type: "Island Centre", students: "190+", facilities: "Library, Tutorial Room, Internet", coordinator: "Ms. Helen Gwali", icon: "🏝️" },
+    { name: "Rabaruana FODE Centre", district: "Rabaruana", centre_type: "Mainland Centre", students: "410+", facilities: "Admin, Library, Lab, Dormitory", coordinator: "Mr. David Gari", icon: "🏫" },
+    { name: "Wanigela FODE Centre", district: "Wanigela", centre_type: "Remote Centre", students: "160+", facilities: "Tutorial Room, Solar, Radio Link", coordinator: "Ms. Susan Kora", icon: "📡" },
+    { name: "Agaivaro FODE Centre", district: "Agaivaro", centre_type: "Rural Centre", students: "220+", facilities: "Library, Computer Access, Tutorial Room", coordinator: "Mr. Thomas Vali", icon: "🌿" },
+    { name: "Dobu FODE Centre", district: "Dobu", centre_type: "Island Centre", students: "180+", facilities: "Tutorial Room, Solar Power", coordinator: "Ms. Jenny Moi", icon: "🏝️" },
+    { name: "Huhu FODE Centre", district: "Huhu", centre_type: "Rural Centre", students: "280+", facilities: "Library, Tutorial Room, Internet", coordinator: "Mr. Paul Boga", icon: "🏫" },
+    { name: "Misima FODE Centre", district: "Samarai-Murua", centre_type: "Remote Island", students: "150+", facilities: "Tutorial Room, Satellite Link", coordinator: "Ms. Rose Kewa", icon: "📡" },
+    { name: "Rossel Island FODE", district: "Samarai-Murua", centre_type: "Remote Island", students: "90+", facilities: "Basic Tutorial Room, Radio", coordinator: "Mr. Henry Uva", icon: "📻" },
   ];
+  const { data: centreRows } = useEntity("fode_centres", CENTRES_FALLBACK);
+  const { data: headings } = useEntity("fode_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "centres") || {
+      eyebrow: "Study Network",
+      heading: "12 Study Centres Across the Province",
+    };
+  // The table column is centre_type so the entity layer stays simple; the cards
+  // and the filter both speak in terms of "type".
+  const centres = centreRows.map((c: any) => ({ ...c, type: c.centre_type || c.type }));
 
   const [centreType, setCentreType] = useState("");
 
@@ -454,8 +278,8 @@ function CentresSection() {
 
   const normalizedQuery = query.trim().toLowerCase();
 
-  const filteredCentres = CENTRES.filter(
-    (c) =>
+  const filteredCentres = centres.filter(
+    (c: any) =>
       (centreType === "" || c.type === centreType) &&
       `${c.name} ${c.district} ${c.facilities} ${c.coordinator}`
         .toLowerCase()
@@ -468,13 +292,13 @@ function CentresSection() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-              Study Network
+              {heading.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-[#0B2545] mt-2"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              12 Study Centres Across the Province
+              {heading.heading}
             </h2>
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
@@ -504,7 +328,7 @@ function CentresSection() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCentres.map((c) => (
+          {filteredCentres.map((c: any) => (
             <div
               key={c.name}
               className="bg-white rounded-xl p-6 border border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all"
@@ -564,23 +388,61 @@ function CentresSection() {
   );
 }
 
+type FodeStudent = {
+  school: string;
+  position_no: number | string | null;
+  primary_school: string;
+  surname: string;
+  first_name: string;
+  gender: string;
+};
+
 function SelectionListsSection() {
+  const { data: headings } = useEntity("fode_section_headings", []);
+  // Student names come from the API, which restricts selection_students to
+  // authenticated admins. There is deliberately no bundled copy.
+  const [students, setStudents] = useState<FodeStudent[]>([]);
+
+  useEffect(() => {
+    let active = true;
+    api
+      .list("selection_students")
+      .then((rows) => {
+        if (!active) return;
+        const fode = (Array.isArray(rows) ? rows : []).filter((row: any) =>
+          /FODE/i.test(String(row.school || "")),
+        );
+        setStudents(fode);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const heading =
+    headings.find((h: any) => h.skey === "selections") || {
+      eyebrow: "2026 FODE Selection",
+      heading: "FODE Student Enrolment Lists",
+      blurb: "Official 2026 FODE student enrolment list for the main Alotau FODE Centre. Students enrolled in Grade 10/12 upgrade programs.",
+    };
+
   return (
     <section id="fode-selections" className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-            2026 FODE Selection
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2 mb-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            FODE Student Enrolment Lists
+            {heading.heading}
           </h2>
           <p className="text-gray-500">
-            Official 2026 FODE student enrolment list for the main Alotau FODE Centre. Students
-            enrolled in Grade 10/12 upgrade programs.
+            {heading.blurb ||
+              "Official 2026 FODE student enrolment list for the main Alotau FODE Centre. Students enrolled in Grade 10/12 upgrade programs."}
           </p>
         </div>
 
@@ -608,12 +470,14 @@ function SelectionListsSection() {
                     </tr>
                   </thead>
                   <tbody>
-                    {(FODE_SELECTION_DATA[FODE_CENTRE] || []).map((student, i) => (
+                    {students.map((student, i) => (
                       <tr key={i} className={`border-b ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
-                        <td className="px-3 py-2 text-center text-gray-700">{student.no}</td>
-                        <td className="px-3 py-2 text-gray-700">{student.primary}</td>
+                        <td className="px-3 py-2 text-center text-gray-700">
+                          {student.position_no || "-"}
+                        </td>
+                        <td className="px-3 py-2 text-gray-700">{student.primary_school}</td>
                         <td className="px-3 py-2 font-medium text-[#0B2545]">{student.surname}</td>
-                        <td className="px-3 py-2 text-gray-700">{student.firstName}</td>
+                        <td className="px-3 py-2 text-gray-700">{student.first_name}</td>
                         <td className="px-3 py-2 text-center">
                           <span
                             className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -674,66 +538,55 @@ function SelectionListsSection() {
 }
 
 function DeliverySection() {
-  const METHODS = [
-    {
-      name: "Printed Course Materials",
-      desc: "Full curriculum textbooks, workbooks, and assignment booklets delivered to centres and correspondence sites. Updated annually.",
-      icon: "📦",
-      availability: "All Centres",
-    },
-    {
-      name: "Digital Learning Platform",
-      desc: "Moodle LMS with interactive lessons, videos, quizzes, and progress tracking. Offline app for areas without internet.",
-      icon: "💻",
-      availability: "8 Centres + App",
-    },
-    {
-      name: "Radio Broadcast Lessons",
-      desc: "Weekly 30-min lessons on NBC Milne Bay & community radio. Covers all core subjects. Schedule distributed each term.",
-      icon: "📻",
-      availability: "Province-wide",
-    },
-    {
-      name: "Tutorial Support Sessions",
-      desc: "Face-to-face tutorials at centres (weekly/fortnightly). Tutor-marked assignments with feedback. Practical sessions for science.",
-      icon: "👨‍🏫",
-      availability: "All Centres",
-    },
-    {
-      name: "WhatsApp Study Groups",
-      desc: "Subject-specific groups with tutor moderation. Peer support, quick questions, assignment reminders. 85% student participation.",
-      icon: "💬",
-      availability: "Mobile Coverage Areas",
-    },
-    {
-      name: "Mobile Centre Visits",
-      desc: "Staff visit remote correspondence sites quarterly for enrolment, material distribution, exams, and counselling.",
-      icon: "🚤",
-      availability: "25+ Remote Sites",
-    },
+  const METHODS_FALLBACK = [
+    { name: "Printed Course Materials", desc: "Full curriculum textbooks, workbooks, and assignment booklets delivered to centres and correspondence sites. Updated annually.", icon: "📦", availability: "All Centres" },
+    { name: "Digital Learning Platform", desc: "Moodle LMS with interactive lessons, videos, quizzes, and progress tracking. Offline app for areas without internet.", icon: "💻", availability: "8 Centres + App" },
+    { name: "Radio Broadcast Lessons", desc: "Weekly 30-min lessons on NBC Milne Bay & community radio. Covers all core subjects. Schedule distributed each term.", icon: "📻", availability: "Province-wide" },
+    { name: "Tutorial Support Sessions", desc: "Face-to-face tutorials at centres (weekly/fortnightly). Tutor-marked assignments with feedback. Practical sessions for science.", icon: "👨‍🏫", availability: "All Centres" },
+    { name: "WhatsApp Study Groups", desc: "Subject-specific groups with tutor moderation. Peer support, quick questions, assignment reminders. 85% student participation.", icon: "💬", availability: "Mobile Coverage Areas" },
+    { name: "Mobile Centre Visits", desc: "Staff visit remote correspondence sites quarterly for enrolment, material distribution, exams, and counselling.", icon: "🚤", availability: "25+ Remote Sites" },
   ];
+  const APP_FALLBACK = [
+    { icon: "📱", heading: "FODE Mobile App (New 2026)", body: "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.", bullet: "Works offline - syncs when online" },
+    { icon: "📱", heading: "FODE Mobile App (New 2026)", body: "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.", bullet: "Push notifications for deadlines & announcements" },
+    { icon: "📱", heading: "FODE Mobile App (New 2026)", body: "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.", bullet: "Assignment photo upload & voice notes" },
+    { icon: "📱", heading: "FODE Mobile App (New 2026)", body: "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.", bullet: "Progress dashboard & exam countdown" },
+    { icon: "📱", heading: "FODE Mobile App (New 2026)", body: "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.", bullet: "Low data mode for expensive connections" },
+    { icon: "📱", heading: "FODE Mobile App (New 2026)", body: "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.", bullet: "Tok Pisin & English interface" },
+  ];
+  const { data: methods } = useEntity("fode_delivery_methods", METHODS_FALLBACK);
+  const { data: appRows } = useEntity("fode_app_callout", APP_FALLBACK);
+  const { data: headings } = useEntity("fode_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "delivery") || {
+      eyebrow: "Delivery Methods",
+      heading: "Multi-Modal Learning Delivery",
+      blurb: "Students choose the mode that works for their location and circumstances. Most combine multiple methods for best results.",
+    };
+  const callout = appRows[0] || { icon: "📱", heading: "FODE Mobile App (New 2026)", body: "" };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-            Delivery Methods
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Multi-Modal Learning Delivery
+            {heading.heading}
           </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
-            Students choose the mode that works for their location and circumstances. Most combine
-            multiple methods for best results.
-          </p>
+          {heading.blurb && (
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
+              {heading.blurb}
+            </p>
+          )}
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {METHODS.map((m) => (
+          {methods.map((m: any) => (
             <div
               key={m.name}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-teal-200 hover:shadow-lg transition-all"
@@ -753,38 +606,21 @@ function DeliverySection() {
 
         <div className="mt-12 p-6 bg-teal-50 rounded-xl border border-teal-100">
           <div className="flex items-start gap-4">
-            <div className="text-3xl shrink-0">📱</div>
+            <div className="text-3xl shrink-0">{callout.icon}</div>
             <div>
               <h3
                 className="text-xl font-bold text-[#0B2545] mb-2"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
-                FODE Mobile App (New 2026)
+                {callout.heading}
               </h3>
-              <p className="text-gray-600 mb-4">
-                Offline-first Android app with full course materials, video lessons, assignment
-                submission, progress tracking, and tutor chat. Free download at centres or via APK.
-              </p>
+              <p className="text-gray-600 mb-4">{callout.body}</p>
               <ul className="space-y-2 text-gray-700 text-sm grid sm:grid-cols-2">
-                <li className="flex items-start gap-2">
-                  <span className="text-teal-500">•</span> Works offline - syncs when online
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-teal-500">•</span> Push notifications for deadlines &
-                  announcements
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-teal-500">•</span> Assignment photo upload & voice notes
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-teal-500">•</span> Progress dashboard & exam countdown
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-teal-500">•</span> Low data mode for expensive connections
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-teal-500">•</span> Tok Pisin & English interface
-                </li>
+                {appRows.map((row: any, i: number) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-teal-500">•</span> {row.bullet}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -795,52 +631,50 @@ function DeliverySection() {
 }
 
 function EnrolmentSection() {
+  const STEPS_FALLBACK = [
+    { step: "01", title: "Choose Your Program", desc: "Grade 10 Upgrade, Grade 12 Upgrade, Matriculation, Adult Literacy, VET Pathway, or Teacher Upgrading. Counsellors available at all centres." },
+    { step: "02", title: "Gather Documents", desc: "Birth certificate/ID, previous certificates (if any), passport photos, medical form. Grade 8/10 certs for upgrade programs." },
+    { step: "03", title: "Visit Nearest Centre", desc: "12 study centres + 25 correspondence sites. Staff assist with forms, course selection, and material collection. Remote: apply via WhatsApp/phone." },
+    { step: "04", title: "Receive Materials", desc: "Full course package: textbooks, workbooks, assignment booklets, study guide, exam timetable. Digital access via app/LMS activated." },
+    { step: "05", title: "Start Learning", desc: "Flexible start - begin any week. Tutor assigned. Study plan created. Submit assignments monthly. Attend tutorials as schedule allows." },
+  ];
+  const DATES_FALLBACK = [
+    { label: "Major Intake 1 Opens", date_text: "15 January 2026" },
+    { label: "Major Intake 1 Closes", date_text: "31 March 2026" },
+    { label: "Grade 10 Exams (FODE)", date_text: "12–16 October 2026" },
+    { label: "Grade 12 Exams (FODE)", date_text: "19–23 October 2026" },
+    { label: "Major Intake 2 Opens", date_text: "1 July 2026" },
+    { label: "Major Intake 2 Closes", date_text: "30 September 2026" },
+    { label: "Results Released", date_text: "December 2026" },
+    { label: "Continuous Enrolment", date_text: "Year-round (foundation programs)" },
+  ];
+  const { data: steps } = useEntity("fode_enrolment_steps", STEPS_FALLBACK);
+  const { data: dates } = useEntity("fode_key_dates", DATES_FALLBACK);
+  const { data: headings } = useEntity("fode_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "enrolment") || {
+      eyebrow: "How to Enrol",
+      heading: "Join Anytime, Study Anywhere",
+      blurb: "FODE has continuous enrolment with two main intakes. No age limit. No previous school required for foundation programs.",
+    };
+
   return (
     <section className="bg-[#F8F6F1] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-              How to Enrol
+              {heading.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-[#0B2545] mt-2 mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Join Anytime, Study Anywhere
+              {heading.heading}
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-8">
-              FODE has continuous enrolment with two main intakes. No age limit. No previous school
-              required for foundation programs.
-            </p>
+            {heading.blurb && <p className="text-gray-600 leading-relaxed mb-8">{heading.blurb}</p>}
             <div className="space-y-6">
-              {[
-                {
-                  step: "01",
-                  title: "Choose Your Program",
-                  desc: "Grade 10 Upgrade, Grade 12 Upgrade, Matriculation, Adult Literacy, VET Pathway, or Teacher Upgrading. Counsellors available at all centres.",
-                },
-                {
-                  step: "02",
-                  title: "Gather Documents",
-                  desc: "Birth certificate/ID, previous certificates (if any), passport photos, medical form. Grade 8/10 certs for upgrade programs.",
-                },
-                {
-                  step: "03",
-                  title: "Visit Nearest Centre",
-                  desc: "12 study centres + 25 correspondence sites. Staff assist with forms, course selection, and material collection. Remote: apply via WhatsApp/phone.",
-                },
-                {
-                  step: "04",
-                  title: "Receive Materials",
-                  desc: "Full course package: textbooks, workbooks, assignment booklets, study guide, exam timetable. Digital access via app/LMS activated.",
-                },
-                {
-                  step: "05",
-                  title: "Start Learning",
-                  desc: "Flexible start - begin any week. Tutor assigned. Study plan created. Submit assignments monthly. Attend tutorials as schedule allows.",
-                },
-              ].map((s) => (
+              {steps.map((s: any) => (
                 <div key={s.step} className="flex gap-4">
                   <div
                     className="w-12 h-12 rounded-full bg-teal-100 text-teal-700 font-bold flex items-center justify-center shrink-0 text-xl"
@@ -865,25 +699,13 @@ function EnrolmentSection() {
               2026 Key Dates
             </h3>
             <div className="space-y-4 mb-6">
-              {[
-                { label: "Major Intake 1 Opens", date: "15 January 2026" },
-                { label: "Major Intake 1 Closes", date: "31 March 2026" },
-                { label: "Grade 10 Exams (FODE)", date: "12–16 October 2026" },
-                { label: "Grade 12 Exams (FODE)", date: "19–23 October 2026" },
-                { label: "Major Intake 2 Opens", date: "1 July 2026" },
-                { label: "Major Intake 2 Closes", date: "30 September 2026" },
-                { label: "Results Released", date: "December 2026" },
-                {
-                  label: "Continuous Enrolment",
-                  date: "Year-round (foundation programs)",
-                },
-              ].map((d) => (
+              {dates.map((d: any) => (
                 <div
                   key={d.label}
                   className="flex items-center justify-between py-3 border-b border-gray-100"
                 >
                   <span className="text-gray-700">{d.label}</span>
-                  <span className="font-semibold text-teal-700">{d.date}</span>
+                  <span className="font-semibold text-teal-700">{d.date_text}</span>
                 </div>
               ))}
             </div>
@@ -901,57 +723,58 @@ function EnrolmentSection() {
 }
 
 function SupportSection() {
+  const SUPPORT_FALLBACK = [
+    { icon: "👨‍🏫", title: "Dedicated Tutors", desc: "Subject-specialist tutors at each centre; phone/WhatsApp/email support; monthly progress calls" },
+    { icon: "📚", title: "Learning Resources", desc: "Full textbook sets, video lessons, past exam papers, marking guides, study planners" },
+    { icon: "💰", title: "Financial Support", desc: "Government FODE subsidy (free tuition), travel allowances for exams, device loan scheme" },
+    { icon: "🧭", title: "Career & Pathway Guidance", desc: "Grade 12 tertiary applications, VET articulation, resume building, interview prep" },
+    { icon: "🤝", title: "Peer Support Networks", desc: "WhatsApp study groups, centre study buddies, alumni mentoring, graduation events" },
+    { icon: "🌏", title: "Inclusive Access", desc: "Materials in large print/audio, sign language tutors, disability support officers at main centres" },
+  ];
+  const CONTACT_FALLBACK = {
+    heading: "FODE Helpdesk",
+    body: "Enrolment, materials, exams, tutor issues, technical support, pathway advice.",
+    phone_label: "Provincial FODE Coordinator",
+    phone_value: "+675 641 1234 (ext. 5)",
+    email_label: "Email",
+    email_value: "fode@mbpeducation.gov.pg",
+    whatsapp_label: "WhatsApp Support",
+    whatsapp_value: "+675 7XXX XXXX",
+    office_label: "Main Centre",
+    office_value: "Alotau FODE Centre, Milne Bay",
+    button_label: "Contact FODE Team",
+    button_href: "/contact",
+  };
+  const { data: support } = useEntity("fode_support", SUPPORT_FALLBACK);
+  const { data: contactRows } = useEntity("fode_support_contact", [CONTACT_FALLBACK]);
+  const { data: headings } = useEntity("fode_section_headings", []);
+  const contact = { ...CONTACT_FALLBACK, ...(contactRows?.[0] || {}) };
+  const heading =
+    headings.find((h: any) => h.skey === "support") || {
+      eyebrow: "Student Support",
+      heading: "Every Learner Supported",
+      blurb: "Comprehensive support ensuring distance learners succeed - from enrolment to graduation and beyond.",
+    };
+
   return (
     <section className="bg-[#0B2545] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-              Student Support
+              {heading.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-white mt-2 mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Every Learner Supported
+              {heading.heading}
             </h2>
-            <p className="text-teal-100 leading-relaxed mb-8">
-              Comprehensive support ensuring distance learners succeed - from enrolment to
-              graduation and beyond.
-            </p>
+            {heading.blurb && (
+              <p className="text-teal-100 leading-relaxed mb-8">{heading.blurb}</p>
+            )}
             <div className="space-y-4">
-              {[
-                {
-                  icon: "👨‍🏫",
-                  title: "Dedicated Tutors",
-                  desc: "Subject-specialist tutors at each centre; phone/WhatsApp/email support; monthly progress calls",
-                },
-                {
-                  icon: "📚",
-                  title: "Learning Resources",
-                  desc: "Full textbook sets, video lessons, past exam papers, marking guides, study planners",
-                },
-                {
-                  icon: "💰",
-                  title: "Financial Support",
-                  desc: "Government FODE subsidy (free tuition), travel allowances for exams, device loan scheme",
-                },
-                {
-                  icon: "🧭",
-                  title: "Career & Pathway Guidance",
-                  desc: "Grade 12 tertiary applications, VET articulation, resume building, interview prep",
-                },
-                {
-                  icon: "🤝",
-                  title: "Peer Support Networks",
-                  desc: "WhatsApp study groups, centre study buddies, alumni mentoring, graduation events",
-                },
-                {
-                  icon: "🌏",
-                  title: "Inclusive Access",
-                  desc: "Materials in large print/audio, sign language tutors, disability support officers at main centres",
-                },
-              ].map((item) => (
+              {support.map((item: any) => (
                 <div
                   key={item.title}
                   className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-teal-400/50 hover:bg-white/10 transition-all"
@@ -971,47 +794,45 @@ function SupportSection() {
               className="text-2xl font-bold text-white mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              FODE Helpdesk
+              {contact.heading}
             </h3>
-            <p className="text-teal-100 mb-6">
-              Enrolment, materials, exams, tutor issues, technical support, pathway advice.
-            </p>
+            <p className="text-teal-100 mb-6">{contact.body}</p>
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-white">
                 <span className="text-teal-400 text-xl">📞</span>
                 <div>
-                  <div className="text-sm text-teal-100">Provincial FODE Coordinator</div>
-                  <div className="font-semibold">+675 641 1234 (ext. 5)</div>
+                  <div className="text-sm text-teal-100">{contact.phone_label}</div>
+                  <div className="font-semibold">{contact.phone_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
                 <span className="text-teal-400 text-xl">✉️</span>
                 <div>
-                  <div className="text-sm text-teal-100">Email</div>
-                  <div className="font-semibold">fode@mbpeducation.gov.pg</div>
+                  <div className="text-sm text-teal-100">{contact.email_label}</div>
+                  <div className="font-semibold">{contact.email_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
                 <span className="text-teal-400 text-xl">📱</span>
                 <div>
-                  <div className="text-sm text-teal-100">WhatsApp Support</div>
-                  <div className="font-semibold">+675 7XXX XXXX</div>
+                  <div className="text-sm text-teal-100">{contact.whatsapp_label}</div>
+                  <div className="font-semibold">{contact.whatsapp_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
                 <span className="text-teal-400 text-xl">📍</span>
                 <div>
-                  <div className="text-sm text-teal-100">Main Centre</div>
-                  <div className="font-semibold">Alotau FODE Centre, Milne Bay</div>
+                  <div className="text-sm text-teal-100">{contact.office_label}</div>
+                  <div className="font-semibold">{contact.office_value}</div>
                 </div>
               </div>
             </div>
             <div className="mt-6 pt-6 border-t border-white/10">
               <Link
-                to="/contact"
+                to={contact.button_href}
                 className="inline-flex items-center gap-2 bg-teal-400 hover:bg-teal-500 text-white font-semibold px-6 py-3 rounded transition-colors"
               >
-                Contact FODE Team →
+                {contact.button_label} →
               </Link>
             </div>
           </div>
@@ -1022,71 +843,44 @@ function SupportSection() {
 }
 
 function InitiativesSection() {
-  const INITIATIVES = [
-    {
-      title: "FODE Mobile App Launch",
-      desc: "Offline-first Android app with full curriculum, video lessons, assignment upload, and tutor chat. 2,000+ downloads target for 2026.",
-      icon: "📱",
-      status: "Launched",
-      color: "bg-teal-500",
-    },
-    {
-      title: "Satellite Internet for Island Centres",
-      desc: "Starlink terminals at 6 remote island centres (Kiriwina, Losuia, Esa'ala, Samarai, Misima, Rossel). High-speed access for LMS & video calls.",
-      icon: "🛰️",
-      status: "Rolling Out",
-      color: "bg-blue-500",
-    },
-    {
-      title: "Radio Education Expansion",
-      desc: "Daily 1-hour slots on NBC Milne Bay. New studio at Alotau Centre. Programs in English & Tok Pisin. Reaches 95% of province.",
-      icon: "📻",
-      status: "Active",
-      color: "bg-amber-500",
-    },
-    {
-      title: "Women's Learning Circles",
-      desc: "Safe study spaces for women with childcare. Female tutors. Flexible timing. 40% female enrolment increase since 2024.",
-      icon: "👩‍🎓",
-      status: "Active",
-      color: "bg-pink-500",
-    },
-    {
-      title: "Digital Literacy Integration",
-      desc: "Basic ICT module now compulsory in all programs. Computer labs upgraded at all centres. ICDL certification pathway available.",
-      icon: "💻",
-      status: "New",
-      color: "bg-indigo-500",
-    },
-    {
-      title: "Tracer Study & Alumni Network",
-      desc: "Annual graduate tracking (employment, further study). Alumni mentorship program. FODE graduates database for provincial workforce planning.",
-      icon: "📊",
-      status: "Active",
-      color: "bg-purple-500",
-    },
+  const INITIATIVES_FALLBACK = [
+    { title: "FODE Mobile App Launch", desc: "Offline-first Android app with full curriculum, video lessons, assignment upload, and tutor chat. 2,000+ downloads target for 2026.", icon: "📱", status: "Launched", color: "bg-teal-500" },
+    { title: "Satellite Internet for Island Centres", desc: "Starlink terminals at 6 remote island centres (Kiriwina, Losuia, Esa'ala, Samarai, Misima, Rossel). High-speed access for LMS & video calls.", icon: "🛰️", status: "Rolling Out", color: "bg-blue-500" },
+    { title: "Radio Education Expansion", desc: "Daily 1-hour slots on NBC Milne Bay. New studio at Alotau Centre. Programs in English & Tok Pisin. Reaches 95% of province.", icon: "📻", status: "Active", color: "bg-amber-500" },
+    { title: "Women's Learning Circles", desc: "Safe study spaces for women with childcare. Female tutors. Flexible timing. 40% female enrolment increase since 2024.", icon: "👩‍🎓", status: "Active", color: "bg-pink-500" },
+    { title: "Digital Literacy Integration", desc: "Basic ICT module now compulsory in all programs. Computer labs upgraded at all centres. ICDL certification pathway available.", icon: "💻", status: "New", color: "bg-indigo-500" },
+    { title: "Tracer Study & Alumni Network", desc: "Annual graduate tracking (employment, further study). Alumni mentorship program. FODE graduates database for provincial workforce planning.", icon: "📊", status: "Active", color: "bg-purple-500" },
   ];
+  const { data: initiatives } = useEntity("fode_initiatives", INITIATIVES_FALLBACK);
+  const { data: headings } = useEntity("fode_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "initiatives") || {
+      eyebrow: "Key Initiatives",
+      heading: "Innovating Distance Learning",
+      blurb: "Strategic programs using technology and community engagement to reach every learner in Milne Bay.",
+    };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-            Key Initiatives
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Innovating Distance Learning
+            {heading.heading}
           </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
-            Strategic programs using technology and community engagement to reach every learner in
-            Milne Bay.
-          </p>
+          {heading.blurb && (
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
+              {heading.blurb}
+            </p>
+          )}
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {INITIATIVES.map((i) => (
+          {initiatives.map((i: any) => (
             <div
               key={i.title}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-teal-200 hover:shadow-lg transition-all"
@@ -1115,56 +909,25 @@ function InitiativesSection() {
 }
 
 function DownloadsSection() {
-  const DOWNLOADS = [
-    {
-      name: "FODE Prospectus 2026",
-      type: "PDF",
-      size: "3.8 MB",
-      category: "Guide",
-    },
-    {
-      name: "Course Guides (All Subjects)",
-      type: "PDF",
-      size: "15.2 MB",
-      category: "Curriculum",
-    },
-    {
-      name: "Enrolment Application Form",
-      type: "PDF",
-      size: "580 KB",
-      category: "Forms",
-    },
-    {
-      name: "Assignment Submission Guidelines",
-      type: "PDF",
-      size: "1.2 MB",
-      category: "Assessment",
-    },
-    {
-      name: "Exam Timetable & Centre List 2026",
-      type: "PDF",
-      size: "890 KB",
-      category: "Examinations",
-    },
-    {
-      name: "Mobile App User Guide",
-      type: "PDF",
-      size: "2.4 MB",
-      category: "Digital",
-    },
-    {
-      name: "Tutor Handbook & Marking Standards",
-      type: "PDF",
-      size: "2.1 MB",
-      category: "Staff",
-    },
-    {
-      name: "Graduate Outcomes Report 2024",
-      type: "PDF",
-      size: "1.9 MB",
-      category: "Reports",
-    },
+  const DOWNLOADS_FALLBACK = [
+    { name: "FODE Prospectus 2026", type: "PDF", size_text: "3.8 MB", category: "Guide" },
+    { name: "Course Guides (All Subjects)", type: "PDF", size_text: "15.2 MB", category: "Curriculum" },
+    { name: "Enrolment Application Form", type: "PDF", size_text: "580 KB", category: "Forms" },
+    { name: "Assignment Submission Guidelines", type: "PDF", size_text: "1.2 MB", category: "Assessment" },
+    { name: "Exam Timetable & Centre List 2026", type: "PDF", size_text: "890 KB", category: "Examinations" },
+    { name: "Mobile App User Guide", type: "PDF", size_text: "2.4 MB", category: "Digital" },
+    { name: "Tutor Handbook & Marking Standards", type: "PDF", size_text: "2.1 MB", category: "Staff" },
+    { name: "Graduate Outcomes Report 2024", type: "PDF", size_text: "1.9 MB", category: "Reports" },
   ];
+  const { data: downloads } = useEntity("downloads", []);
+  const scoped = downloads.filter((d: any) => d.program === "fode");
+  const docs = scoped.length ? scoped : DOWNLOADS_FALLBACK;
+  const { data: headings } = useEntity("fode_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "downloads") || {
+      eyebrow: "Resources",
+      heading: "Documents & Downloads",
+    };
 
   return (
     <section className="py-16 px-4 bg-[#F8F6F1]">
@@ -1172,13 +935,13 @@ function DownloadsSection() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-              Resources
+              {heading.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-[#0B2545] mt-2"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Documents & Downloads
+              {heading.heading}
             </h2>
           </div>
           <Link
@@ -1189,10 +952,10 @@ function DownloadsSection() {
           </Link>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {DOWNLOADS.map((doc) => (
+          {docs.map((doc: any) => (
             <Link
               key={doc.name}
-              to="/contact"
+              to="/downloads"
               className="bg-white rounded-xl p-5 border border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all flex items-start gap-4"
             >
               <div
@@ -1207,7 +970,7 @@ function DownloadsSection() {
                   {doc.category}
                 </span>
                 <h3 className="text-[#0B2545] font-semibold text-sm mt-1 truncate">{doc.name}</h3>
-                <div className="text-gray-500 text-xs mt-1">{doc.size}</div>
+                <div className="text-gray-500 text-xs mt-1">{doc.size_text}</div>
               </div>
               <span className="text-teal-500 shrink-0">→</span>
             </Link>
@@ -1219,49 +982,38 @@ function DownloadsSection() {
 }
 
 function FAQSection() {
-  const FAQS = [
-    {
-      q: "Is a FODE certificate the same as a regular school certificate?",
-      a: "Yes. FODE students sit the identical Grade 10 and Grade 12 National Examinations as conventional schools. Certificates are issued by the same authority (Measurement Services Division) with no distinction.",
-    },
-    {
-      q: "Can I study FODE while working full-time?",
-      a: "Absolutely. FODE is designed for flexible, self-paced learning. Many students work full-time. You submit assignments monthly and attend tutorials when your schedule allows. No fixed class times.",
-    },
-    {
-      q: "How do I get course materials if I live on a remote island?",
-      a: "Materials are shipped to your nearest centre or correspondence site by boat/plane. Digital materials sync via the mobile app when you have internet. Radio lessons broadcast weekly. Tutors visit remote sites quarterly.",
-    },
-    {
-      q: "What if I fail an assignment or exam?",
-      a: "Assignments can be resubmitted after tutor feedback. Failed exams can be re-sat at the next exam sitting (June or October). No limit on attempts. Tutor support provided for improvement.",
-    },
-    {
-      q: "Can I transfer from FODE to a regular school?",
-      a: "Yes. Credit transfer is available. Provide your FODE transcripts and certificates. The Division coordinates transfers with the receiving school. Many students do Grade 10 via FODE then enter Grade 11 conventionally.",
-    },
-    {
-      q: "How much does FODE cost?",
-      a: "Tuition is free under Government FODE subsidy. Students pay only for: exam fees (K50–K100), optional printing, and travel to exam centres. Device loan scheme available for eligible students.",
-    },
+  const FAQS_FALLBACK = [
+    { q: "Is a FODE certificate the same as a regular school certificate?", a: "Yes. FODE students sit the identical Grade 10 and Grade 12 National Examinations as conventional schools. Certificates are issued by the same authority (Measurement Services Division) with no distinction." },
+    { q: "Can I study FODE while working full-time?", a: "Absolutely. FODE is designed for flexible, self-paced learning. Many students work full-time. You submit assignments monthly and attend tutorials when your schedule allows. No fixed class times." },
+    { q: "How do I get course materials if I live on a remote island?", a: "Materials are shipped to your nearest centre or correspondence site by boat/plane. Digital materials sync via the mobile app when you have internet. Radio lessons broadcast weekly. Tutors visit remote sites quarterly." },
+    { q: "What if I fail an assignment or exam?", a: "Assignments can be resubmitted after tutor feedback. Failed exams can be re-sat at the next exam sitting (June or October). No limit on attempts. Tutor support provided for improvement." },
+    { q: "Can I transfer from FODE to a regular school?", a: "Yes. Credit transfer is available. Provide your FODE transcripts and certificates. The Division coordinates transfers with the receiving school. Many students do Grade 10 via FODE then enter Grade 11 conventionally." },
+    { q: "How much does FODE cost?", a: "Tuition is free under Government FODE subsidy. Students pay only for: exam fees (K50–K100), optional printing, and travel to exam centres. Device loan scheme available for eligible students." },
   ];
+  const { data: faqs } = useEntity("fode_faq", FAQS_FALLBACK);
+  const { data: headings } = useEntity("fode_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "faq") || {
+      eyebrow: "Frequently Asked",
+      heading: "Common Questions",
+    };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-            Frequently Asked
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Common Questions
+            {heading.heading}
           </h2>
         </div>
         <div className="space-y-4">
-          {FAQS.map((faq, i) => (
+          {faqs.map((faq: any, i: number) => (
             <details
               key={i}
               className="group bg-[#F8F6F1] rounded-xl border border-gray-100 overflow-hidden"

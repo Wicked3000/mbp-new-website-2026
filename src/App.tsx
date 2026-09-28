@@ -38,6 +38,7 @@ import SelectionsManager from "@/admin/pages/SelectionsManager";
 import BasicEducationManager from "@/admin/pages/BasicEducationManager";
 import PostPrimaryManager from "@/admin/pages/PostPrimaryManager";
 import VETManager from "@/admin/pages/VETManager";
+import FODEManager from "@/admin/pages/FODEManager";
 import MessagesManager from "@/admin/pages/MessagesManager";
 import WhatsAppSubscribersManager from "@/admin/pages/WhatsAppSubscribersManager";
 import SettingsManager from "@/admin/pages/SettingsManager";
@@ -1552,6 +1553,7 @@ export default function App() {
         <Route path="basic-education" element={<BasicEducationManager />} />
         <Route path="post-primary" element={<PostPrimaryManager />} />
         <Route path="vet" element={<VETManager />} />
+        <Route path="fode" element={<FODEManager />} />
         <Route path="settings" element={<SettingsManager />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

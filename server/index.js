@@ -359,6 +359,38 @@ async function ensureVetTables() {
   }
 }
 
+// The FODE page sections, the last of the four programme pages.
+//
+// No table here holds student names: those stay in selection_students, which is
+// admin-only, so they cannot leak into a static export.
+async function ensureFodeTables() {
+  const common = [
+    ["fode_hero", "(eyebrow VARCHAR(160) NOT NULL DEFAULT '', title VARCHAR(160) NOT NULL DEFAULT '', subtitle VARCHAR(160) NOT NULL DEFAULT '', description TEXT, banner VARCHAR(255) DEFAULT NULL, alt VARCHAR(255) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0)"],
+    ["fode_overview", "(eyebrow VARCHAR(160) NOT NULL DEFAULT '', heading VARCHAR(255) NOT NULL DEFAULT '', intro TEXT, body TEXT, features_title VARCHAR(160) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0)"],
+    ["fode_overview_cards", "(icon VARCHAR(16) NOT NULL DEFAULT '', title VARCHAR(255) NOT NULL DEFAULT '', `desc` TEXT, sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_overview_cards_order (sort_order))"],
+    ["fode_overview_features", "(feature TEXT NOT NULL, sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_overview_features_order (sort_order))"],
+    ["fode_overview_stats", "(value_text VARCHAR(80) NOT NULL DEFAULT '', label VARCHAR(120) NOT NULL DEFAULT '', color VARCHAR(60) NOT NULL DEFAULT 'bg-[#0B2545]', sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_overview_stats_order (sort_order))"],
+    ["fode_programs", "(name VARCHAR(200) NOT NULL DEFAULT '', level VARCHAR(80) NOT NULL DEFAULT '', duration VARCHAR(60) NOT NULL DEFAULT '', subjects TEXT, target VARCHAR(255) NOT NULL DEFAULT '', icon VARCHAR(16) NOT NULL DEFAULT '', color VARCHAR(60) NOT NULL DEFAULT 'bg-blue-500', sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_programs_order (sort_order))"],
+    ["fode_centres", "(name VARCHAR(200) NOT NULL DEFAULT '', district VARCHAR(120) NOT NULL DEFAULT '', centre_type VARCHAR(60) NOT NULL DEFAULT 'Main Centre', students VARCHAR(40) NOT NULL DEFAULT '', facilities TEXT, coordinator VARCHAR(160) NOT NULL DEFAULT '', icon VARCHAR(16) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_centres_order (sort_order))"],
+    ["fode_delivery_methods", "(name VARCHAR(200) NOT NULL DEFAULT '', `desc` TEXT, icon VARCHAR(16) NOT NULL DEFAULT '', availability VARCHAR(120) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_delivery_methods_order (sort_order))"],
+    ["fode_app_callout", "(icon VARCHAR(16) NOT NULL DEFAULT '', heading VARCHAR(255) NOT NULL DEFAULT '', body TEXT, bullet TEXT, sort_order INT NOT NULL DEFAULT 0)"],
+    ["fode_enrolment_steps", "(step VARCHAR(8) NOT NULL DEFAULT '', title VARCHAR(200) NOT NULL DEFAULT '', `desc` TEXT, sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_enrolment_steps_order (sort_order))"],
+    ["fode_key_dates", "(label VARCHAR(200) NOT NULL DEFAULT '', date_text VARCHAR(120) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_key_dates_order (sort_order))"],
+    ["fode_support", "(icon VARCHAR(16) NOT NULL DEFAULT '', title VARCHAR(255) NOT NULL DEFAULT '', `desc` TEXT, sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_support_order (sort_order))"],
+    ["fode_support_contact", "(heading VARCHAR(255) NOT NULL DEFAULT '', body TEXT, phone_label VARCHAR(160) NOT NULL DEFAULT '', phone_value VARCHAR(120) NOT NULL DEFAULT '', email_label VARCHAR(160) NOT NULL DEFAULT '', email_value VARCHAR(190) NOT NULL DEFAULT '', whatsapp_label VARCHAR(160) NOT NULL DEFAULT '', whatsapp_value VARCHAR(120) NOT NULL DEFAULT '', office_label VARCHAR(160) NOT NULL DEFAULT '', office_value VARCHAR(255) NOT NULL DEFAULT '', button_label VARCHAR(120) NOT NULL DEFAULT '', button_href VARCHAR(255) NOT NULL DEFAULT '/contact', sort_order INT NOT NULL DEFAULT 0)"],
+    ["fode_initiatives", "(title VARCHAR(255) NOT NULL DEFAULT '', `desc` TEXT, icon VARCHAR(16) NOT NULL DEFAULT '', status VARCHAR(60) NOT NULL DEFAULT '', color VARCHAR(60) NOT NULL DEFAULT 'bg-teal-500', sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_initiatives_order (sort_order))"],
+    ["fode_faq", "(q TEXT NOT NULL, a TEXT, sort_order INT NOT NULL DEFAULT 0, INDEX idx_fode_faq_order (sort_order))"],
+    ["fode_section_headings", "(skey VARCHAR(80) NOT NULL UNIQUE, eyebrow VARCHAR(160) NOT NULL DEFAULT '', heading VARCHAR(255) NOT NULL DEFAULT '', blurb TEXT, sort_order INT NOT NULL DEFAULT 0)"],
+  ];
+  try {
+    for (const [table, columns] of common) {
+      await pool.query(`CREATE TABLE IF NOT EXISTS \`${table}\` ${columns} ENGINE=InnoDB`);
+    }
+  } catch (error) {
+    console.error("Unable to ensure FODE tables:", error.message);
+  }
+}
+
 // downloads gained program/sort_order so documents can be scoped to one
 // programme page instead of always showing in the shared listing.
 async function ensureDownloadsProgramColumns() {
@@ -1034,6 +1066,95 @@ const MAP = {
     table: "vet_section_headings",
     cols: ["skey", "eyebrow", "heading", "blurb", "sort_order"],
   },
+  // FODE page sections. Centre coordinators are staff names, which the site
+  // already published; the trainee rows are not in this file at all.
+  fode_hero: {
+    table: "fode_hero",
+    cols: ["eyebrow", "title", "subtitle", "description", "banner", "alt", "sort_order"],
+  },
+  fode_overview: {
+    table: "fode_overview",
+    cols: ["eyebrow", "heading", "intro", "body", "features_title", "sort_order"],
+  },
+  fode_overview_cards: {
+    table: "fode_overview_cards",
+    cols: ["icon", "title", "desc", "sort_order"],
+  },
+  fode_overview_features: {
+    table: "fode_overview_features",
+    cols: ["feature", "sort_order"],
+  },
+  fode_overview_stats: {
+    table: "fode_overview_stats",
+    cols: ["value_text", "label", "color", "sort_order"],
+  },
+  fode_programs: {
+    table: "fode_programs",
+    cols: ["name", "level", "duration", "subjects", "target", "icon", "color", "sort_order"],
+  },
+  fode_centres: {
+    table: "fode_centres",
+    cols: [
+      "name",
+      "district",
+      "centre_type",
+      "students",
+      "facilities",
+      "coordinator",
+      "icon",
+      "sort_order",
+    ],
+  },
+  fode_delivery_methods: {
+    table: "fode_delivery_methods",
+    cols: ["name", "desc", "icon", "availability", "sort_order"],
+  },
+  fode_app_callout: {
+    table: "fode_app_callout",
+    cols: ["icon", "heading", "body", "bullet", "sort_order"],
+  },
+  fode_enrolment_steps: {
+    table: "fode_enrolment_steps",
+    cols: ["step", "title", "desc", "sort_order"],
+  },
+  fode_key_dates: {
+    table: "fode_key_dates",
+    cols: ["label", "date_text", "sort_order"],
+  },
+  fode_support: {
+    table: "fode_support",
+    cols: ["icon", "title", "desc", "sort_order"],
+  },
+  fode_support_contact: {
+    table: "fode_support_contact",
+    cols: [
+      "heading",
+      "body",
+      "phone_label",
+      "phone_value",
+      "email_label",
+      "email_value",
+      "whatsapp_label",
+      "whatsapp_value",
+      "office_label",
+      "office_value",
+      "button_label",
+      "button_href",
+      "sort_order",
+    ],
+  },
+  fode_initiatives: {
+    table: "fode_initiatives",
+    cols: ["title", "desc", "icon", "status", "color", "sort_order"],
+  },
+  fode_faq: {
+    table: "fode_faq",
+    cols: ["q", "a", "sort_order"],
+  },
+  fode_section_headings: {
+    table: "fode_section_headings",
+    cols: ["skey", "eyebrow", "heading", "blurb", "sort_order"],
+  },
   selections_grade9: {
     table: "selections_grade9",
     cols: ["school", "district", "type", "capacity", "placed", "stream", "cutoff"],
@@ -1145,6 +1266,23 @@ const publicRead = new Set([
   "vet_support_contact",
   "vet_faq",
   "vet_section_headings",
+  // FODE page sections.
+  "fode_hero",
+  "fode_overview",
+  "fode_overview_cards",
+  "fode_overview_features",
+  "fode_overview_stats",
+  "fode_programs",
+  "fode_centres",
+  "fode_delivery_methods",
+  "fode_app_callout",
+  "fode_enrolment_steps",
+  "fode_key_dates",
+  "fode_support",
+  "fode_support_contact",
+  "fode_initiatives",
+  "fode_faq",
+  "fode_section_headings",
 ]);
 
 app.all("/api/entities", async (req, res) => {
@@ -1368,6 +1506,7 @@ Promise.all([
   ensureBasicEducationTables(),
   ensurePostPrimaryTables(),
   ensureVetTables(),
+  ensureFodeTables(),
   ensureDownloadsProgramColumns(),
 ]).finally(() => {
   app.listen(PORT, () =>

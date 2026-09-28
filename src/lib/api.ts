@@ -1098,6 +1098,102 @@ const SEEDS: Record<string, any[]> = {
       "program": "vet",
       "created_at": {},
       "sort_order": 8
+    },
+    {
+      "id": 63,
+      "name": "FODE Prospectus 2026",
+      "type": "PDF",
+      "size_text": "3.8 MB",
+      "category": "Guide",
+      "description": "FODE programme prospectus",
+      "file_path": "",
+      "program": "fode",
+      "created_at": {},
+      "sort_order": 1
+    },
+    {
+      "id": 64,
+      "name": "Course Guides (All Subjects)",
+      "type": "PDF",
+      "size_text": "15.2 MB",
+      "category": "Curriculum",
+      "description": "Course guides for every subject",
+      "file_path": "",
+      "program": "fode",
+      "created_at": {},
+      "sort_order": 2
+    },
+    {
+      "id": 65,
+      "name": "Enrolment Application Form",
+      "type": "PDF",
+      "size_text": "580 KB",
+      "category": "Forms",
+      "description": "FODE enrolment application form",
+      "file_path": "",
+      "program": "fode",
+      "created_at": {},
+      "sort_order": 3
+    },
+    {
+      "id": 66,
+      "name": "Assignment Submission Guidelines",
+      "type": "PDF",
+      "size_text": "1.2 MB",
+      "category": "Assessment",
+      "description": "Guidelines for submitting assignments",
+      "file_path": "",
+      "program": "fode",
+      "created_at": {},
+      "sort_order": 4
+    },
+    {
+      "id": 67,
+      "name": "Exam Timetable & Centre List 2026",
+      "type": "PDF",
+      "size_text": "890 KB",
+      "category": "Examinations",
+      "description": "Exam timetable and centre list",
+      "file_path": "",
+      "program": "fode",
+      "created_at": {},
+      "sort_order": 5
+    },
+    {
+      "id": 68,
+      "name": "Mobile App User Guide",
+      "type": "PDF",
+      "size_text": "2.4 MB",
+      "category": "Digital",
+      "description": "FODE mobile app user guide",
+      "file_path": "",
+      "program": "fode",
+      "created_at": {},
+      "sort_order": 6
+    },
+    {
+      "id": 69,
+      "name": "Tutor Handbook & Marking Standards",
+      "type": "PDF",
+      "size_text": "2.1 MB",
+      "category": "Staff",
+      "description": "Tutor handbook and marking standards",
+      "file_path": "",
+      "program": "fode",
+      "created_at": {},
+      "sort_order": 7
+    },
+    {
+      "id": 70,
+      "name": "Graduate Outcomes Report 2024",
+      "type": "PDF",
+      "size_text": "1.9 MB",
+      "category": "Reports",
+      "description": "Graduate outcomes report",
+      "file_path": "",
+      "program": "fode",
+      "created_at": {},
+      "sort_order": 8
     }
   ],
   "selections_grade9": [
@@ -2935,6 +3031,740 @@ const SEEDS: Record<string, any[]> = {
       "eyebrow": "Support & Resources",
       "heading": "For Trainees, Employers & Trainers",
       "blurb": "Comprehensive support ecosystem ensuring quality training delivery and successful outcomes for all VET stakeholders.",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "skey": "downloads",
+      "eyebrow": "Resources",
+      "heading": "Documents & Downloads",
+      "blurb": null,
+      "sort_order": 8
+    },
+    {
+      "id": 9,
+      "skey": "faq",
+      "eyebrow": "Frequently Asked",
+      "heading": "Common Questions",
+      "blurb": null,
+      "sort_order": 9
+    }
+  ],
+  "fode_hero": [
+    {
+      "id": 1,
+      "eyebrow": "Program 04 - Flexible Open & Distance Education",
+      "title": "Flexible Open &",
+      "subtitle": " Distance Education (FODE)",
+      "description": "Quality secondary education for remote communities, working adults, and students needing flexible pathways - learning without boundaries across Milne Bay Province.",
+      "banner": "/assets/fode/fode-banner-img.jpg",
+      "alt": "FODE learning materials",
+      "sort_order": 1
+    }
+  ],
+  "fode_overview": [
+    {
+      "id": 1,
+      "eyebrow": "Program Overview",
+      "heading": "Education Without Boundaries",
+      "intro": "FODE provides the same national curriculum and examinations as conventional schools, delivered through flexible distance learning. The Division operates 12 study centres across all 4 districts, serving 3,500+ students annually.",
+      "body": "Students include Grade 10/12 upgraders, remote island learners, working adults, and those who missed conventional schooling. All courses lead to nationally recognized Grade 10 and Grade 12 certificates.",
+      "features_title": "Key Features",
+      "sort_order": 1
+    }
+  ],
+  "fode_overview_cards": [
+    {
+      "id": 1,
+      "icon": "📚",
+      "title": "Same National Curriculum",
+      "desc": "Identical syllabus, textbooks, and examinations as classroom-based schools",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "⏰",
+      "title": "Flexible Scheduling",
+      "desc": "Study at your own pace; no fixed timetables - ideal for working students and parents",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "🏝️",
+      "title": "Remote Access",
+      "desc": "Study centres on islands and mainland; materials delivered by boat, plane, and digital platforms",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "🎓",
+      "title": "National Certification",
+      "desc": "Grade 10 & 12 certificates identical to conventional schools; accepted for tertiary entry",
+      "sort_order": 4
+    }
+  ],
+  "fode_overview_features": [
+    {
+      "id": 1,
+      "feature": "Free tuition under Government FODE subsidy",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "feature": "12 study centres + 25+ correspondence sites",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "feature": "Print & digital materials (Moodle LMS, offline apps)",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "feature": "Tutor support via phone, WhatsApp, and centre visits",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "feature": "Same Grade 10/12 National Exams as conventional schools",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "feature": "Credit transfer to/from conventional and VET pathways",
+      "sort_order": 6
+    }
+  ],
+  "fode_overview_stats": [
+    {
+      "id": 1,
+      "value_text": "12",
+      "label": "Study Centres",
+      "color": "bg-[#0B2545]",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "value_text": "3,500+",
+      "label": "Active Students",
+      "color": "bg-[#163663]",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "value_text": "25+",
+      "label": "Correspondence Sites",
+      "color": "bg-teal-600",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "value_text": "92%",
+      "label": "Exam Pass Rate",
+      "color": "bg-teal-700",
+      "sort_order": 4
+    }
+  ],
+  "fode_programs": [
+    {
+      "id": 1,
+      "name": "Grade 10 Upgrade",
+      "level": "Grade 10",
+      "duration": "12–18 months",
+      "subjects": "English, Math, Science, Social Science, Personal Development, Business Studies",
+      "target": "Grade 8/9 leavers seeking Grade 10 cert",
+      "icon": "📖",
+      "color": "bg-blue-500",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Grade 12 Upgrade",
+      "level": "Grade 12",
+      "duration": "18–24 months",
+      "subjects": "English (A/L), Math (A/L), Science, Social Science, plus 2 electives per stream",
+      "target": "Grade 10 holders seeking Grade 12 cert",
+      "icon": "🎓",
+      "color": "bg-purple-500",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Matriculation Program",
+      "level": "Pre-University",
+      "duration": "12 months",
+      "subjects": "English, Math, Science, Humanities - university preparation stream",
+      "target": "Grade 12 grads improving marks for uni",
+      "icon": "🏛️",
+      "color": "bg-indigo-500",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "Adult Literacy & Numeracy",
+      "level": "Foundation",
+      "duration": "6–12 months",
+      "subjects": "Basic literacy, numeracy, digital skills, life skills",
+      "target": "Adults with limited formal education",
+      "icon": "📝",
+      "color": "bg-green-500",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "name": "VET Pathway Courses",
+      "level": "Certificate",
+      "duration": "6–12 months",
+      "subjects": "Trade theory modules aligned with VET NC1 - practical at nearest centre",
+      "target": "FODE students entering trades",
+      "icon": "🔧",
+      "color": "bg-orange-500",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "name": "Teacher Upgrading",
+      "level": "Professional",
+      "duration": "12–18 months",
+      "subjects": "Curriculum, pedagogy, assessment - for untrained teachers",
+      "target": "In-service teachers without certification",
+      "icon": "👨‍🏫",
+      "color": "bg-teal-500",
+      "sort_order": 6
+    }
+  ],
+  "fode_centres": [
+    {
+      "id": 1,
+      "name": "Alotau FODE Centre",
+      "district": "Alotau",
+      "centre_type": "Main Centre",
+      "students": "850+",
+      "facilities": "Admin, Library, Computer Lab, Tutorial Rooms",
+      "coordinator": "Ms. Grace Kila",
+      "icon": "🏢",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Kiriwina FODE Centre",
+      "district": "Kiriwina-Goodenough",
+      "centre_type": "Island Centre",
+      "students": "320+",
+      "facilities": "Solar Power, Satellite Internet, Tutorial Room",
+      "coordinator": "Mr. John Bula",
+      "icon": "🏝️",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Losuia FODE Centre",
+      "district": "Losuia",
+      "centre_type": "Island Centre",
+      "students": "280+",
+      "facilities": "Library, Computer Lab, Staff Housing",
+      "coordinator": "Ms. Mary Tovue",
+      "icon": "🌊",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "Esa'ala FODE Centre",
+      "district": "Esa'ala",
+      "centre_type": "Island Centre",
+      "students": "240+",
+      "facilities": "Tutorial Room, Solar, Boat Access",
+      "coordinator": "Mr. Peter Waso",
+      "icon": "⚓",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "name": "Samarai FODE Centre",
+      "district": "Samarai-Murua",
+      "centre_type": "Island Centre",
+      "students": "190+",
+      "facilities": "Library, Tutorial Room, Internet",
+      "coordinator": "Ms. Helen Gwali",
+      "icon": "🏝️",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "name": "Rabaruana FODE Centre",
+      "district": "Rabaruana",
+      "centre_type": "Mainland Centre",
+      "students": "410+",
+      "facilities": "Admin, Library, Lab, Dormitory",
+      "coordinator": "Mr. David Gari",
+      "icon": "🏫",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "name": "Wanigela FODE Centre",
+      "district": "Wanigela",
+      "centre_type": "Remote Centre",
+      "students": "160+",
+      "facilities": "Tutorial Room, Solar, Radio Link",
+      "coordinator": "Ms. Susan Kora",
+      "icon": "📡",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "name": "Agaivaro FODE Centre",
+      "district": "Agaivaro",
+      "centre_type": "Rural Centre",
+      "students": "220+",
+      "facilities": "Library, Computer Access, Tutorial Room",
+      "coordinator": "Mr. Thomas Vali",
+      "icon": "🌿",
+      "sort_order": 8
+    },
+    {
+      "id": 9,
+      "name": "Dobu FODE Centre",
+      "district": "Dobu",
+      "centre_type": "Island Centre",
+      "students": "180+",
+      "facilities": "Tutorial Room, Solar Power",
+      "coordinator": "Ms. Jenny Moi",
+      "icon": "🏝️",
+      "sort_order": 9
+    },
+    {
+      "id": 10,
+      "name": "Huhu FODE Centre",
+      "district": "Huhu",
+      "centre_type": "Rural Centre",
+      "students": "280+",
+      "facilities": "Library, Tutorial Room, Internet",
+      "coordinator": "Mr. Paul Boga",
+      "icon": "🏫",
+      "sort_order": 10
+    },
+    {
+      "id": 11,
+      "name": "Misima FODE Centre",
+      "district": "Samarai-Murua",
+      "centre_type": "Remote Island",
+      "students": "150+",
+      "facilities": "Tutorial Room, Satellite Link",
+      "coordinator": "Ms. Rose Kewa",
+      "icon": "📡",
+      "sort_order": 11
+    },
+    {
+      "id": 12,
+      "name": "Rossel Island FODE",
+      "district": "Samarai-Murua",
+      "centre_type": "Remote Island",
+      "students": "90+",
+      "facilities": "Basic Tutorial Room, Radio",
+      "coordinator": "Mr. Henry Uva",
+      "icon": "📻",
+      "sort_order": 12
+    }
+  ],
+  "fode_delivery_methods": [
+    {
+      "id": 1,
+      "name": "Printed Course Materials",
+      "desc": "Full curriculum textbooks, workbooks, and assignment booklets delivered to centres and correspondence sites. Updated annually.",
+      "icon": "📦",
+      "availability": "All Centres",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Digital Learning Platform",
+      "desc": "Moodle LMS with interactive lessons, videos, quizzes, and progress tracking. Offline app for areas without internet.",
+      "icon": "💻",
+      "availability": "8 Centres + App",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Radio Broadcast Lessons",
+      "desc": "Weekly 30-min lessons on NBC Milne Bay & community radio. Covers all core subjects. Schedule distributed each term.",
+      "icon": "📻",
+      "availability": "Province-wide",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "Tutorial Support Sessions",
+      "desc": "Face-to-face tutorials at centres (weekly/fortnightly). Tutor-marked assignments with feedback. Practical sessions for science.",
+      "icon": "👨‍🏫",
+      "availability": "All Centres",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "name": "WhatsApp Study Groups",
+      "desc": "Subject-specific groups with tutor moderation. Peer support, quick questions, assignment reminders. 85% student participation.",
+      "icon": "💬",
+      "availability": "Mobile Coverage Areas",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "name": "Mobile Centre Visits",
+      "desc": "Staff visit remote correspondence sites quarterly for enrolment, material distribution, exams, and counselling.",
+      "icon": "🚤",
+      "availability": "25+ Remote Sites",
+      "sort_order": 6
+    }
+  ],
+  "fode_app_callout": [
+    {
+      "id": 1,
+      "icon": "📱",
+      "heading": "FODE Mobile App (New 2026)",
+      "body": "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.",
+      "bullet": "Works offline - syncs when online",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "📱",
+      "heading": "FODE Mobile App (New 2026)",
+      "body": "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.",
+      "bullet": "Push notifications for deadlines & announcements",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "📱",
+      "heading": "FODE Mobile App (New 2026)",
+      "body": "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.",
+      "bullet": "Assignment photo upload & voice notes",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "📱",
+      "heading": "FODE Mobile App (New 2026)",
+      "body": "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.",
+      "bullet": "Progress dashboard & exam countdown",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "icon": "📱",
+      "heading": "FODE Mobile App (New 2026)",
+      "body": "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.",
+      "bullet": "Low data mode for expensive connections",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "icon": "📱",
+      "heading": "FODE Mobile App (New 2026)",
+      "body": "Offline-first Android app with full course materials, video lessons, assignment submission, progress tracking, and tutor chat. Free download at centres or via APK.",
+      "bullet": "Tok Pisin & English interface",
+      "sort_order": 6
+    }
+  ],
+  "fode_enrolment_steps": [
+    {
+      "id": 1,
+      "step": "01",
+      "title": "Choose Your Program",
+      "desc": "Grade 10 Upgrade, Grade 12 Upgrade, Matriculation, Adult Literacy, VET Pathway, or Teacher Upgrading. Counsellors available at all centres.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "step": "02",
+      "title": "Gather Documents",
+      "desc": "Birth certificate/ID, previous certificates (if any), passport photos, medical form. Grade 8/10 certs for upgrade programs.",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "step": "03",
+      "title": "Visit Nearest Centre",
+      "desc": "12 study centres + 25 correspondence sites. Staff assist with forms, course selection, and material collection. Remote: apply via WhatsApp/phone.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "step": "04",
+      "title": "Receive Materials",
+      "desc": "Full course package: textbooks, workbooks, assignment booklets, study guide, exam timetable. Digital access via app/LMS activated.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "step": "05",
+      "title": "Start Learning",
+      "desc": "Flexible start - begin any week. Tutor assigned. Study plan created. Submit assignments monthly. Attend tutorials as schedule allows.",
+      "sort_order": 5
+    }
+  ],
+  "fode_key_dates": [
+    {
+      "id": 1,
+      "label": "Major Intake 1 Opens",
+      "date_text": "15 January 2026",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "label": "Major Intake 1 Closes",
+      "date_text": "31 March 2026",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "label": "Grade 10 Exams (FODE)",
+      "date_text": "12–16 October 2026",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "label": "Grade 12 Exams (FODE)",
+      "date_text": "19–23 October 2026",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "label": "Major Intake 2 Opens",
+      "date_text": "1 July 2026",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "label": "Major Intake 2 Closes",
+      "date_text": "30 September 2026",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "label": "Results Released",
+      "date_text": "December 2026",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "label": "Continuous Enrolment",
+      "date_text": "Year-round (foundation programs)",
+      "sort_order": 8
+    }
+  ],
+  "fode_support": [
+    {
+      "id": 1,
+      "icon": "👨‍🏫",
+      "title": "Dedicated Tutors",
+      "desc": "Subject-specialist tutors at each centre; phone/WhatsApp/email support; monthly progress calls",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "📚",
+      "title": "Learning Resources",
+      "desc": "Full textbook sets, video lessons, past exam papers, marking guides, study planners",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "💰",
+      "title": "Financial Support",
+      "desc": "Government FODE subsidy (free tuition), travel allowances for exams, device loan scheme",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "🧭",
+      "title": "Career & Pathway Guidance",
+      "desc": "Grade 12 tertiary applications, VET articulation, resume building, interview prep",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "icon": "🤝",
+      "title": "Peer Support Networks",
+      "desc": "WhatsApp study groups, centre study buddies, alumni mentoring, graduation events",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "icon": "🌏",
+      "title": "Inclusive Access",
+      "desc": "Materials in large print/audio, sign language tutors, disability support officers at main centres",
+      "sort_order": 6
+    }
+  ],
+  "fode_support_contact": [
+    {
+      "id": 1,
+      "heading": "FODE Helpdesk",
+      "body": "Enrolment, materials, exams, tutor issues, technical support, pathway advice.",
+      "phone_label": "Provincial FODE Coordinator",
+      "phone_value": "+675 641 1234 (ext. 5)",
+      "email_label": "Email",
+      "email_value": "fode@mbpeducation.gov.pg",
+      "whatsapp_label": "WhatsApp Support",
+      "whatsapp_value": "+675 7XXX XXXX",
+      "office_label": "Main Centre",
+      "office_value": "Alotau FODE Centre, Milne Bay",
+      "button_label": "Contact FODE Team",
+      "button_href": "/contact",
+      "sort_order": 1
+    }
+  ],
+  "fode_initiatives": [
+    {
+      "id": 1,
+      "title": "FODE Mobile App Launch",
+      "desc": "Offline-first Android app with full curriculum, video lessons, assignment upload, and tutor chat. 2,000+ downloads target for 2026.",
+      "icon": "📱",
+      "status": "Launched",
+      "color": "bg-teal-500",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "title": "Satellite Internet for Island Centres",
+      "desc": "Starlink terminals at 6 remote island centres (Kiriwina, Losuia, Esa'ala, Samarai, Misima, Rossel). High-speed access for LMS & video calls.",
+      "icon": "🛰️",
+      "status": "Rolling Out",
+      "color": "bg-blue-500",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "title": "Radio Education Expansion",
+      "desc": "Daily 1-hour slots on NBC Milne Bay. New studio at Alotau Centre. Programs in English & Tok Pisin. Reaches 95% of province.",
+      "icon": "📻",
+      "status": "Active",
+      "color": "bg-amber-500",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "title": "Women's Learning Circles",
+      "desc": "Safe study spaces for women with childcare. Female tutors. Flexible timing. 40% female enrolment increase since 2024.",
+      "icon": "👩‍🎓",
+      "status": "Active",
+      "color": "bg-pink-500",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "title": "Digital Literacy Integration",
+      "desc": "Basic ICT module now compulsory in all programs. Computer labs upgraded at all centres. ICDL certification pathway available.",
+      "icon": "💻",
+      "status": "New",
+      "color": "bg-indigo-500",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "title": "Tracer Study & Alumni Network",
+      "desc": "Annual graduate tracking (employment, further study). Alumni mentorship program. FODE graduates database for provincial workforce planning.",
+      "icon": "📊",
+      "status": "Active",
+      "color": "bg-purple-500",
+      "sort_order": 6
+    }
+  ],
+  "fode_faq": [
+    {
+      "id": 1,
+      "q": "Is a FODE certificate the same as a regular school certificate?",
+      "a": "Yes. FODE students sit the identical Grade 10 and Grade 12 National Examinations as conventional schools. Certificates are issued by the same authority (Measurement Services Division) with no distinction.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "q": "Can I study FODE while working full-time?",
+      "a": "Absolutely. FODE is designed for flexible, self-paced learning. Many students work full-time. You submit assignments monthly and attend tutorials when your schedule allows. No fixed class times.",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "q": "How do I get course materials if I live on a remote island?",
+      "a": "Materials are shipped to your nearest centre or correspondence site by boat/plane. Digital materials sync via the mobile app when you have internet. Radio lessons broadcast weekly. Tutors visit remote sites quarterly.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "q": "What if I fail an assignment or exam?",
+      "a": "Assignments can be resubmitted after tutor feedback. Failed exams can be re-sat at the next exam sitting (June or October). No limit on attempts. Tutor support provided for improvement.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "q": "Can I transfer from FODE to a regular school?",
+      "a": "Yes. Credit transfer is available. Provide your FODE transcripts and certificates. The Division coordinates transfers with the receiving school. Many students do Grade 10 via FODE then enter Grade 11 conventionally.",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "q": "How much does FODE cost?",
+      "a": "Tuition is free under Government FODE subsidy. Students pay only for: exam fees (K50–K100), optional printing, and travel to exam centres. Device loan scheme available for eligible students.",
+      "sort_order": 6
+    }
+  ],
+  "fode_section_headings": [
+    {
+      "id": 1,
+      "skey": "programs",
+      "eyebrow": "Study Programs",
+      "heading": "Flexible Learning Pathways",
+      "blurb": "Six program types serving diverse learners - from school leavers to working adults. All use the national curriculum with flexible delivery.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "skey": "centres",
+      "eyebrow": "Study Network",
+      "heading": "12 Study Centres Across the Province",
+      "blurb": null,
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "skey": "selections",
+      "eyebrow": "2026 FODE Selection",
+      "heading": "FODE Student Enrolment Lists",
+      "blurb": "Official 2026 FODE student enrolment list for the main Alotau FODE Centre. Students enrolled in Grade 10/12 upgrade programs.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "skey": "delivery",
+      "eyebrow": "Delivery Methods",
+      "heading": "Multi-Modal Learning Delivery",
+      "blurb": "Students choose the mode that works for their location and circumstances. Most combine multiple methods for best results.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "skey": "enrolment",
+      "eyebrow": "How to Enrol",
+      "heading": "Join Anytime, Study Anywhere",
+      "blurb": "FODE has continuous enrolment with two main intakes. No age limit. No previous school required for foundation programs.",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "skey": "support",
+      "eyebrow": "Student Support",
+      "heading": "Every Learner Supported",
+      "blurb": "Comprehensive support ensuring distance learners succeed - from enrolment to graduation and beyond.",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "skey": "initiatives",
+      "eyebrow": "Key Initiatives",
+      "heading": "Innovating Distance Learning",
+      "blurb": "Strategic programs using technology and community engagement to reach every learner in Milne Bay.",
       "sort_order": 7
     },
     {
