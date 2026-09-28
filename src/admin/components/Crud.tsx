@@ -6,7 +6,12 @@ type Field = {
   key: string;
   label: string;
   type?: "text" | "textarea" | "select" | "number" | "image" | "file";
-  options?: string[];
+  /**
+   * Select choices. A plain string is both the label and the stored value; a
+   * {label, value} pair is needed when the value must be something other than
+   * the visible text, such as an empty string for "not scoped to a programme".
+   */
+  options?: (string | { label: string; value: string })[];
   placeholder?: string;
   required?: boolean;
 };
@@ -439,11 +444,15 @@ export default function Crud({
                   className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
                 >
                   <option value="">Select</option>
-                  {f.options?.map((o) => (
-                    <option key={o} value={o}>
-                      {o}
-                    </option>
-                  ))}
+                  {f.options?.map((o) => {
+                    const value = typeof o === "string" ? o : o.value;
+                    const text = typeof o === "string" ? o : o.label;
+                    return (
+                      <option key={value} value={value}>
+                        {text}
+                      </option>
+                    );
+                  })}
                 </select>
               ) : (
                 <input

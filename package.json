@@ -14,6 +14,7 @@
     "test:watch": "vitest",
     "admin:password": "node scripts/set-admin-password.mjs",
     "check:assets": "node scripts/check-assets.mjs",
+    "check:admin": "node scripts/audit-admin-coverage.mjs",
     "export:seeds": "node scripts/export-seeds.mjs",
     "sync:php": "node scripts/sync-php-entities.mjs",
     "verify": "node scripts/verify.mjs",

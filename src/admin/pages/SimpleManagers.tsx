@@ -485,11 +485,38 @@ export function DownloadsManager() {
         { key: "category", label: "Category", placeholder: "Policy" },
         { key: "description", label: "Description", type: "textarea" },
         { key: "file_path", label: "File", type: "file", required: true },
+        // Every programme page filters downloads by this column and falls back
+        // to its bundled seed copy when nothing matches. Without a way to set it
+        // here, a document uploaded through the admin belongs to no programme
+        // and appears in none of the four programme download sections.
+        {
+          key: "program",
+          label: "Programme",
+          type: "select",
+          // An empty stored value means "not scoped to one programme", which is
+          // how the seeded shared documents are recorded and what the four
+          // programme pages filter on. The label cannot be the value here, so
+          // the option is given as a pair.
+          options: [
+            { label: "Shared (all programmes)", value: "" },
+            { label: "Basic Education", value: "basic" },
+            { label: "Post Primary", value: "post" },
+            { label: "VET", value: "vet" },
+            { label: "FODE", value: "fode" },
+          ],
+        },
+        {
+          key: "sort_order",
+          label: "Order",
+          type: "number",
+          placeholder: "0",
+        },
       ]}
       columns={[
         { key: "name", label: "Name" },
         { key: "type", label: "Type" },
         { key: "category", label: "Cat" },
+        { key: "program", label: "Programme" },
         { key: "size_text", label: "Size" },
       ]}
     />
