@@ -13,8 +13,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "admin:password": "node scripts/set-admin-password.mjs",
+    "check:assets": "node scripts/check-assets.mjs",
     "export:seeds": "node scripts/export-seeds.mjs",
+    "sync:php": "node scripts/sync-php-entities.mjs",
     "verify": "node scripts/verify.mjs",
+    "verify:sync": "node scripts/check-api-sync.mjs",
     "verify:wiring": "node scripts/verify-wiring.mjs"
   },
   "dependencies": {

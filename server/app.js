@@ -121,11 +121,21 @@ export const ENTITY_MAP = {
   stats: { table: "stats", cols: ["value_text", "label", "sub", "sort_order"] },
   districts: {
     table: "districts",
-    cols: ["name", "schools", "type", "students"],
+    cols: ["name", "capital", "schools", "type", "students", "img", "sort_order"],
   },
   schools: {
     table: "schools",
-    cols: ["district_id", "name", "district", "type", "level", "capacity", "enrolled"],
+    cols: [
+      "district_id", "name", "district", "type", "level", "capacity", "enrolled",
+      "img", "head_teacher", "contact", "location", "male", "female", "teachers",
+      "staff", "lat", "lng", "email", "address", "alt_phone", "contact_person",
+      "code", "established", "day_boarding", "category", "classrooms",
+      "land_hectares", "has_library", "has_computer_lab", "has_science_lab",
+      "has_sports_field", "has_boarding", "principal", "teachers_male",
+      "teachers_female", "untrained_teachers", "admin_officers", "support_staff",
+      "streams", "exam_centre", "extracurricular", "day_students", "boarders",
+      "transport", "uniform", "fees", "notes",
+    ],
   },
   leadership: {
     table: "leadership",

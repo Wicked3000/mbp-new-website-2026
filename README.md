@@ -101,6 +101,22 @@ npm run format
 npm run admin:password -- admin 'a long unique passphrase'
 ```
 
+## The Two API Clients
+
+The browser can be served by either the Node API (`server/`) or the legacy PHP
+API (`backend/api/`). Both keep their own copy of the entity map, and
+`server/app.js` is the single source of truth. After adding an entity to
+`ENTITY_MAP`, regenerate the PHP copy and confirm they agree:
+
+```bash
+npm run sync:php
+npm run verify:sync
+```
+
+Skipping this is what broke the Home Page admin: the PHP map was still the
+original 19 entities, so every page-section request answered
+`400 Unknown entity` even though the tables were right there in the database.
+
 ## Project Structure
 
 - `src/App.tsx` - site routes, the admin auth guard and the skip link.
