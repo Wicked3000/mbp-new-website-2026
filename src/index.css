@@ -141,17 +141,21 @@ img {
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Route change. A short fade with a few pixels of lift: enough to signal that
-   the page changed without making the visitor wait for content. Scoped to a
-   keyed wrapper so it replays on every navigation. */
+/* Route change: a short fade, enough to signal that the page changed without
+   making the visitor wait for content. Scoped to a keyed wrapper so it replays
+   on every navigation.
+
+   Opacity only, and deliberately no transform. The wrapper is an ancestor of
+   everything the page renders, including position: fixed chrome (the social
+   row, back-to-top). A transformed ancestor becomes the containing block for
+   fixed descendants, so animating a transform here would silently unpin them
+   from the viewport and make them scroll with the page. */
 @keyframes page-enter {
   from {
     opacity: 0;
-    transform: translate3d(0, 8px, 0);
   }
   to {
     opacity: 1;
-    transform: none;
   }
 }
 
