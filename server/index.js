@@ -87,6 +87,138 @@ async function ensureSelectionStudentsTable() {
   }
 }
 
+// The Basic Education page sections. CREATE TABLE IF NOT EXISTS makes this
+// idempotent, and every table is seeded separately from
+// backend/database/basic_education_seed.sql so the admin can start from the
+// content the page already rendered.
+async function ensureBasicEducationTables() {
+  const tables = [
+    `CREATE TABLE IF NOT EXISTS basic_hero (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      eyebrow VARCHAR(160) NOT NULL DEFAULT '',
+      title VARCHAR(160) NOT NULL DEFAULT '',
+      subtitle VARCHAR(160) NOT NULL DEFAULT '',
+      description TEXT,
+      banner VARCHAR(255) DEFAULT NULL,
+      alt VARCHAR(255) NOT NULL DEFAULT '',
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_overview (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      eyebrow VARCHAR(160) NOT NULL DEFAULT '',
+      heading VARCHAR(255) NOT NULL DEFAULT '',
+      intro TEXT,
+      body TEXT,
+      features_title VARCHAR(160) NOT NULL DEFAULT '',
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_overview_cards (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      title VARCHAR(255) NOT NULL DEFAULT '',
+      \`desc\` TEXT,
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_basic_overview_cards_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_overview_features (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      feature TEXT NOT NULL,
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_basic_overview_features_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_overview_stats (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      value_text VARCHAR(80) NOT NULL DEFAULT '',
+      label VARCHAR(120) NOT NULL DEFAULT '',
+      color VARCHAR(60) NOT NULL DEFAULT 'bg-[#0B2545]',
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_basic_overview_stats_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_curriculum (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      area VARCHAR(160) NOT NULL DEFAULT '',
+      grades VARCHAR(40) NOT NULL DEFAULT '',
+      \`desc\` TEXT,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_basic_curriculum_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_initiatives (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255) NOT NULL DEFAULT '',
+      \`desc\` TEXT,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      status VARCHAR(60) NOT NULL DEFAULT '',
+      color VARCHAR(60) NOT NULL DEFAULT 'bg-teal-500',
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_basic_initiatives_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_support (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      icon VARCHAR(16) NOT NULL DEFAULT '',
+      title VARCHAR(255) NOT NULL DEFAULT '',
+      \`desc\` TEXT,
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_basic_support_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_support_contact (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      heading VARCHAR(255) NOT NULL DEFAULT '',
+      body TEXT,
+      phone_label VARCHAR(160) NOT NULL DEFAULT '',
+      phone_value VARCHAR(120) NOT NULL DEFAULT '',
+      email_label VARCHAR(160) NOT NULL DEFAULT '',
+      email_value VARCHAR(190) NOT NULL DEFAULT '',
+      office_label VARCHAR(160) NOT NULL DEFAULT '',
+      office_value VARCHAR(255) NOT NULL DEFAULT '',
+      button_label VARCHAR(120) NOT NULL DEFAULT '',
+      button_href VARCHAR(255) NOT NULL DEFAULT '/contact',
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_faq (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      q TEXT NOT NULL,
+      a TEXT,
+      sort_order INT NOT NULL DEFAULT 0,
+      INDEX idx_basic_faq_order (sort_order)
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS basic_section_headings (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      skey VARCHAR(80) NOT NULL UNIQUE,
+      eyebrow VARCHAR(160) NOT NULL DEFAULT '',
+      heading VARCHAR(255) NOT NULL DEFAULT '',
+      blurb TEXT,
+      sort_order INT NOT NULL DEFAULT 0
+    ) ENGINE=InnoDB`,
+  ];
+  try {
+    for (const ddl of tables) await pool.query(ddl);
+  } catch (error) {
+    console.error("Unable to ensure Basic Education tables:", error.message);
+  }
+}
+
+// downloads gained program/sort_order so documents can be scoped to one
+// programme page instead of always showing in the shared listing.
+async function ensureDownloadsProgramColumns() {
+  const columns = [
+    { name: "program", ddl: "program VARCHAR(40) NOT NULL DEFAULT '' AFTER file_path" },
+    { name: "sort_order", ddl: "sort_order INT NOT NULL DEFAULT 0" },
+  ];
+  try {
+    for (const column of columns) {
+      const [rows] = await pool.query(
+        "SELECT COUNT(*) AS count FROM information_schema.columns WHERE table_schema = ? AND table_name = 'downloads' AND column_name = ?",
+        [DB.database, column.name],
+      );
+      if (Number(rows[0]?.count) === 0)
+        await pool.query(`ALTER TABLE downloads ADD COLUMN ${column.ddl}`);
+    }
+  } catch (error) {
+    console.error("Unable to ensure downloads program columns:", error.message);
+  }
+}
+
 async function ensureSelectionGrade11Columns() {
   const columns = ["capacity", "placed", "cutoff"];
   try {
@@ -527,12 +659,72 @@ const MAP = {
   },
   downloads: {
     table: "downloads",
-    cols: ["name", "type", "size_text", "category", "description", "file_path"],
+    // program scopes a document to one programme page; "" means it shows in
+    // the shared /downloads listing only.
+    cols: ["name", "type", "size_text", "category", "description", "file_path", "program", "sort_order"],
   },
   site_settings: {
     table: "site_settings",
     cols: ["skey", "svalue"],
     pk: "skey",
+  },
+  // Basic Education page sections. These were hardcoded in the page component;
+  // each section now has its own table so the admin can edit it.
+  basic_hero: {
+    table: "basic_hero",
+    cols: ["eyebrow", "title", "subtitle", "description", "banner", "alt", "sort_order"],
+  },
+  basic_overview: {
+    table: "basic_overview",
+    cols: ["eyebrow", "heading", "intro", "body", "features_title", "sort_order"],
+  },
+  basic_overview_cards: {
+    table: "basic_overview_cards",
+    cols: ["icon", "title", "desc", "sort_order"],
+  },
+  basic_overview_features: {
+    table: "basic_overview_features",
+    cols: ["feature", "sort_order"],
+  },
+  basic_overview_stats: {
+    table: "basic_overview_stats",
+    cols: ["value_text", "label", "color", "sort_order"],
+  },
+  basic_curriculum: {
+    table: "basic_curriculum",
+    cols: ["area", "grades", "desc", "icon", "sort_order"],
+  },
+  basic_initiatives: {
+    table: "basic_initiatives",
+    cols: ["title", "desc", "icon", "status", "color", "sort_order"],
+  },
+  basic_support: {
+    table: "basic_support",
+    cols: ["icon", "title", "desc", "sort_order"],
+  },
+  basic_support_contact: {
+    table: "basic_support_contact",
+    cols: [
+      "heading",
+      "body",
+      "phone_label",
+      "phone_value",
+      "email_label",
+      "email_value",
+      "office_label",
+      "office_value",
+      "button_label",
+      "button_href",
+      "sort_order",
+    ],
+  },
+  basic_faq: {
+    table: "basic_faq",
+    cols: ["q", "a", "sort_order"],
+  },
+  basic_section_headings: {
+    table: "basic_section_headings",
+    cols: ["skey", "eyebrow", "heading", "blurb", "sort_order"],
   },
   selections_grade9: {
     table: "selections_grade9",
@@ -601,6 +793,18 @@ const publicRead = new Set([
   "site_settings",
   "selections_grade9",
   "selections_grade11",
+  // Basic Education sections: public page content, same as news or programs.
+  "basic_hero",
+  "basic_overview",
+  "basic_overview_cards",
+  "basic_overview_features",
+  "basic_overview_stats",
+  "basic_curriculum",
+  "basic_initiatives",
+  "basic_support",
+  "basic_support_contact",
+  "basic_faq",
+  "basic_section_headings",
 ]);
 
 app.all("/api/entities", async (req, res) => {
@@ -821,6 +1025,8 @@ Promise.all([
   ensureWhatsAppSubscribersTable(),
   ensureSelectionStudentsTable(),
   ensureSelectionGrade11Columns(),
+  ensureBasicEducationTables(),
+  ensureDownloadsProgramColumns(),
 ]).finally(() => {
   app.listen(PORT, () =>
     console.log(

@@ -771,7 +771,9 @@ const SEEDS: Record<string, any[]> = {
       "category": "Grade 9 Selection List - 2026",
       "description": "This is a grade 9 selection list of 2026 for schools in Milne Bay Province.",
       "file_path": "/uploads/Cameron_Secondary_School_1790316482895_gxvi.pdf",
-      "created_at": {}
+      "program": "",
+      "created_at": {},
+      "sort_order": 0
     },
     {
       "id": 2,
@@ -781,7 +783,105 @@ const SEEDS: Record<string, any[]> = {
       "category": "Grade 11 Selection List - 2026",
       "description": "This is a selection list for grade 11 of 2026 in Milne Bay Province.",
       "file_path": "/uploads/Cameron_Secondary_School_Grade_11_Selections_List_1790317047140_db98.pdf",
-      "created_at": {}
+      "program": "",
+      "created_at": {},
+      "sort_order": 0
+    },
+    {
+      "id": 18,
+      "name": "Basic Education Handbook 2026",
+      "type": "PDF",
+      "size_text": "2.4 MB",
+      "category": "Policy",
+      "description": "Complete handbook",
+      "file_path": "",
+      "program": "basic",
+      "created_at": {},
+      "sort_order": 1
+    },
+    {
+      "id": 19,
+      "name": "Standards-Based Curriculum: Grades 3–8",
+      "type": "PDF",
+      "size_text": "18.7 MB",
+      "category": "Curriculum",
+      "description": "National SBC for Grades 3 to 8",
+      "file_path": "",
+      "program": "basic",
+      "created_at": {},
+      "sort_order": 2
+    },
+    {
+      "id": 20,
+      "name": "Elementary Vernacular Guide",
+      "type": "PDF",
+      "size_text": "5.1 MB",
+      "category": "Curriculum",
+      "description": "Teaching guide for vernacular early years",
+      "file_path": "",
+      "program": "basic",
+      "created_at": {},
+      "sort_order": 3
+    },
+    {
+      "id": 21,
+      "name": "School Learning Improvement Plan Template",
+      "type": "DOCX",
+      "size_text": "890 KB",
+      "category": "Planning",
+      "description": "SLIP planning template for schools",
+      "file_path": "",
+      "program": "basic",
+      "created_at": {},
+      "sort_order": 4
+    },
+    {
+      "id": 22,
+      "name": "Grade 8 Examination Specifications",
+      "type": "PDF",
+      "size_text": "1.2 MB",
+      "category": "Assessment",
+      "description": "Grade 8 national examination specifications",
+      "file_path": "",
+      "program": "basic",
+      "created_at": {},
+      "sort_order": 5
+    },
+    {
+      "id": 23,
+      "name": "Inclusive Education Guidelines",
+      "type": "PDF",
+      "size_text": "3.3 MB",
+      "category": "Policy",
+      "description": "Guidance on inclusive education delivery",
+      "file_path": "",
+      "program": "basic",
+      "created_at": {},
+      "sort_order": 6
+    },
+    {
+      "id": 24,
+      "name": "Teacher Performance Appraisal Forms",
+      "type": "PDF",
+      "size_text": "650 KB",
+      "category": "HR",
+      "description": "Teacher appraisal forms",
+      "file_path": "",
+      "program": "basic",
+      "created_at": {},
+      "sort_order": 7
+    },
+    {
+      "id": 25,
+      "name": "WASH in Schools Standards",
+      "type": "PDF",
+      "size_text": "2.1 MB",
+      "category": "Infrastructure",
+      "description": "Water, sanitation and hygiene standards",
+      "file_path": "",
+      "program": "basic",
+      "created_at": {},
+      "sort_order": 8
     }
   ],
   "selections_grade9": [
@@ -1012,6 +1112,383 @@ const SEEDS: Record<string, any[]> = {
       "capacity": 0,
       "placed": 0,
       "cutoff": 0
+    }
+  ],
+  "basic_hero": [
+    {
+      "id": 1,
+      "eyebrow": "Program 01 - Basic Education",
+      "title": "Basic Education",
+      "subtitle": "Elementary to Grade 8",
+      "description": "Providing foundational literacy, numeracy and life skills for all children from Prep through to Grade 8 across Milne Bay Province's 312 schools.",
+      "banner": "/assets/education_programs/basic/banner.jpg",
+      "alt": "Elementary school students in Milne Bay",
+      "sort_order": 1
+    }
+  ],
+  "basic_overview": [
+    {
+      "id": 1,
+      "eyebrow": "Program Overview",
+      "heading": "Foundation for Lifelong Learning",
+      "intro": "Basic Education in Milne Bay Province covers the critical foundational years from Elementary Prep through Grade 8. This nine-year journey equips children with essential literacy, numeracy, and life skills that form the bedrock of all future learning.",
+      "body": "The Division oversees schools across all 4 districts of Milne Bay Province with a teaching workforce of 1,800+ qualified educators. Our schools span from urban Alotau to remote island communities in Samarai-Murua, ensuring every child has access to quality basic education.",
+      "features_title": "Key Features",
+      "sort_order": 1
+    }
+  ],
+  "basic_overview_cards": [
+    {
+      "id": 8,
+      "icon": "📘",
+      "title": "Elementary (Prep–Grade 2)",
+      "desc": "Vernacular-based early learning focusing on oral language, pre-literacy, and cultural identity",
+      "sort_order": 1
+    },
+    {
+      "id": 9,
+      "icon": "📗",
+      "title": "Primary (Grades 3–8)",
+      "desc": "English-medium curriculum covering English, Mathematics, Science, Social Science, and Personal Development",
+      "sort_order": 2
+    },
+    {
+      "id": 10,
+      "icon": "📙",
+      "title": "Life Skills & Values",
+      "desc": "Health, hygiene, environmental awareness, and citizenship education integrated across all grades",
+      "sort_order": 3
+    },
+    {
+      "id": 11,
+      "icon": "📕",
+      "title": "Inclusive Education",
+      "desc": "Support for children with disabilities and learning difficulties through specialist teacher aides",
+      "sort_order": 4
+    }
+  ],
+  "basic_overview_features": [
+    {
+      "id": 1,
+      "feature": "Free tuition under Government TFF policy",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "feature": "Standard-based curriculum (SBC) implementation",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "feature": "Vernacular education in Elementary years",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "feature": "School Learning Improvement Plans (SLIP)",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "feature": "Community participation through Boards of Management",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "feature": "Regular school inspections & quality assurance",
+      "sort_order": 6
+    }
+  ],
+  "basic_overview_stats": [
+    {
+      "id": 1,
+      "value_text": "312",
+      "label": "Schools",
+      "color": "bg-[#0B2545]",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "value_text": "35,200+",
+      "label": "Students",
+      "color": "bg-[#163663]",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "value_text": "1,840",
+      "label": "Teachers",
+      "color": "bg-teal-600",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "value_text": "17",
+      "label": "Districts",
+      "color": "bg-teal-700",
+      "sort_order": 4
+    }
+  ],
+  "basic_curriculum": [
+    {
+      "id": 16,
+      "area": "English",
+      "grades": "3–8",
+      "desc": "Reading, writing, speaking, listening; phonics to advanced comprehension",
+      "icon": "📝",
+      "sort_order": 1
+    },
+    {
+      "id": 17,
+      "area": "Mathematics",
+      "grades": "3–8",
+      "desc": "Number, algebra, measurement, geometry, statistics, problem-solving",
+      "icon": "🔢",
+      "sort_order": 2
+    },
+    {
+      "id": 18,
+      "area": "Science",
+      "grades": "3–8",
+      "desc": "Living world, physical world, earth & space, scientific inquiry skills",
+      "icon": "🔬",
+      "sort_order": 3
+    },
+    {
+      "id": 19,
+      "area": "Social Science",
+      "grades": "3–8",
+      "desc": "History, geography, civics, economics, PNG studies & culture",
+      "icon": "🌍",
+      "sort_order": 4
+    },
+    {
+      "id": 20,
+      "area": "Personal Development",
+      "grades": "3–8",
+      "desc": "Health, physical education, values, life skills, career awareness",
+      "icon": "💪",
+      "sort_order": 5
+    },
+    {
+      "id": 21,
+      "area": "Making a Living",
+      "grades": "6–8",
+      "desc": "Agriculture, business basics, home economics, technical skills",
+      "icon": "🛠️",
+      "sort_order": 6
+    },
+    {
+      "id": 22,
+      "area": "Vernacular / Tok Pisin",
+      "grades": "Prep–2",
+      "desc": "Oral language, cultural stories, early literacy in mother tongue",
+      "icon": "🗣️",
+      "sort_order": 7
+    },
+    {
+      "id": 23,
+      "area": "Religious Education",
+      "grades": "Prep–8",
+      "desc": "Christian principles, values, ethics (per Education Act)",
+      "icon": "✝️",
+      "sort_order": 8
+    }
+  ],
+  "basic_initiatives": [
+    {
+      "id": 8,
+      "title": "Early Grade Reading Assessment (EGRA)",
+      "desc": "Annual literacy screening for Grades 1–3 to identify struggling readers early and provide targeted intervention.",
+      "icon": "📖",
+      "status": "Active",
+      "color": "bg-teal-500",
+      "sort_order": 1
+    },
+    {
+      "id": 9,
+      "title": "School Learning Improvement Plans (SLIP)",
+      "desc": "Every school develops a 3-year improvement plan with community input, focusing on infrastructure, teaching quality, and student outcomes.",
+      "icon": "📋",
+      "status": "Active",
+      "color": "bg-blue-500",
+      "sort_order": 2
+    },
+    {
+      "id": 10,
+      "title": "Vernacular Education Support",
+      "desc": "Development of orthographies, teaching materials, and teacher training for 12+ local languages used in Elementary schools.",
+      "icon": "🗣️",
+      "status": "Ongoing",
+      "color": "bg-amber-500",
+      "sort_order": 3
+    },
+    {
+      "id": 11,
+      "title": "Inclusive Education Pilot",
+      "desc": "Specialist teacher aides and adaptive resources in 15 pilot schools supporting children with disabilities in mainstream classrooms.",
+      "icon": "🤝",
+      "status": "Pilot",
+      "color": "bg-purple-500",
+      "sort_order": 4
+    },
+    {
+      "id": 12,
+      "title": "WASH in Schools Program",
+      "desc": "Water, sanitation, and hygiene infrastructure upgrades plus hygiene education in 50 priority schools across the province.",
+      "icon": "💧",
+      "status": "Active",
+      "color": "bg-cyan-500",
+      "sort_order": 5
+    },
+    {
+      "id": 13,
+      "title": "Digital Learning Trial",
+      "desc": "Tablet-based literacy and numeracy apps deployed in 10 remote schools with solar charging, measuring learning gains.",
+      "icon": "💻",
+      "status": "Trial",
+      "color": "bg-indigo-500",
+      "sort_order": 6
+    }
+  ],
+  "basic_support": [
+    {
+      "id": 8,
+      "icon": "📄",
+      "title": "Curriculum Materials",
+      "desc": "Syllabuses, teacher guides, student workbooks distributed annually",
+      "sort_order": 1
+    },
+    {
+      "id": 9,
+      "icon": "🏗️",
+      "title": "Infrastructure Grants",
+      "desc": "Maintenance and construction funding through SLIP and TFF",
+      "sort_order": 2
+    },
+    {
+      "id": 10,
+      "icon": "👨‍🏫",
+      "title": "Teacher Professional Development",
+      "desc": "In-service training, cluster workshops, and certification support",
+      "sort_order": 3
+    },
+    {
+      "id": 11,
+      "icon": "📊",
+      "title": "Data & Monitoring",
+      "desc": "EMIS reporting, school inspections, and performance dashboards",
+      "sort_order": 4
+    },
+    {
+      "id": 12,
+      "icon": "🤝",
+      "title": "Community Engagement",
+      "desc": "Board of Management training, P&C support, awareness campaigns",
+      "sort_order": 5
+    },
+    {
+      "id": 13,
+      "icon": "🚨",
+      "title": "Emergency Response",
+      "desc": "Cyclone/disaster recovery, temporary learning spaces, psychosocial support",
+      "sort_order": 6
+    }
+  ],
+  "basic_support_contact": [
+    {
+      "id": 1,
+      "heading": "Basic Education Helpdesk",
+      "body": "Need assistance with enrolments, transfers, curriculum, or school issues? Our dedicated Basic Education support team is here to help.",
+      "phone_label": "Provincial Basic Education Officer",
+      "phone_value": "+675 641 1234 (ext. 2)",
+      "email_label": "Email",
+      "email_value": "basic.education@mbpeducation.gov.pg",
+      "office_label": "Office",
+      "office_value": "Division of Education, Alotau",
+      "button_label": "Submit Enquiry",
+      "button_href": "/contact",
+      "sort_order": 1
+    }
+  ],
+  "basic_faq": [
+    {
+      "id": 1,
+      "q": "At what age should my child start Elementary Prep?",
+      "a": "Children should be 6 years old by June 30 of the enrolment year to start Elementary Prep. Early or late enrolment requires approval from the Provincial Education Advisor.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "q": "What language is used for instruction in Elementary grades?",
+      "a": "Elementary Prep to Grade 2 uses the local vernacular language (or Tok Pisin in multilingual settings) as the medium of instruction. English is introduced as a subject from Elementary 2 and becomes the medium of instruction from Grade 3 onwards.",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "q": "How do I enrol my child in a Basic Education school?",
+      "a": "Visit your nearest school during enrolment period (typically January). Bring your child's birth certificate or clinic card, and proof of residence. The head teacher will process the enrolment. No fees are charged under the Tuition Fee Free policy.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "q": "What is the Grade 8 National Examination?",
+      "a": "The Grade 8 Examination is a national assessment held annually in October. It covers English, Mathematics, Science, and Social Science. Results determine placement into Grade 9 (Post Primary) and certification of Basic Education completion.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "q": "My child has a disability. Can they attend a regular school?",
+      "a": "Yes. The Division is implementing inclusive education across schools. Contact the Basic Education Officer to discuss your child's needs. Specialist teacher aides and adaptive resources are available in pilot schools, with expansion planned.",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "q": "How can I get a copy of my child's Grade 8 certificate?",
+      "a": "Certificates are issued by the Measurement Services Division of NDoE through the school. If lost, apply through your former school with a statutory declaration and K20 processing fee. Contact the Basic Education helpdesk for assistance.",
+      "sort_order": 6
+    }
+  ],
+  "basic_section_headings": [
+    {
+      "id": 1,
+      "skey": "curriculum",
+      "eyebrow": "Curriculum",
+      "heading": "Standards-Based Curriculum",
+      "blurb": "Milne Bay schools implement the National Standards-Based Curriculum (SBC), ensuring consistent learning outcomes across all schools while allowing local contextualization.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "skey": "initiatives",
+      "eyebrow": "Key Initiatives",
+      "heading": "Programs Driving Quality",
+      "blurb": "Targeted initiatives addressing literacy, inclusion, infrastructure, and innovation across the basic education sector.",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "skey": "support",
+      "eyebrow": "Support & Resources",
+      "heading": "For Teachers, Parents & Communities",
+      "blurb": "The Division provides comprehensive support to ensure every school can deliver quality basic education.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "skey": "downloads",
+      "eyebrow": "Resources",
+      "heading": "Documents & Downloads",
+      "blurb": null,
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "skey": "faq",
+      "eyebrow": "Frequently Asked",
+      "heading": "Common Questions",
+      "blurb": null,
+      "sort_order": 5
     }
   ]
 };

@@ -20,3 +20,5 @@ logs/
 # committed (via git-lfs) or they are missing from the deployed build.
 query
 tmp
+
+.vercel

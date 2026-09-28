@@ -5,11 +5,22 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 function PageHero() {
+  const FALLBACK = {
+    eyebrow: "Program 01 - Basic Education",
+    title: "Basic Education",
+    subtitle: "Elementary to Grade 8",
+    description:
+      "Providing foundational literacy, numeracy and life skills for all children from Prep through to Grade 8 across Milne Bay Province's 312 schools.",
+    banner: "/assets/education_programs/basic/banner.jpg",
+    alt: "Elementary school students in Milne Bay",
+  };
+  const { data } = useEntity("basic_hero", [FALLBACK]);
+  const hero = { ...FALLBACK, ...(data?.[0] || {}) };
   return (
     <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
       <img decoding="async"
-        src="/assets/education_programs/basic/banner.jpg"
-        alt="Elementary school students in Milne Bay"
+        src={hero.banner}
+        alt={hero.alt}
         className="absolute inset-0 w-full h-full object-cover object-center opacity-40"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-[#0B2545]/90 via-[#0B2545]/70 to-[#163663]/40" />
@@ -18,18 +29,17 @@ function PageHero() {
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 bg-teal-500/20 border border-teal-500/40 text-teal-300 text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-teal-500 inline-block" />
-            Program 01 - Basic Education
+            {hero.eyebrow}
           </div>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-5"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Basic Education
-            <span className="block text-teal-400">Elementary to Grade 8</span>
+            {hero.title}
+            <span className="block text-teal-400">{hero.subtitle}</span>
           </h1>
           <p className="text-teal-100 text-lg leading-relaxed max-w-2xl">
-            Providing foundational literacy, numeracy and life skills for all children from Prep
-            through to Grade 8 across Milne Bay Province's 312 schools.
+            {hero.description}
           </p>
           <div className="flex flex-wrap gap-4 mt-8">
             <Link
@@ -52,54 +62,79 @@ function PageHero() {
 }
 
 function OverviewSection() {
+  const OVERVIEW_FALLBACK = {
+    eyebrow: "Program Overview",
+    heading: "Foundation for Lifelong Learning",
+    intro:
+      "Basic Education in Milne Bay Province covers the critical foundational years from Elementary Prep through Grade 8. This nine-year journey equips children with essential literacy, numeracy, and life skills that form the bedrock of all future learning.",
+    body: "The Division oversees schools across all 4 districts of Milne Bay Province with a teaching workforce of 1,800+ qualified educators. Our schools span from urban Alotau to remote island communities in Samarai-Murua, ensuring every child has access to quality basic education.",
+    features_title: "Key Features",
+  };
+  const CARDS_FALLBACK = [
+    {
+      icon: "📘",
+      title: "Elementary (Prep–Grade 2)",
+      desc: "Vernacular-based early learning focusing on oral language, pre-literacy, and cultural identity",
+    },
+    {
+      icon: "📗",
+      title: "Primary (Grades 3–8)",
+      desc: "English-medium curriculum covering English, Mathematics, Science, Social Science, and Personal Development",
+    },
+    {
+      icon: "📙",
+      title: "Life Skills & Values",
+      desc: "Health, hygiene, environmental awareness, and citizenship education integrated across all grades",
+    },
+    {
+      icon: "📕",
+      title: "Inclusive Education",
+      desc: "Support for children with disabilities and learning difficulties through specialist teacher aides",
+    },
+  ];
+  const FEATURES_FALLBACK = [
+    { feature: "Free tuition under Government TFF policy" },
+    { feature: "Standard-based curriculum (SBC) implementation" },
+    { feature: "Vernacular education in Elementary years" },
+    { feature: "School Learning Improvement Plans (SLIP)" },
+    { feature: "Community participation through Boards of Management" },
+    { feature: "Regular school inspections & quality assurance" },
+  ];
+  const STATS_FALLBACK = [
+    { value_text: "312", label: "Schools", color: "bg-[#0B2545]" },
+    { value_text: "35,200+", label: "Students", color: "bg-[#163663]" },
+    { value_text: "1,840", label: "Teachers", color: "bg-teal-600" },
+    { value_text: "17", label: "Districts", color: "bg-teal-700" },
+  ];
+
+  const { data: overviewRows } = useEntity("basic_overview", [OVERVIEW_FALLBACK]);
+  const { data: cards } = useEntity("basic_overview_cards", CARDS_FALLBACK);
+  const { data: features } = useEntity("basic_overview_features", FEATURES_FALLBACK);
+  const { data: stats } = useEntity("basic_overview_stats", STATS_FALLBACK);
+  const overview = { ...OVERVIEW_FALLBACK, ...(overviewRows?.[0] || {}) };
+
   return (
     <section id="overview" className="bg-[#F8F6F1] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
             <span className="text-teal-500 text-xs font-bold uppercase tracking-widest">
-              Program Overview
+              {overview.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-[#0B2545] mt-2 mb-6 leading-tight"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Foundation for Lifelong Learning
+              {overview.heading}
             </h2>
             <p className="text-gray-600 leading-relaxed mb-4 text-lg">
-              Basic Education in Milne Bay Province covers the critical foundational years from
-              Elementary Prep through Grade 8. This nine-year journey equips children with essential
-              literacy, numeracy, and life skills that form the bedrock of all future learning.
+              {overview.intro}
             </p>
             <p className="text-gray-600 leading-relaxed mb-6">
-              The Division oversees schools across all 4 districts of Milne Bay Province
-              with a teaching workforce of 1,800+ qualified educators. Our schools span from urban
-              Alotau to remote island communities in Samarai-Murua, ensuring every child has access
-              to quality basic education.
+              {overview.body}
             </p>
             <div className="space-y-4">
-              {[
-                {
-                  icon: "📚",
-                  title: "Elementary (Prep–Grade 2)",
-                  desc: "Vernacular-based early learning focusing on oral language, pre-literacy, and cultural identity",
-                },
-                {
-                  icon: "📖",
-                  title: "Primary (Grades 3–8)",
-                  desc: "English-medium curriculum covering English, Mathematics, Science, Social Science, and Personal Development",
-                },
-                {
-                  icon: "🌿",
-                  title: "Life Skills & Values",
-                  desc: "Health, hygiene, environmental awareness, and citizenship education integrated across all grades",
-                },
-                {
-                  icon: "🏫",
-                  title: "Inclusive Education",
-                  desc: "Support for children with disabilities and learning difficulties through specialist teacher aides",
-                },
-              ].map((item) => (
+              {cards.map((item: any) => (
                 <div
                   key={item.title}
                   className="flex gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all"
@@ -126,20 +161,13 @@ function OverviewSection() {
                   className="text-xl font-bold text-[#0B2545] mb-3"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  Key Features
+                  {overview.features_title}
                 </h3>
                 <ul className="space-y-3">
-                  {[
-                    "Free tuition under Government TFF policy",
-                    "Standard-based curriculum (SBC) implementation",
-                    "Vernacular education in Elementary years",
-                    "School Learning Improvement Plans (SLIP)",
-                    "Community participation through Boards of Management",
-                    "Regular school inspections & quality assurance",
-                  ].map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm">
+                  {features.map((row: any, i: number) => (
+                    <li key={i} className="flex items-start gap-3 text-sm">
                       <span className="text-teal-500 shrink-0">✓</span>
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-gray-700">{row.feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -147,12 +175,7 @@ function OverviewSection() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
-              {[
-                { value: "312", label: "Schools", color: "bg-[#0B2545]" },
-                { value: "35,200+", label: "Students", color: "bg-[#163663]" },
-                { value: "1,840", label: "Teachers", color: "bg-teal-600" },
-                { value: "17", label: "Districts", color: "bg-teal-700" },
-              ].map((stat) => (
+              {stats.map((stat: any) => (
                 <div
                   key={stat.label}
                   className={`${stat.color} rounded-xl p-5 text-white text-center`}
@@ -161,7 +184,7 @@ function OverviewSection() {
                     className="text-3xl font-bold"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
-                    {stat.value}
+                    {stat.value_text}
                   </div>
                   <div className="text-teal-100 text-sm uppercase tracking-wider">{stat.label}</div>
                 </div>
@@ -175,7 +198,7 @@ function OverviewSection() {
 }
 
 function CurriculumSection() {
-  const SUBJECTS = [
+  const SUBJECTS_FALLBACK = [
     {
       area: "English",
       grades: "3–8",
@@ -225,28 +248,37 @@ function CurriculumSection() {
       icon: "✝️",
     },
   ];
+  const { data: subjects } = useEntity("basic_curriculum", SUBJECTS_FALLBACK);
+  const { data: headings } = useEntity("basic_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "curriculum") || {
+      eyebrow: "Curriculum",
+      heading: "Standards-Based Curriculum",
+      blurb: "Milne Bay schools implement the National Standards-Based Curriculum (SBC), ensuring consistent learning outcomes across all schools while allowing local contextualization.",
+    };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-500 text-xs font-bold uppercase tracking-widest">
-            Curriculum
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Standards-Based Curriculum
+            {heading.heading}
           </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
-            Milne Bay schools implement the National Standards-Based Curriculum (SBC), ensuring
-            consistent learning outcomes across all schools while allowing local contextualization.
-          </p>
+          {heading.blurb && (
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
+              {heading.blurb}
+            </p>
+          )}
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SUBJECTS.map((subject) => (
+          {subjects.map((subject: any) => (
             <div
               key={subject.area}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all"
@@ -453,7 +485,7 @@ function SchoolsSection() {
 }
 
 function InitiativesSection() {
-  const INITIATIVES = [
+  const INITIATIVES_FALLBACK = [
     {
       title: "Early Grade Reading Assessment (EGRA)",
       desc: "Annual literacy screening for Grades 1–3 to identify struggling readers early and provide targeted intervention.",
@@ -497,28 +529,37 @@ function InitiativesSection() {
       color: "bg-indigo-500",
     },
   ];
+  const { data: initiatives } = useEntity("basic_initiatives", INITIATIVES_FALLBACK);
+  const { data: headings } = useEntity("basic_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "initiatives") || {
+      eyebrow: "Key Initiatives",
+      heading: "Programs Driving Quality",
+      blurb: "Targeted initiatives addressing literacy, inclusion, infrastructure, and innovation across the basic education sector.",
+    };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-500 text-xs font-bold uppercase tracking-widest">
-            Key Initiatives
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Programs Driving Quality
+            {heading.heading}
           </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
-            Targeted initiatives addressing literacy, inclusion, infrastructure, and innovation
-            across the basic education sector.
-          </p>
+          {heading.blurb && (
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto text-base leading-relaxed">
+              {heading.blurb}
+            </p>
+          )}
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {INITIATIVES.map((init) => (
+          {initiatives.map((init: any) => (
             <div
               key={init.title}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-teal-200 hover:shadow-lg transition-all"
@@ -547,57 +588,80 @@ function InitiativesSection() {
 }
 
 function SupportSection() {
+  const SUPPORT_FALLBACK = [
+    {
+      icon: "📄",
+      title: "Curriculum Materials",
+      desc: "Syllabuses, teacher guides, student workbooks distributed annually",
+    },
+    {
+      icon: "🏗️",
+      title: "Infrastructure Grants",
+      desc: "Maintenance and construction funding through SLIP and TFF",
+    },
+    {
+      icon: "👨‍🏫",
+      title: "Teacher Professional Development",
+      desc: "In-service training, cluster workshops, and certification support",
+    },
+    {
+      icon: "📊",
+      title: "Data & Monitoring",
+      desc: "EMIS reporting, school inspections, and performance dashboards",
+    },
+    {
+      icon: "🤝",
+      title: "Community Engagement",
+      desc: "Board of Management training, P&C support, awareness campaigns",
+    },
+    {
+      icon: "🚨",
+      title: "Emergency Response",
+      desc: "Cyclone/disaster recovery, temporary learning spaces, psychosocial support",
+    },
+  ];
+  const CONTACT_FALLBACK = {
+    heading: "Basic Education Helpdesk",
+    body: "Need assistance with enrolments, transfers, curriculum, or school issues? Our dedicated Basic Education support team is here to help.",
+    phone_label: "Provincial Basic Education Officer",
+    phone_value: "+675 641 1234 (ext. 2)",
+    email_label: "Email",
+    email_value: "basic.education@mbpeducation.gov.pg",
+    office_label: "Office",
+    office_value: "Division of Education, Alotau",
+    button_label: "Submit Enquiry",
+    button_href: "/contact",
+  };
+  const { data: support } = useEntity("basic_support", SUPPORT_FALLBACK);
+  const { data: contactRows } = useEntity("basic_support_contact", [CONTACT_FALLBACK]);
+  const { data: headings } = useEntity("basic_section_headings", []);
+  const contact = { ...CONTACT_FALLBACK, ...(contactRows?.[0] || {}) };
+  const heading =
+    headings.find((h: any) => h.skey === "support") || {
+      eyebrow: "Support & Resources",
+      heading: "For Teachers, Parents & Communities",
+      blurb: "The Division provides comprehensive support to ensure every school can deliver quality basic education.",
+    };
+
   return (
     <section className="bg-[#0B2545] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
-              Support & Resources
+              {heading.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-white mt-2 mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              For Teachers, Parents & Communities
+              {heading.heading}
             </h2>
-            <p className="text-teal-100 leading-relaxed mb-8">
-              The Division provides comprehensive support to ensure every school can deliver quality
-              basic education.
-            </p>
+            {heading.blurb && (
+              <p className="text-teal-100 leading-relaxed mb-8">{heading.blurb}</p>
+            )}
             <div className="space-y-4">
-              {[
-                {
-                  icon: "📄",
-                  title: "Curriculum Materials",
-                  desc: "Syllabuses, teacher guides, student workbooks distributed annually",
-                },
-                {
-                  icon: "🏗️",
-                  title: "Infrastructure Grants",
-                  desc: "Maintenance and construction funding through SLIP and TFF",
-                },
-                {
-                  icon: "👨‍🏫",
-                  title: "Teacher Professional Development",
-                  desc: "In-service training, cluster workshops, and certification support",
-                },
-                {
-                  icon: "📊",
-                  title: "Data & Monitoring",
-                  desc: "EMIS reporting, school inspections, and performance dashboards",
-                },
-                {
-                  icon: "🤝",
-                  title: "Community Engagement",
-                  desc: "Board of Management training, P&C support, awareness campaigns",
-                },
-                {
-                  icon: "🚨",
-                  title: "Emergency Response",
-                  desc: "Cyclone/disaster recovery, temporary learning spaces, psychosocial support",
-                },
-              ].map((item) => (
+              {support.map((item: any) => (
                 <div
                   key={item.title}
                   className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-teal-500/50 hover:bg-white/10 transition-all"
@@ -617,41 +681,38 @@ function SupportSection() {
               className="text-2xl font-bold text-white mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Basic Education Helpdesk
+              {contact.heading}
             </h3>
-            <p className="text-teal-200 mb-6">
-              Need assistance with enrolments, transfers, curriculum, or school issues? Our
-              dedicated Basic Education support team is here to help.
-            </p>
+            <p className="text-teal-200 mb-6">{contact.body}</p>
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-white">
                 <span className="text-teal-400 text-xl">📞</span>
                 <div>
-                  <div className="text-sm text-teal-200">Provincial Basic Education Officer</div>
-                  <div className="font-semibold">+675 641 1234 (ext. 2)</div>
+                  <div className="text-sm text-teal-200">{contact.phone_label}</div>
+                  <div className="font-semibold">{contact.phone_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
                 <span className="text-teal-400 text-xl">✉️</span>
                 <div>
-                  <div className="text-sm text-teal-200">Email</div>
-                  <div className="font-semibold">basic.education@mbpeducation.gov.pg</div>
+                  <div className="text-sm text-teal-200">{contact.email_label}</div>
+                  <div className="font-semibold">{contact.email_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
                 <span className="text-teal-400 text-xl">📍</span>
                 <div>
-                  <div className="text-sm text-teal-200">Office</div>
-                  <div className="font-semibold">Division of Education, Alotau</div>
+                  <div className="text-sm text-teal-200">{contact.office_label}</div>
+                  <div className="font-semibold">{contact.office_value}</div>
                 </div>
               </div>
             </div>
             <div className="mt-6 pt-6 border-t border-white/10">
               <Link
-                to="/contact"
+                to={contact.button_href}
                 className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 rounded transition-colors"
               >
-                Submit Enquiry →
+                {contact.button_label} →
               </Link>
             </div>
           </div>
@@ -662,56 +723,67 @@ function SupportSection() {
 }
 
 function DownloadsSection() {
-  const DOWNLOADS = [
+  const DOWNLOADS_FALLBACK = [
     {
       name: "Basic Education Handbook 2026",
       type: "PDF",
-      size: "2.4 MB",
+      size_text: "2.4 MB",
       category: "Policy",
     },
     {
       name: "Standards-Based Curriculum: Grades 3–8",
       type: "PDF",
-      size: "18.7 MB",
+      size_text: "18.7 MB",
       category: "Curriculum",
     },
     {
       name: "Elementary Vernacular Guide",
       type: "PDF",
-      size: "5.1 MB",
+      size_text: "5.1 MB",
       category: "Curriculum",
     },
     {
       name: "School Learning Improvement Plan Template",
       type: "DOCX",
-      size: "890 KB",
+      size_text: "890 KB",
       category: "Planning",
     },
     {
       name: "Grade 8 Examination Specifications",
       type: "PDF",
-      size: "1.2 MB",
+      size_text: "1.2 MB",
       category: "Assessment",
     },
     {
       name: "Inclusive Education Guidelines",
       type: "PDF",
-      size: "3.3 MB",
+      size_text: "3.3 MB",
       category: "Policy",
     },
     {
       name: "Teacher Performance Appraisal Forms",
       type: "PDF",
-      size: "650 KB",
+      size_text: "650 KB",
       category: "HR",
     },
     {
       name: "WASH in Schools Standards",
       type: "PDF",
-      size: "2.1 MB",
+      size_text: "2.1 MB",
       category: "Infrastructure",
     },
   ];
+  const { data: downloads } = useEntity("downloads", []);
+  // Only the documents scoped to Basic Education belong in this section; the
+  // table is shared with /downloads.
+  const scoped = downloads.filter((d: any) => d.program === "basic");
+  const docs = scoped.length ? scoped : DOWNLOADS_FALLBACK;
+  const { data: headings } = useEntity("basic_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "downloads") || {
+      eyebrow: "Resources",
+      heading: "Documents & Downloads",
+    };
 
   return (
     <section className="py-16 px-4 bg-[#F8F6F1]">
@@ -719,13 +791,13 @@ function DownloadsSection() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
             <span className="text-teal-500 text-xs font-bold uppercase tracking-widest">
-              Resources
+              {heading.eyebrow}
             </span>
             <h2
               className="text-4xl font-bold text-[#0B2545] mt-2"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Documents & Downloads
+              {heading.heading}
             </h2>
           </div>
           <Link
@@ -737,10 +809,10 @@ function DownloadsSection() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {DOWNLOADS.map((doc) => (
+          {docs.map((doc: any) => (
             <Link
               key={doc.name}
-              to="/contact"
+              to="/downloads"
               className="bg-white rounded-xl p-5 border border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all flex items-start gap-4"
             >
               <div
@@ -755,7 +827,7 @@ function DownloadsSection() {
                   {doc.category}
                 </span>
                 <h3 className="text-[#0B2545] font-semibold text-sm mt-1 truncate">{doc.name}</h3>
-                <div className="text-gray-500 text-xs mt-1">{doc.size}</div>
+                <div className="text-gray-500 text-xs mt-1">{doc.size_text}</div>
               </div>
               <span className="text-teal-500 shrink-0">→</span>
             </Link>
@@ -767,7 +839,7 @@ function DownloadsSection() {
 }
 
 function FAQSection() {
-  const FAQS = [
+  const FAQS_FALLBACK = [
     {
       q: "At what age should my child start Elementary Prep?",
       a: "Children should be 6 years old by June 30 of the enrolment year to start Elementary Prep. Early or late enrolment requires approval from the Provincial Education Advisor.",
@@ -793,24 +865,31 @@ function FAQSection() {
       a: "Certificates are issued by the Measurement Services Division of NDoE through the school. If lost, apply through your former school with a statutory declaration and K20 processing fee. Contact the Basic Education helpdesk for assistance.",
     },
   ];
+  const { data: faqs } = useEntity("basic_faq", FAQS_FALLBACK);
+  const { data: headings } = useEntity("basic_section_headings", []);
+  const heading =
+    headings.find((h: any) => h.skey === "faq") || {
+      eyebrow: "Frequently Asked",
+      heading: "Common Questions",
+    };
 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-500 text-xs font-bold uppercase tracking-widest">
-            Frequently Asked
+            {heading.eyebrow}
           </span>
           <h2
             className="text-4xl font-bold text-[#0B2545] mt-2"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            Common Questions
+            {heading.heading}
           </h2>
         </div>
 
         <div className="space-y-4">
-          {FAQS.map((faq, i) => (
+          {faqs.map((faq: any, i: number) => (
             <details
               key={i}
               className="group bg-[#F8F6F1] rounded-xl border border-gray-100 overflow-hidden"

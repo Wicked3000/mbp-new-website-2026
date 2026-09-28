@@ -44,14 +44,16 @@ export const SOCIAL_NETWORKS: SocialNetwork[] = [
 ];
 
 /**
- * Floating social links, pinned to the right edge and vertically centred.
+ * Floating social links, pinned to the right edge and vertically centred, then
+ * nudged below centre so they do not sit on top of the hero slider's next-slide
+ * arrow, which occupies the same right edge at the true vertical midpoint.
  * Each button keeps its brand colour whether or not a URL has been filled in
  * yet, so the row never renders in a muted or "disabled" state.
  */
 export default function SocialFloat() {
   return (
     <div
-      className="fixed right-0 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 pr-3 sm:flex"
+      className="fixed right-0 top-[70%] z-40 hidden -translate-y-1/2 flex-col gap-2 pr-3 sm:flex"
       aria-label="Social media"
     >
       {SOCIAL_NETWORKS.map((n) => (
