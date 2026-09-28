@@ -1,15 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Crud from "@/admin/components/Crud";
 
 // Admin content for the home page.
 //
 // Most of the home page was already database-backed before this: the hero
 // slider, quick links, stats, programs, news, notices, events, leadership,
-// districts and partners each have their own manager. Only the mission
-// section, the selection banner and the WhatsApp call to action were hardcoded
-// in src/App.tsx, and those are the tabs here. The rest are listed as links
-// below so the whole page has one starting point.
+// districts and partners each have their own manager, all reachable from the
+// sidebar. Only the mission section, the selection banner and the WhatsApp call
+// to action were hardcoded in src/App.tsx, and those are the tabs here.
 
 type Tab = {
   key: string;
@@ -181,19 +179,6 @@ const TABS: Tab[] = [
   },
 ];
 
-const ELSEWHERE = [
-  { label: "Hero Slider", to: "/admin/hero" },
-  { label: "Quick Links", to: "/admin/quicklinks" },
-  { label: "Stats", to: "/admin/stats" },
-  { label: "Programs", to: "/admin/programs" },
-  { label: "News", to: "/admin/news" },
-  { label: "Notices", to: "/admin/notices" },
-  { label: "Events", to: "/admin/events" },
-  { label: "Leadership", to: "/admin/leadership" },
-  { label: "Districts", to: "/admin/districts" },
-  { label: "Partners", to: "/admin/partners" },
-];
-
 export default function HomeManager() {
   const [active, setActive] = useState(TABS[0].key);
   const tab = TABS.find((t) => t.key === active) || TABS[0];
@@ -203,8 +188,9 @@ export default function HomeManager() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#0B2545]">Home Page</h1>
         <p className="text-sm text-gray-600 mt-1">
-          The three home page sections that were hardcoded. The rest of the home page is managed
-          from the pages linked below.
+          The three home page sections that were hardcoded. The rest of the home page - hero
+          slider, quick links, stats, programs, news, notices, events, leadership, districts and
+          partners - is managed from its own pages in the sidebar.
         </p>
       </div>
 
@@ -235,26 +221,6 @@ export default function HomeManager() {
         columns={tab.columns}
         defaultValues={tab.defaultValues}
       />
-
-      <div className="mt-10 pt-6 border-t border-gray-200">
-        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-600">
-          Rest of the home page
-        </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          These sections already had their own tables and managers before the home page work.
-        </p>
-        <div className="flex flex-wrap gap-2 mt-3">
-          {ELSEWHERE.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="px-3 py-1.5 rounded-lg text-sm font-semibold bg-white text-gray-700 border border-gray-200 hover:border-[#0D9488] hover:text-[#0D9488] transition-colors"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
