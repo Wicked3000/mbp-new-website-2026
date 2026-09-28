@@ -35,17 +35,17 @@ export function DistrictsSection() {
             </p>
           </div>
           <Link
-            to="/basic#schools"
+            to="/districts"
             className="inline-flex items-center gap-2 bg-[#0B2545] text-white font-bold px-5 py-2.5 rounded-full hover:bg-[#163663] transition-colors text-sm shadow-sm"
           >
-            School Directory →
+            View All Districts →
           </Link>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {districts.map((d) => (
             <Link
               key={d.name}
-              to="/basic#schools"
+              to={`/districts/${d.id ?? d.name}`}
               className="group rounded-2xl border border-gray-100 bg-[#F8F6F1] overflow-hidden hover:bg-white hover:shadow-lg hover:border-[#0D9488]/20 hover:-translate-y-1 transition-all"
             >
               {/* The admin offers a district thumbnail ("Coverage section
@@ -91,7 +91,7 @@ export function DistrictsSection() {
                   {d.schools} schools • {d.schools * 110}+ students
                 </div>
                 <div className="mt-3 text-xs font-bold text-[#0B2545] group-hover:text-[#0D9488] flex items-center gap-1">
-                  View schools{" "}
+                  View district{" "}
                   <span className="group-hover:translate-x-0.5 transition-transform">→</span>
                 </div>
               </div>
