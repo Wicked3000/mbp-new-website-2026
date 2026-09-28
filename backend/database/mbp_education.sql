@@ -12,8 +12,10 @@ CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(80) NOT NULL UNIQUE,
   email VARCHAR(160) NOT NULL UNIQUE,
-  password_hash VARCHAR(255) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL DEFAULT '',
   role ENUM('super_admin','editor') NOT NULL DEFAULT 'editor',
+  -- Bumped on every password change; tokens carrying an older value are rejected.
+  auth_version INT NOT NULL DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -325,9 +327,12 @@ SET FOREIGN_KEY_CHECKS=1;
 
 -- SEED DATA
 INSERT INTO users (username,email,password_hash,role) VALUES
-('admin','admin@mbpeducation.gov.pg','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'super_admin');
--- Initial super_admin account. Set a unique password on first login, or replace
--- this hash with your own bcrypt hash before importing into any real environment.
+('admin','admin@mbpeducation.gov.pg','', 'super_admin');
+-- The seed deliberately ships with NO password: any hash committed here is
+-- public, and a known hash means anyone who reads this repository can sign in.
+-- Set one right after importing, then change it from Admin -> Settings:
+--   npm run admin:password -- admin 'a long unique passphrase'
+-- Accounts with an empty password_hash are refused by both APIs.
 
 INSERT INTO hero_slides (src,alt,sort_order) VALUES
 ('/assets/slider/mbp-img1.jpg','Milne Bay students and community learning',1),

@@ -118,12 +118,16 @@ export default function NoticesManager() {
         </div>
         <div className="flex gap-2">
           <input
+            id="notice-search"
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search..."
+            aria-label="Search notices"
             className="px-4 py-2.5 rounded-full border border-gray-200 bg-white text-sm w-56"
           />
           <button
+            type="button"
             onClick={() => {
               setEditing(null);
               setForm({ notice_date: "", title: "", is_published: 1 });
@@ -136,15 +140,27 @@ export default function NoticesManager() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        aria-busy={loading}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
+            <caption className="sr-only">Notice board notices</caption>
             <thead>
               <tr className="bg-[#0B2545] text-white text-left">
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Title</th>
-                <th className="px-4 py-3">Pub</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th scope="col" className="px-4 py-3">
+                  Date
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Title
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Pub
+                </th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -169,12 +185,16 @@ export default function NoticesManager() {
                   <td className="px-4 py-3">{r.is_published ? "yes" : "no"}</td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button
+                      type="button"
+                      aria-label={`Edit notice ${r.title}`}
                       onClick={() => setEditing(r)}
                       className="text-xs font-bold bg-amber-100 text-amber-700 px-3 py-1.5 rounded-full mr-1"
                     >
                       Edit
                     </button>
                     <button
+                      type="button"
+                      aria-label={`Delete notice ${r.title}`}
                       onClick={() => del(r.id)}
                       className="text-xs font-bold bg-red-50 text-red-600 px-3 py-1.5 rounded-full"
                     >
@@ -190,11 +210,14 @@ export default function NoticesManager() {
 
       <form
         id="notice-form"
+        aria-labelledby="notice-form-heading"
         onSubmit={submit}
         className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-[#0B2545]">{editing ? "Edit" : "Add"} - Notice</h2>
+          <h2 id="notice-form-heading" className="font-bold text-[#0B2545]">
+            {editing ? "Edit" : "Add"} - Notice
+          </h2>
           {editing && (
             <button
               type="button"
@@ -210,12 +233,17 @@ export default function NoticesManager() {
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="notice-date"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Date *
             </label>
             <input
+              id="notice-date"
               type="date"
               value={toInputDate(form.notice_date)}
+              aria-describedby="notice-date-hint"
               onChange={(e) =>
                 setForm({
                   ...form,
@@ -225,15 +253,19 @@ export default function NoticesManager() {
               required
               className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
             />
-            <div className="text-xs text-gray-500 mt-1">
+            <div id="notice-date-hint" className="text-xs text-gray-500 mt-1">
               Pick from calendar - saved as "{form.notice_date || "..."}"
             </div>
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="notice-published"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Published
             </label>
             <select
+              id="notice-published"
               value={form.is_published}
               onChange={(e) => setForm({ ...form, is_published: Number(e.target.value) })}
               className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm"
@@ -243,22 +275,28 @@ export default function NoticesManager() {
             </select>
           </div>
           <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="notice-title"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Title *
             </label>
             <textarea
+              id="notice-title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               required
               rows={2}
               placeholder="Notice title"
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 outline-none text-sm"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
             />
           </div>
         </div>
-        <button className="bg-[#0D9488] text-white font-bold px-6 py-3 rounded-full text-sm">
-          {" "}
-          {editing ? "Update" : "Create"}{" "}
+        <button
+          type="submit"
+          className="bg-[#0D9488] text-white font-bold px-6 py-3 rounded-full text-sm"
+        >
+          {editing ? "Update" : "Create"}
         </button>
       </form>
     </div>

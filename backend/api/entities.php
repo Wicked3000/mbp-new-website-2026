@@ -1,9 +1,9 @@
 <?php
-// Generic CRUD: ?entity=news|notices|events|programs|stats|districts|schools|leadership|partners|quick_links|hero_slides|downloads|site_settings|selections_grade9|selections_grade11|contact_messages|users
-require __DIR__.'/config/cors.php';
-require __DIR__.'/config/database.php';
-require __DIR__.'/config/auth.php';
-require __DIR__.'/helpers.php';
+// Generic CRUD: ?entity=news|notices|events|programs|stats|districts|schools|leadership|partners|quick_links|hero_slides|downloads|site_settings|selections_grade9|selections_grade11|selection_students|contact_messages|whatsapp_subscribers|users
+require_once __DIR__.'/config/cors.php';
+require_once __DIR__.'/helpers.php';
+require_once __DIR__.'/config/database.php';
+require_once __DIR__.'/config/auth.php';
 
 $pdo=(new Database())->connect();
 
@@ -17,33 +17,41 @@ $MAP=[
   'districts'=>['table'=>'districts','cols'=>['name','capital','schools','type','students','img','sort_order']],
   'schools'=>['table'=>'schools','cols'=>['district_id','name','district','type','level','capacity','enrolled','img','head_teacher','contact','location','male','female','teachers','staff','lat','lng','email','address','alt_phone','contact_person','code','established','day_boarding','category','classrooms','land_hectares','has_library','has_computer_lab','has_science_lab','has_sports_field','has_boarding','principal','teachers_male','teachers_female','untrained_teachers','admin_officers','support_staff','streams','exam_centre','extracurricular','day_students','boarders','transport','uniform','fees','notes']],
   'leadership'=>['table'=>'leadership','cols'=>['name','title','bio','icon','photo','sort_order']],
-  'partners'=>['table'=>'partners','cols'=>['name','sort_order']],
+  'partners'=>['table'=>'partners','cols'=>['name','logo','sort_order']],
   'quick_links'=>['table'=>'quick_links','cols'=>['icon','label','description','href','sort_order']],
   'downloads'=>['table'=>'downloads','cols'=>['name','type','size_text','category','description','file_path']],
   'site_settings'=>['table'=>'site_settings','cols'=>['skey','svalue'],'pk'=>'skey'],
   'selections_grade9'=>['table'=>'selections_grade9','cols'=>['school','district','type','capacity','placed','stream','cutoff']],
-  'selections_grade11'=>['table'=>'selections_grade11','cols'=>['school','district','type','streams_json','placed_json','cutoff_json']],
+  'selections_grade11'=>['table'=>'selections_grade11','cols'=>['school','district','type','streams_json','placed_json','cutoff_json','capacity','placed','cutoff']],
+  // Minors' names, SLF numbers and gender: never public, never in a public page.
+  'selection_students'=>['table'=>'selection_students','cols'=>['grade_level','school','position_no','primary_school','surname','first_name','gender','student_name','slf_no','transferred_from']],
   'contact_messages'=>['table'=>'contact_messages','cols'=>['full_name','phone','email','category','district','subject','message','status']],
+  'whatsapp_subscribers'=>['table'=>'whatsapp_subscribers','cols'=>['phone','source']],
   'users'=>['table'=>'users','cols'=>['username','email','role'],'selectCols'=>['id','username','email','role'],'readOnly'=>true],
 ];
 
 $entity=$_GET['entity']??'';
-if(!isset($MAP[$entity])) respond(['error'=>'Unknown entity','allowed'=>array_keys($MAP)],400);
+// array_key_exists, not isset, and reject anything that is not a plain name so
+// "constructor"/"__proto__" can never reach the query builder.
+if(!is_string($entity) || !preg_match('/^[a-z0-9_]+$/', $entity) || !array_key_exists($entity,$MAP)){
+  respond(['error'=>'Unknown entity','allowed'=>array_keys($MAP)],400);
+}
 $cfg=$MAP[$entity];
 $table=$cfg['table'];
 $cols=$cfg['cols'];
 $pk=$cfg['pk']??'id';
 $method=$_SERVER['REQUEST_METHOD'];
 
-// Public read for most entities except users/contact_messages which require auth for listing
+// Public read for site content. users, contact_messages, whatsapp_subscribers and
+// selection_students require a valid token.
 $publicRead = ['hero_slides','news','notices','events','programs','stats','districts','schools','leadership','partners','quick_links','downloads','site_settings','selections_grade9','selections_grade11'];
 $needsAuthForRead = !in_array($entity,$publicRead,true);
 
 if($needsAuthForRead && $method==='GET'){
-  auth_require();
+  auth_require($pdo);
 }
 if(in_array($method,['POST','PUT','DELETE'])){
-  auth_require();
+  auth_require($pdo);
   if(($cfg['readOnly']??false)) respond(['error'=>'Read only'],403);
 }
 

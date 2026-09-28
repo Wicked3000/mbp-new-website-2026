@@ -1,36 +1,19 @@
 import { Link } from "react-router-dom";
+import PageHeroBanner, { TEAL_HERO } from "@/components/PageHero";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 function PageHero() {
   return (
-    <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
-      <img decoding="async"
-        src="/assets/slider/mbp-img1.jpg"
-        alt="Inclusive education"
-        className="absolute inset-0 w-full h-full object-cover object-center opacity-40"
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0B2545]/90 via-[#0B2545]/70 to-[#163663]/40" />
-      <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 bg-teal-500/20 border border-teal-500/40 text-teal-300 text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-teal-500 inline-block" />
-            Accessibility Statement
-          </div>
-          <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-5"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Accessibility
-            <span className="block text-teal-400"> for Everyone</span>
-          </h1>
-          <p className="text-teal-100 text-lg leading-relaxed max-w-2xl">
-            We are committed to making our website and digital services accessible to all users,
-            regardless of ability or technology.
-          </p>
-        </div>
-      </div>
-    </section>
+    <PageHeroBanner
+      theme={TEAL_HERO}
+      image="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&h=900&fit=crop&auto=format"
+      imageAlt="Inclusive education"
+      eyebrow="Accessibility Statement"
+      title="Accessibility"
+      highlight=" for Everyone"
+      lead="We are committed to making our website and digital services accessible to all users, regardless of ability or technology."
+    />
   );
 }
 
@@ -363,11 +346,13 @@ export default function AccessibilityPage() {
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
       <SiteHeader />
-      <PageHero />
-      <StatementSection />
-      <FeaturesSection />
-      <TestingSection />
-      <FeedbackSection />
+      <main id="main-content">
+        <PageHero />
+        <StatementSection />
+        <FeaturesSection />
+        <TestingSection />
+        <FeedbackSection />
+      </main>
       <SiteFooter />
     </div>
   );

@@ -5,13 +5,17 @@ import { useToast } from "@/admin/components/Toast";
 export default function MessagesManager() {
   const toast = useToast();
   const [rows, setRows] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const load = () =>
-    api
+  const load = () => {
+    setLoading(true);
+    return api
       .list("contact_messages")
       .then(setRows)
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  };
   useEffect(() => {
     load();
   }, []);
@@ -56,7 +60,11 @@ export default function MessagesManager() {
           </p>
         </div>
         <div className="flex gap-2">
+          <label htmlFor="message-status-filter" className="sr-only">
+            Filter messages by status
+          </label>
           <select
+            id="message-status-filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-4 py-2.5 rounded-full border border-gray-200 bg-white text-sm"
@@ -67,7 +75,12 @@ export default function MessagesManager() {
             <option value="replied">Replied</option>
             <option value="archived">Archived</option>
           </select>
+          <label htmlFor="message-search" className="sr-only">
+            Search contact messages
+          </label>
           <input
+            id="message-search"
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search…"
@@ -75,17 +88,33 @@ export default function MessagesManager() {
           />
         </div>
       </div>
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        aria-busy={loading}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
+            <caption className="sr-only">Contact messages</caption>
             <thead>
               <tr className="bg-[#0B2545] text-white text-left">
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">From</th>
-                <th className="px-4 py-3">Category</th>
-                <th className="px-4 py-3">Subject</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th scope="col" className="px-4 py-3">
+                  Date
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  From
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Category
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Subject
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Status
+                </th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -138,6 +167,7 @@ export default function MessagesManager() {
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <select
                       value={r.status}
+                      aria-label={`Status for message from ${r.full_name}`}
                       onChange={(e) => setStatus(r.id, e.target.value)}
                       className="text-xs border border-gray-200 rounded-full px-2 py-1 bg-white mr-1"
                     >
@@ -147,6 +177,8 @@ export default function MessagesManager() {
                       <option value="archived">archived</option>
                     </select>
                     <button
+                      type="button"
+                      aria-label={`Delete message from ${r.full_name}`}
                       onClick={() => del(r.id)}
                       className="text-xs font-bold bg-red-50 text-red-600 px-3 py-1.5 rounded-full"
                     >

@@ -51,6 +51,7 @@ export default function NewsManager() {
   const [preview, setPreview] = useState("");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [imgInvalid, setImgInvalid] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   async function load() {
@@ -145,9 +146,11 @@ export default function NewsManager() {
       return;
     }
     if (!form.img) {
+      setImgInvalid(true);
       toast.error("Please upload an image from your device");
       return;
     }
+    setImgInvalid(false);
     setSaving(true);
     try {
       const payload = {
@@ -226,12 +229,16 @@ export default function NewsManager() {
         </div>
         <div className="flex gap-2">
           <input
+            id="news-search"
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search title or tag"
+            aria-label="Search news articles"
             className="px-4 py-2.5 rounded-full border border-gray-200 bg-white text-sm w-56 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
           />
           <button
+            type="button"
             onClick={() => {
               setEditing(null);
               setForm({
@@ -254,18 +261,36 @@ export default function NewsManager() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        aria-busy={loading}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
+            <caption className="sr-only">News and announcements</caption>
             <thead>
               <tr className="bg-[#0B2545] text-white text-left">
-                <th className="px-4 py-3">Image</th>
-                <th className="px-4 py-3">Tag</th>
-                <th className="px-4 py-3">Title</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Section</th>
-                <th className="px-4 py-3">Pub</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th scope="col" className="px-4 py-3">
+                  Image
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Tag
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Title
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Date
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Section
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Pub
+                </th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -324,6 +349,8 @@ export default function NewsManager() {
                   </td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button
+                      type="button"
+                      aria-label={`Move news item ${r.title} to ${(r as any).is_previous ? "Latest News" : "Previous News"}`}
                       onClick={() => togglePrevious(r)}
                       className={`text-xs font-bold px-3 py-1.5 rounded-full mr-1 ${
                         (r as any).is_previous
@@ -334,12 +361,16 @@ export default function NewsManager() {
                       {(r as any).is_previous ? "To Latest" : "To Previous"}
                     </button>
                     <button
+                      type="button"
+                      aria-label={`Edit news item ${r.title}`}
                       onClick={() => setEditing(r)}
                       className="text-xs font-bold bg-amber-100 text-amber-700 px-3 py-1.5 rounded-full hover:bg-amber-200 mr-1"
                     >
                       Edit
                     </button>
                     <button
+                      type="button"
+                      aria-label={`Delete news item ${r.title}`}
                       onClick={() => del(r.id)}
                       className="text-xs font-bold bg-red-50 text-red-600 px-3 py-1.5 rounded-full hover:bg-red-100"
                     >
@@ -361,11 +392,14 @@ export default function NewsManager() {
 
       <form
         id="news-form"
+        aria-labelledby="news-form-heading"
         onSubmit={submit}
         className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-[#0B2545]">{editing ? "Edit" : "Add"} - News</h2>
+          <h2 id="news-form-heading" className="font-bold text-[#0B2545]">
+            {editing ? "Edit" : "Add"} - News
+          </h2>
           {editing && (
             <button
               type="button"
@@ -392,13 +426,17 @@ export default function NewsManager() {
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="news-tag"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Tag *
             </label>
             <select
+              id="news-tag"
               value={form.tag}
               onChange={(e) => setForm({ ...form, tag: e.target.value })}
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm outline-none"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
             >
               <option>Announcement</option>
               <option>Programs</option>
@@ -407,65 +445,89 @@ export default function NewsManager() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="news-tag-color"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Tag color class
             </label>
             <input
+              id="news-tag-color"
               value={form.tag_color}
               onChange={(e) => setForm({ ...form, tag_color: e.target.value })}
               placeholder="bg-[#0D9488]"
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
             />
           </div>
 
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="news-date"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Date *
             </label>
             <input
+              id="news-date"
               type="date"
               value={toInputDate(form.news_date)}
               onChange={(e) => setForm({ ...form, news_date: toDisplayDate(e.target.value) })}
+              aria-describedby="news-date-hint"
               required
               className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
             />
-            <div className="text-xs text-gray-500 mt-1">
+            <div id="news-date-hint" className="text-xs text-gray-500 mt-1">
               Pick from calendar - saved as "{form.news_date || "..."}".
             </div>
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="news-published"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Published
             </label>
             <select
+              id="news-published"
               value={form.is_published}
               onChange={(e) => setForm({ ...form, is_published: Number(e.target.value) })}
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm outline-none"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
             >
               <option value={1}>1 - Published</option>
               <option value={0}>0 - Draft</option>
             </select>
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="news-section"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Section
             </label>
             <select
+              id="news-section"
               value={(form as any).is_previous}
               onChange={(e) => setForm({ ...form, is_previous: Number(e.target.value) } as any)}
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm outline-none"
+              aria-describedby="news-section-hint"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
             >
               <option value={0}>Latest News</option>
               <option value={1}>Previous News</option>
             </select>
-            <div className="text-xs text-gray-500 mt-1">Move old news to Previous</div>
+            <div id="news-section-hint" className="text-xs text-gray-500 mt-1">
+              Move old news to Previous
+            </div>
           </div>
 
           <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="news-title"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Title *
             </label>
             <input
+              id="news-title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               required
@@ -475,10 +537,14 @@ export default function NewsManager() {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="news-excerpt"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Excerpt *
             </label>
             <textarea
+              id="news-excerpt"
               value={form.excerpt}
               onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
               required
@@ -489,23 +555,41 @@ export default function NewsManager() {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="news-image"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Image - upload from device *
             </label>
             <div className="mt-1 flex flex-col sm:flex-row gap-3 items-start">
               <div className="flex-1 w-full">
                 <input
                   ref={fileRef}
+                  id="news-image"
                   type="file"
                   accept="image/*"
-                  onChange={onPickFile}
+                  onChange={(e) => {
+                    setImgInvalid(false);
+                    onPickFile(e);
+                  }}
+                  aria-invalid={imgInvalid || undefined}
+                  aria-describedby={
+                    imgInvalid ? "news-image-hint news-image-error" : "news-image-hint"
+                  }
                   className="w-full text-sm file:mr-3 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:bg-[#0B2545] file:text-white file:font-bold hover:file:bg-[#163663] border border-gray-200 rounded-xl px-3 py-1.5 bg-white"
                 />
-                <div className="text-xs text-gray-500 mt-1">
+                <div id="news-image-hint" className="text-xs text-gray-500 mt-1">
                   Choose JPG, PNG, WEBP up to 8MB from your computer.
                 </div>
+                {imgInvalid && (
+                  <p id="news-image-error" className="text-xs font-semibold text-red-600 mt-1">
+                    Please upload an image from your device
+                  </p>
+                )}
                 {uploading && (
-                  <div className="text-xs font-bold text-[#0D9488] mt-1">Uploading...</div>
+                  <div className="text-xs font-bold text-[#0D9488] mt-1" role="status">
+                    Uploading...
+                  </div>
                 )}
                 {form.img && !form.img.startsWith("data:") && (
                   <div className="text-xs text-gray-500 truncate mt-1">
@@ -526,7 +610,9 @@ export default function NewsManager() {
         </div>
 
         <button
+          type="submit"
           disabled={saving || uploading}
+          aria-busy={saving || uploading}
           className="bg-[#0D9488] hover:bg-[#0b7a6e] text-white font-bold px-6 py-3 rounded-full text-sm disabled:opacity-60"
         >
           {saving ? "Saving..." : editing ? "Update News" : "Create News"}

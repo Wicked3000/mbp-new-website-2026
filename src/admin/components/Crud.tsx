@@ -38,6 +38,7 @@ export default function Crud({
   const [form, setForm] = useState<any>(defaultValues || {});
   const [saving, setSaving] = useState(false);
   const [uploadingField, setUploadingField] = useState<string | null>(null);
+  const [invalidField, setInvalidField] = useState<string | null>(null);
 
   async function load() {
     setLoading(true);
@@ -61,14 +62,26 @@ export default function Crud({
     (r) => !q || Object.values(r).join(" ").toLowerCase().includes(q.toLowerCase()),
   );
 
+  const rowName = (row: any) => {
+    const key = columns[0]?.key;
+    const value = key ? row[key] : undefined;
+    const text = value == null ? "" : String(value).trim();
+    return text || (row.id != null ? `record ${row.id}` : "record");
+  };
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
     try {
       const missingFile = fields.find(
-        (field) => (field.type === "image" || field.type === "file") && field.required && !form[field.key],
+        (field) =>
+          (field.type === "image" || field.type === "file") && field.required && !form[field.key],
       );
-      if (missingFile) throw new Error(`${missingFile.label} is required`);
+      if (missingFile) {
+        setInvalidField(missingFile.key);
+        throw new Error(`${missingFile.label} is required`);
+      }
+      setInvalidField(null);
       const payload = { ...form };
       fields
         .filter((f) => f.type === "number")
@@ -171,12 +184,16 @@ export default function Crud({
         </div>
         <div className="flex gap-2">
           <input
+            id={`search-${entity}`}
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search…"
+            aria-label={`Search ${title}`}
             className="px-4 py-2.5 rounded-full border border-gray-200 bg-white text-sm w-56 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
           />
           <button
+            type="button"
             onClick={() => {
               setEditing(null);
               setForm(defaultValues || {});
@@ -189,17 +206,23 @@ export default function Crud({
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        aria-busy={loading}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
+            <caption className="sr-only">{title} records</caption>
             <thead>
               <tr className="bg-[#0B2545] text-white text-left">
                 {columns.map((c) => (
-                  <th key={c.key} className="px-4 py-3 font-semibold whitespace-nowrap">
+                  <th key={c.key} scope="col" className="px-4 py-3 font-semibold whitespace-nowrap">
                     {c.label}
                   </th>
                 ))}
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -229,12 +252,16 @@ export default function Crud({
                   ))}
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button
+                      type="button"
+                      aria-label={`Edit ${rowName(r)}`}
                       onClick={() => setEditing(r)}
                       className="text-xs font-bold bg-amber-100 text-amber-700 px-3 py-1.5 rounded-full hover:bg-amber-200 mr-1"
                     >
                       Edit
                     </button>
                     <button
+                      type="button"
+                      aria-label={`Delete ${rowName(r)}`}
                       onClick={() => del(r.id)}
                       className="text-xs font-bold bg-red-50 text-red-600 px-3 py-1.5 rounded-full hover:bg-red-100"
                     >
@@ -259,11 +286,12 @@ export default function Crud({
 
       <form
         id={`form-${entity}`}
+        aria-labelledby={`form-${entity}-heading`}
         onSubmit={submit}
         className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-[#0B2545]">
+          <h2 id={`form-${entity}-heading`} className="font-bold text-[#0B2545]">
             {editing ? "Edit" : "Add"} - {title}
           </h2>
           {editing && (
@@ -283,41 +311,93 @@ export default function Crud({
           {fields.map((f) => (
             <div
               key={f.key}
-              className={f.type === "textarea" || f.type === "image" || f.type === "file" ? "sm:col-span-2" : ""}
+              className={
+                f.type === "textarea" || f.type === "image" || f.type === "file"
+                  ? "sm:col-span-2"
+                  : ""
+              }
             >
-              <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+              <label
+                htmlFor={`field-${entity}-${f.key}`}
+                className="text-xs font-bold uppercase tracking-widest text-gray-600"
+              >
                 {f.label} {f.required && <span className="text-red-500">*</span>}
               </label>
               {f.type === "file" ? (
                 <div className="mt-1">
                   <input
+                    id={`field-${entity}-${f.key}`}
                     type="file"
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt"
                     disabled={uploadingField === f.key}
-                    onChange={(event) => uploadFile(f.key, event)}
+                    aria-invalid={invalidField === f.key || undefined}
+                    aria-describedby={
+                      invalidField === f.key ? `error-${entity}-${f.key}` : undefined
+                    }
+                    onChange={(event) => {
+                      setInvalidField(null);
+                      uploadFile(f.key, event);
+                    }}
                     className="w-full text-sm file:mr-3 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:bg-[#0B2545] file:text-white file:font-bold hover:file:bg-[#163663] disabled:opacity-60 border border-gray-200 rounded-xl px-3 py-1.5 bg-white"
                   />
-                  <div className="text-xs text-gray-500 mt-2">Choose PDF, Word, Excel, CSV, or TXT up to 25MB.</div>
-                  {uploadingField === f.key && <div className="text-xs font-bold text-[#0D9488] mt-2">Uploading file...</div>}
+                  <div className="text-xs text-gray-500 mt-2">
+                    Choose PDF, Word, Excel, CSV, or TXT up to 25MB.
+                  </div>
+                  {invalidField === f.key && (
+                    <p
+                      id={`error-${entity}-${f.key}`}
+                      className="text-xs font-semibold text-red-600 mt-2"
+                    >
+                      {f.label} is required
+                    </p>
+                  )}
+                  {uploadingField === f.key && (
+                    <div className="text-xs font-bold text-[#0D9488] mt-2" role="status">
+                      Uploading file...
+                    </div>
+                  )}
                   {form[f.key] && (
-                    <a href={form[f.key]} target="_blank" rel="noreferrer" className="inline-block text-xs font-semibold text-[#0D9488] mt-2 hover:underline">View selected file</a>
+                    <a
+                      href={form[f.key]}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-block text-xs font-semibold text-[#0D9488] mt-2 hover:underline"
+                    >
+                      View selected file
+                    </a>
                   )}
                 </div>
               ) : f.type === "image" ? (
                 <div className="mt-1 flex flex-col sm:flex-row gap-4 items-start">
                   <div className="flex-1 w-full">
                     <input
+                      id={`field-${entity}-${f.key}`}
                       type="file"
                       accept="image/*"
                       disabled={uploadingField === f.key}
-                      onChange={(event) => uploadImage(f.key, event)}
+                      aria-invalid={invalidField === f.key || undefined}
+                      aria-describedby={
+                        invalidField === f.key ? `error-${entity}-${f.key}` : undefined
+                      }
+                      onChange={(event) => {
+                        setInvalidField(null);
+                        uploadImage(f.key, event);
+                      }}
                       className="w-full text-sm file:mr-3 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:bg-[#0B2545] file:text-white file:font-bold hover:file:bg-[#163663] disabled:opacity-60 border border-gray-200 rounded-xl px-3 py-1.5 bg-white"
                     />
                     <div className="text-xs text-gray-500 mt-2">
                       Choose JPG, PNG, GIF, or WEBP up to 8MB.
                     </div>
+                    {invalidField === f.key && (
+                      <p
+                        id={`error-${entity}-${f.key}`}
+                        className="text-xs font-semibold text-red-600 mt-2"
+                      >
+                        {f.label} is required
+                      </p>
+                    )}
                     {uploadingField === f.key && (
-                      <div className="text-xs font-bold text-[#0D9488] mt-2">
+                      <div className="text-xs font-bold text-[#0D9488] mt-2" role="status">
                         Uploading image...
                       </div>
                     )}
@@ -326,7 +406,7 @@ export default function Crud({
                     <div className="w-full sm:w-56 shrink-0">
                       <img loading="lazy" decoding="async"
                         src={form[f.key]}
-                        alt="Selected preview"
+                        alt={`Selected preview for ${f.label}`}
                         className="w-full h-32 object-cover rounded-xl border border-gray-200 bg-[#F8F6F1]"
                       />
                       <div className="text-xs font-semibold text-emerald-700 mt-2">
@@ -337,8 +417,12 @@ export default function Crud({
                 </div>
               ) : f.type === "textarea" ? (
                 <textarea
+                  id={`field-${entity}-${f.key}`}
                   value={form[f.key] ?? ""}
-                  onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+                  onChange={(e) => {
+                    setInvalidField(null);
+                    setForm({ ...form, [f.key]: e.target.value });
+                  }}
                   rows={3}
                   placeholder={f.placeholder}
                   required={f.required}
@@ -346,9 +430,13 @@ export default function Crud({
                 />
               ) : f.type === "select" ? (
                 <select
+                  id={`field-${entity}-${f.key}`}
                   value={form[f.key] ?? ""}
-                  onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-                  className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] outline-none"
+                  onChange={(e) => {
+                    setInvalidField(null);
+                    setForm({ ...form, [f.key]: e.target.value });
+                  }}
+                  className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
                 >
                   <option value="">Select</option>
                   {f.options?.map((o) => (
@@ -359,9 +447,13 @@ export default function Crud({
                 </select>
               ) : (
                 <input
+                  id={`field-${entity}-${f.key}`}
                   type={f.type === "number" ? "number" : "text"}
                   value={form[f.key] ?? ""}
-                  onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+                  onChange={(e) => {
+                    setInvalidField(null);
+                    setForm({ ...form, [f.key]: e.target.value });
+                  }}
                   placeholder={f.placeholder}
                   required={f.required}
                   className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
@@ -371,7 +463,9 @@ export default function Crud({
           ))}
         </div>
         <button
+          type="submit"
           disabled={saving}
+          aria-busy={saving}
           className="bg-[#0D9488] hover:bg-[#0b7a6e] text-white font-bold px-6 py-3 rounded-full text-sm disabled:opacity-60"
         >
           {saving ? "Saving…" : editing ? "Update" : "Create"}

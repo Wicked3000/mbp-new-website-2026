@@ -8,10 +8,14 @@
     "dev:api": "node server/index.js",
     "dev:all": "concurrently \"npm run dev:api\" \"npm run dev\"",
     "build": "vite build",
-    "export:seeds": "node scripts/export-seeds.mjs",
     "preview": "vite preview",
-    "deploy": "vite build",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "admin:password": "node scripts/set-admin-password.mjs",
+    "export:seeds": "node scripts/export-seeds.mjs",
+    "verify": "node scripts/verify.mjs",
+    "verify:wiring": "node scripts/verify-wiring.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -32,9 +36,12 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^6.0.0",
     "concurrently": "^10.0.5",
+    "jsdom": "^30.1.1",
     "oxfmt": "^0.70.0",
+    "supertest": "^7.3.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.0",
-    "vite": "^8.0.5"
+    "vite": "^8.0.5",
+    "vitest": "^5.0.2"
   }
 }

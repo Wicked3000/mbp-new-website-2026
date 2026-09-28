@@ -1,37 +1,19 @@
 import { Link } from "react-router-dom";
+import PageHeroBanner, { NAVY_HERO } from "@/components/PageHero";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 function PageHero() {
   return (
-    <section className="relative h-[400px] sm:h-[480px] overflow-hidden bg-[#0B2545]">
-      <img decoding="async"
-        src="/assets/slider/mbp-img3.jpg"
-        alt="Milne Bay Province landscape"
-        className="absolute inset-0 w-full h-full object-cover object-center opacity-40"
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0B2545]/90 via-[#0B2545]/70 to-[#163663]/40" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 bg-[#C9A84C]/20 border border-[#C9A84C]/40 text-[#E2C47A] text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] inline-block" />
-            Milne Bay Province - Papua New Guinea
-          </div>
-          <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-5"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            About the Division
-            <span className="block text-[#14B8A6]"> of Education</span>
-          </h1>
-          <p className="text-blue-100 text-lg leading-relaxed max-w-2xl">
-            Learn about our mission, leadership, and commitment to quality education across Milne
-            Bay Province.
-          </p>
-        </div>
-      </div>
-    </section>
+    <PageHeroBanner
+      theme={NAVY_HERO}
+      image="https://images.unsplash.com/photo-1671883240914-22753874f0de?w=1600&h=900&fit=crop&auto=format"
+      imageAlt="Milne Bay Province landscape"
+      eyebrow="Milne Bay Province - Papua New Guinea"
+      title="About the Division"
+      highlight=" of Education"
+      lead="Learn about our mission, leadership, and commitment to quality education across Milne Bay Province."
+    />
   );
 }
 
@@ -74,8 +56,8 @@ function MissionSection() {
           </div>
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-xl">
-              <img loading="lazy" decoding="async"
-                src="/assets/education_programs/map/milne_bay_map.jpg"
+              <img
+                src="https://images.unsplash.com/photo-1615608178738-37d47d27c13d?w=800&h=600&fit=crop&auto=format"
                 alt="Students in classroom"
                 className="w-full h-96 object-cover"
               />
@@ -347,12 +329,14 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
       <SiteHeader />
-      <PageHero />
-      <MissionSection />
-      <LeadershipSection />
-      <HistorySection />
-      <StatsSection />
-      <PartnersSection />
+      <main id="main-content">
+        <PageHero />
+        <MissionSection />
+        <LeadershipSection />
+        <HistorySection />
+        <StatsSection />
+        <PartnersSection />
+      </main>
       <SiteFooter />
     </div>
   );

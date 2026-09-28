@@ -10,13 +10,21 @@ import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 
 dotenv.config();
-const PAGES = [
-  "src/App.tsx",
-  "src/pages/BasicEducation.tsx",
-  "src/pages/PostPrimary.tsx",
-  "src/pages/VET.tsx",
-  "src/pages/FODE.tsx",
-];
+// The refactor split each page into a folder of section components and moved
+// the home sections into src/home, so the wiring is checked per file across
+// those directories rather than at the old single-file paths.
+const PAGES = [];
+for (const dir of [
+  "src/pages/BasicEducation",
+  "src/pages/PostPrimary",
+  "src/pages/VET",
+  "src/pages/FODE",
+  "src/home",
+]) {
+  for (const f of fs.readdirSync(dir)) {
+    if (f.endsWith(".tsx")) PAGES.push(`${dir}/${f}`);
+  }
+}
 
 let failures = 0;
 const fail = (m) => { failures += 1; console.log("  FAIL  " + m); };
@@ -42,10 +50,14 @@ for (const r of cols) {
 
 console.log("[useEntity calls resolve to a real, non-empty entity]");
 const seen = new Set();
+let checkedFiles = 0;
 for (const page of PAGES) {
   const src = fs.readFileSync(page, "utf8");
   const calls = [...src.matchAll(/useEntity\(\s*"([a-z_0-9]+)"/g)].map((m) => m[1]);
-  if (!calls.length) { fail(`${page}: no useEntity calls found`); continue; }
+  // Page index files and the few sections that were always hardcoded have no
+  // calls; that is not a failure, it just means there is nothing to check.
+  if (!calls.length) continue;
+  checkedFiles++;
   let bad = 0;
   for (const e of calls) {
     seen.add(e);
@@ -57,24 +69,26 @@ for (const page of PAGES) {
   }
   if (!bad) pass(`${page}: ${calls.length} useEntity calls all resolve, all non-empty`);
 }
+if (!checkedFiles) fail("no section files with useEntity calls were found - is the layout right?");
 
 console.log("\n[fields the components read exist on their tables]");
 // component alias -> table, for the spots where a rename would render blank
 const CHECKS = [
-  ["src/pages/PostPrimary.tsx", /s\.subjects/g, "post_streams", "subjects"],
-  ["src/pages/PostPrimary.tsx", /s\.grades/g, "post_streams", "grades"],
-  ["src/pages/PostPrimary.tsx", /doc\.size_text/g, "downloads", "size_text"],
-  ["src/pages/PostPrimary.tsx", /p\.stats/g, "post_pathways", "stats"],
-  ["src/pages/FODE.tsx", /m\.availability/g, "fode_delivery_methods", "availability"],
-  ["src/pages/FODE.tsx", /d\.date_text/g, "fode_key_dates", "date_text"],
-  ["src/pages/FODE.tsx", /p\.target/g, "fode_programs", "target"],
-  ["src/pages/FODE.tsx", /row\.bullet/g, "fode_app_callout", "bullet"],
-  ["src/pages/VET.tsx", /p\.trades/g, "vet_programs", "trades"],
-  ["src/pages/VET.tsx", /row\.name/g, "vet_centre_names", "name"],
-  ["src/pages/VET.tsx", /doc\.size_text/g, "downloads", "size_text"],
-  ["src/pages/BasicEducation.tsx", /doc\.size_text/g, "downloads", "size_text"],
-  ["src/App.tsx", /row\.feature/g, "home_mission_points", "feature"],
-  ["src/App.tsx", /row\.name/g, "home_cta_channels", "name"],
+  ["src/pages/PostPrimary/CurriculumSection.tsx", /s\.subjects/g, "post_streams", "subjects"],
+  ["src/pages/PostPrimary/CurriculumSection.tsx", /s\.grades/g, "post_streams", "grades"],
+  ["src/pages/PostPrimary/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
+  ["src/pages/PostPrimary/PathwaysSection.tsx", /p\.stats/g, "post_pathways", "stats"],
+  ["src/pages/VET/ProgramsSection.tsx", /p\.trades/g, "vet_programs", "trades"],
+  ["src/pages/VET/SelectionListsSection.tsx", /row\.name/g, "vet_centre_names", "name"],
+  ["src/pages/VET/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
+  ["src/pages/FODE/DeliverySection.tsx", /m\.availability/g, "fode_delivery_methods", "availability"],
+  ["src/pages/FODE/EnrolmentSection.tsx", /d\.date_text/g, "fode_key_dates", "date_text"],
+  ["src/pages/FODE/ProgramsSection.tsx", /p\.target/g, "fode_programs", "target"],
+  ["src/pages/FODE/DeliverySection.tsx", /row\.bullet/g, "fode_app_callout", "bullet"],
+  ["src/pages/FODE/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
+  ["src/pages/BasicEducation/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
+  ["src/home/AboutMissionSection.tsx", /row\.feature/g, "home_mission_points", "feature"],
+  ["src/home/HelpCTASection.tsx", /row\.name/g, "home_cta_channels", "name"],
 ];
 let mapFails = 0;
 for (const [file, re, table, col] of CHECKS) {
@@ -87,7 +101,7 @@ for (const [file, re, table, col] of CHECKS) {
 if (!mapFails) pass(`${CHECKS.length} field mappings verified against their tables`);
 
 console.log("\n[fode centres: centre_type is mapped back to type in the component]");
-const fode = fs.readFileSync("src/pages/FODE.tsx", "utf8");
+const fode = fs.readFileSync("src/pages/FODE/CentresSection.tsx", "utf8");
 const mapsType = /centre_type\s*\|\|\s*c\.type/.test(fode) || /type:\s*c\.centre_type/.test(fode);
 const cardReadsType = /\{\s*c\.type\s*\}/.test(fode) || /c\.type\s*===\s*"/.test(fode);
 mapsType && cardReadsType

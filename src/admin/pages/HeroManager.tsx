@@ -25,6 +25,7 @@ export default function HeroManager() {
   const [preview, setPreview] = useState<string>("");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [srcInvalid, setSrcInvalid] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   async function load() {
@@ -82,9 +83,11 @@ export default function HeroManager() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.src) {
+      setSrcInvalid(true);
       toast.error("Please upload an image from your device");
       return;
     }
+    setSrcInvalid(false);
     if (!form.alt) {
       toast.error("Alt text required");
       return;
@@ -142,12 +145,16 @@ export default function HeroManager() {
         </div>
         <div className="flex gap-2">
           <input
+            id="hero-search"
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search alt or url"
+            aria-label="Search hero slides"
             className="px-4 py-2.5 rounded-full border border-gray-200 bg-white text-sm w-56 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
           />
           <button
+            type="button"
             onClick={() => {
               setEditing(null);
               setForm({ src: "", alt: "", sort_order: 0, is_active: 1 });
@@ -161,16 +168,30 @@ export default function HeroManager() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        aria-busy={loading}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
+            <caption className="sr-only">Hero slider slides</caption>
             <thead>
               <tr className="bg-[#0B2545] text-white text-left">
-                <th className="px-4 py-3">Preview</th>
-                <th className="px-4 py-3">Alt</th>
-                <th className="px-4 py-3">Order</th>
-                <th className="px-4 py-3">Active</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th scope="col" className="px-4 py-3">
+                  Preview
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Alt
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Order
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Active
+                </th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -192,7 +213,7 @@ export default function HeroManager() {
                 <tr key={r.id} className={`border-b ${i % 2 === 0 ? "bg-white" : "bg-[#F8F6F1]"}`}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <img loading="lazy" decoding="async"
+                      <img
                         src={r.src}
                         alt={r.alt}
                         className="w-20 h-12 object-cover rounded-lg border border-gray-200"
@@ -219,12 +240,16 @@ export default function HeroManager() {
                   </td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button
+                      type="button"
+                      aria-label={`Edit hero slide ${r.alt || r.id}`}
                       onClick={() => setEditing(r)}
                       className="text-xs font-bold bg-amber-100 text-amber-700 px-3 py-1.5 rounded-full hover:bg-amber-200 mr-1"
                     >
                       Edit
                     </button>
                     <button
+                      type="button"
+                      aria-label={`Delete hero slide ${r.alt || r.id}`}
                       onClick={() => del(r.id)}
                       className="text-xs font-bold bg-red-50 text-red-600 px-3 py-1.5 rounded-full hover:bg-red-100"
                     >
@@ -246,11 +271,14 @@ export default function HeroManager() {
 
       <form
         id="hero-form"
+        aria-labelledby="hero-form-heading"
         onSubmit={submit}
         className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-[#0B2545]">{editing ? "Edit" : "Add"} - Hero Slide</h2>
+          <h2 id="hero-form-heading" className="font-bold text-[#0B2545]">
+            {editing ? "Edit" : "Add"} - Hero Slide
+          </h2>
           {editing && (
             <button
               type="button"
@@ -268,24 +296,40 @@ export default function HeroManager() {
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="hero-image-file"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Image - upload from device *
             </label>
             <div className="mt-1 flex flex-col sm:flex-row gap-3 items-start">
               <div className="flex-1 w-full">
                 <input
                   ref={fileRef}
+                  id="hero-image-file"
                   type="file"
                   accept="image/*"
-                  onChange={onPickFile}
+                  onChange={(e) => {
+                    setSrcInvalid(false);
+                    onPickFile(e);
+                  }}
+                  aria-invalid={srcInvalid || undefined}
+                  aria-describedby={srcInvalid ? "hero-image-error" : undefined}
                   className="w-full text-sm file:mr-3 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:bg-[#0B2545] file:text-white file:font-bold hover:file:bg-[#163663] border border-gray-200 rounded-xl px-3 py-1.5 bg-white"
                 />
                 <div className="text-xs text-gray-500 mt-1">
                   Choose JPG, PNG, WEBP up to 8MB from your computer. Works offline via local
                   preview.
                 </div>
+                {srcInvalid && (
+                  <p id="hero-image-error" className="text-xs font-semibold text-red-600 mt-1">
+                    Please upload an image from your device
+                  </p>
+                )}
                 {uploading && (
-                  <div className="text-xs font-bold text-[#0D9488] mt-1">Uploading...</div>
+                  <div className="text-xs font-bold text-[#0D9488] mt-1" role="status">
+                    Uploading...
+                  </div>
                 )}
                 {form.src && !form.src.startsWith("data:") && (
                   <div className="text-xs text-gray-500 truncate mt-1">Saved: {form.src}</div>
@@ -293,7 +337,7 @@ export default function HeroManager() {
               </div>
               <div className="w-full sm:w-48 h-28 rounded-xl border border-gray-200 bg-[#F8F6F1] overflow-hidden grid place-items-center shrink-0">
                 {preview ? (
-                  <img loading="lazy" decoding="async" src={preview} alt="preview" className="w-full h-full object-cover" />
+                  <img src={preview} alt="preview" className="w-full h-full object-cover" />
                 ) : (
                   <span className="text-xs text-gray-400">No preview</span>
                 )}
@@ -302,10 +346,37 @@ export default function HeroManager() {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="hero-src"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
+              Image URL (auto-filled after upload)
+            </label>
+            <input
+              id="hero-src"
+              value={form.src}
+              aria-describedby="hero-src-hint"
+              onChange={(e) => {
+                setForm({ ...form, src: e.target.value });
+                setPreview(e.target.value);
+              }}
+              placeholder="Will be filled after device upload or paste https://..."
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:bg-white focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
+            />
+            <div id="hero-src-hint" className="text-xs text-gray-400 mt-1">
+              You can also paste a URL manually, but device upload is preferred.
+            </div>
+          </div>
+
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="hero-alt"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Alt text *
             </label>
             <input
+              id="hero-alt"
               value={form.alt}
               onChange={(e) => setForm({ ...form, alt: e.target.value })}
               required
@@ -315,24 +386,32 @@ export default function HeroManager() {
           </div>
 
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="hero-sort-order"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Sort order
             </label>
             <input
+              id="hero-sort-order"
               type="number"
               value={form.sort_order}
               onChange={(e) => setForm({ ...form, sort_order: Number(e.target.value) })}
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 outline-none text-sm"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
             />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-widest text-gray-600">
+            <label
+              htmlFor="hero-is-active"
+              className="text-xs font-bold uppercase tracking-widest text-gray-600"
+            >
               Active (1 or 0)
             </label>
             <select
+              id="hero-is-active"
               value={form.is_active}
               onChange={(e) => setForm({ ...form, is_active: Number(e.target.value) })}
-              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm outline-none"
+              className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none"
             >
               <option value={1}>1 - Active</option>
               <option value={0}>0 - Hidden</option>
@@ -341,7 +420,9 @@ export default function HeroManager() {
         </div>
 
         <button
+          type="submit"
           disabled={saving || uploading}
+          aria-busy={saving || uploading}
           className="bg-[#0D9488] hover:bg-[#0b7a6e] text-white font-bold px-6 py-3 rounded-full text-sm disabled:opacity-60"
         >
           {saving ? "Saving..." : editing ? "Update Slide" : "Create Slide"}

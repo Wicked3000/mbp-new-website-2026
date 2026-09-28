@@ -136,7 +136,7 @@ export default function CalendarPage() {
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto px-4 py-10 sm:py-14">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 py-10 sm:py-14">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-7">
           <div className="flex items-center gap-3">
             <button
@@ -171,12 +171,15 @@ export default function CalendarPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
+              type="search"
+              aria-label="Search events"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search events..."
               className="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm outline-none focus:border-[#0D9488]"
             />
             <select
+              aria-label="Filter events by category"
               value={category}
               onChange={(event) => setCategory(event.target.value)}
               className="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm outline-none focus:border-[#0D9488]"

@@ -1,38 +1,46 @@
 <?php
-require __DIR__.'/config/cors.php';
-require __DIR__.'/config/auth.php';
+require_once __DIR__.'/config/cors.php';
+require_once __DIR__.'/helpers.php';
+require_once __DIR__.'/config/database.php';
+require_once __DIR__.'/config/auth.php';
 
 // Require auth for uploads
-auth_require();
+auth_require((new Database())->connect());
 
 if($_SERVER['REQUEST_METHOD'] !== 'POST'){
-  http_response_code(405); echo json_encode(['error'=>'POST only']); exit;
+  respond(['error'=>'POST only'],405);
 }
 
 if(!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK){
-  http_response_code(400); echo json_encode(['error'=>'No file uploaded','code'=>$_FILES['file']['error'] ?? 'missing']); exit;
+  http_response_code(400); respond(['error'=>'No file uploaded','code'=>$_FILES['file']['error'] ?? 'missing']);
 }
 
 $file = $_FILES['file'];
-$maxBytes = 8 * 1024 * 1024; // 8MB
+$maxBytes = 25 * 1024 * 1024; // 25MB, matching the Node API
 if($file['size'] > $maxBytes){
-  http_response_code(400); echo json_encode(['error'=>'File too large, max 8MB']); exit;
+  respond(['error'=>'File too large, max 25MB'],400);
 }
 
 // SVG is excluded: it can carry <script>, and uploads are served from this
 // origin, so accepting it is a stored-XSS route into the admin session.
-$allowedExt = ['jpg','jpeg','png','webp','gif','avif'];
-$allowedMime = ['image/jpeg','image/png','image/webp','image/gif','image/avif'];
+$allowedExt = ['jpg','jpeg','png','webp','gif','avif','pdf','doc','docx','xls','xlsx','csv','txt'];
+$allowedMime = [
+  'image/jpeg','image/png','image/webp','image/gif','image/avif',
+  'application/pdf','application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-excel','text/csv','text/plain',
+];
 $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 $finfo = finfo_open(FILEINFO_MIME_TYPE);
 $mime = $finfo ? finfo_file($finfo, $file['tmp_name']) : $file['type'];
 if($finfo) finfo_close($finfo);
 
 if(!in_array($ext, $allowedExt, true)){
-  http_response_code(400); echo json_encode(['error'=>'Invalid file type. Allowed: '.implode(', ',$allowedExt)]); exit;
+  respond(['error'=>'Invalid file type. Allowed: '.implode(', ',$allowedExt)],400);
 }
 if(!in_array($mime, $allowedMime, true)){
-  http_response_code(400); echo json_encode(['error'=>'File contents do not match an allowed image type']); exit;
+  respond(['error'=>'File contents do not match an allowed type'],400);
 }
 
 $uploadDir = __DIR__ . '/uploads';
@@ -47,14 +55,12 @@ $unique = $base . '_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
 $dest = $uploadDir . '/' . $unique;
 
 if(!move_uploaded_file($file['tmp_name'], $dest)){
-  http_response_code(500); echo json_encode(['error'=>'Failed to save file']); exit;
+  respond(['error'=>'Failed to save file'],500);
 }
 
-// Build public URL - assumes api is at http://localhost/mbp-api
-$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-// Derive base path from script location: /mbp-api/upload.php -> /mbp-api
-$scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-$url = $scheme . '://' . $host . $scriptDir . '/uploads/' . $unique;
+// Relative URL: building an absolute one from HTTP_HOST lets a caller inject a
+// host of their choosing into every stored document link.
+$scriptDir = rtrim(str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
+$url = $scriptDir . '/uploads/' . $unique;
 
-echo json_encode(['ok'=>true,'url'=>$url,'filename'=>$unique,'path'=>'uploads/'.$unique]);
+respond(['ok'=>true,'url'=>$url,'filename'=>$unique,'path'=>'uploads/'.$unique]);

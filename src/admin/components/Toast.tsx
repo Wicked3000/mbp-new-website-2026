@@ -35,6 +35,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
+            role={t.type === "error" ? "alert" : "status"}
+            aria-live={t.type === "error" ? "assertive" : "polite"}
             className={`pointer-events-auto min-w-[280px] max-w-[360px] rounded-xl shadow-xl border px-4 py-3 flex items-start gap-3 backdrop-blur bg-white ${
               t.type === "success"
                 ? "border-emerald-200"
@@ -44,6 +46,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             }`}
           >
             <span
+              aria-hidden="true"
               className={`w-8 h-8 rounded-full grid place-items-center shrink-0 ${
                 t.type === "success"
                   ? "bg-emerald-100 text-emerald-600"
@@ -103,6 +106,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               <div className="text-sm text-gray-700 leading-snug">{t.message}</div>
             </div>
             <button
+              type="button"
+              aria-label="Dismiss notification"
               onClick={() => setToasts((items) => items.filter((item) => item.id !== t.id))}
               className="text-gray-400 hover:text-gray-700 pointer-events-auto"
             >

@@ -1,10 +1,10 @@
 <?php
-require __DIR__.'/../config/cors.php';
-require __DIR__.'/../config/database.php';
-require __DIR__.'/../config/auth.php';
-require __DIR__.'/../helpers.php';
-auth_require();
+require_once __DIR__.'/../config/cors.php';
+require_once __DIR__.'/../helpers.php';
+require_once __DIR__.'/../config/database.php';
+require_once __DIR__.'/../config/auth.php';
 $pdo=(new Database())->connect();
+auth_require($pdo);
 $out=[];
 $out['news']= (int) q($pdo,"SELECT COUNT(*) c FROM news")->fetch()['c'];
 $out['notices']= (int) q($pdo,"SELECT COUNT(*) c FROM notices")->fetch()['c'];

@@ -11,7 +11,12 @@ export default function Dashboard() {
       .then(setData)
       .finally(() => setLoading(false));
   }, []);
-  if (loading) return <div className="text-sm text-gray-500">Loading…</div>;
+  if (loading)
+    return (
+      <div className="text-sm text-gray-500" role="status" aria-live="polite">
+        Loading…
+      </div>
+    );
   const cards = [
     {
       label: "News",
@@ -83,7 +88,12 @@ export default function Dashboard() {
                 {c.label}
               </div>
             </div>
-            <span className="w-10 h-10 rounded-full bg-white/20 grid place-items-center">→</span>
+            <span
+              aria-hidden="true"
+              className="w-10 h-10 rounded-full bg-white/20 grid place-items-center"
+            >
+              →
+            </span>
           </Link>
         ))}
       </div>
@@ -144,7 +154,10 @@ export default function Dashboard() {
                 key={m.id}
                 className="flex gap-3 p-3 rounded-xl bg-[#F8F6F1] border border-gray-100"
               >
-                <div className="w-8 h-8 rounded-full bg-[#0B2545] text-white grid place-items-center text-xs font-bold shrink-0">
+                <div
+                  aria-hidden="true"
+                  className="w-8 h-8 rounded-full bg-[#0B2545] text-white grid place-items-center text-xs font-bold shrink-0"
+                >
                   {m.full_name?.[0] || "?"}
                 </div>
                 <div className="min-w-0 flex-1">

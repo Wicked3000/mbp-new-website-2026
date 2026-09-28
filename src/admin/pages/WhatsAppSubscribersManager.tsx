@@ -47,8 +47,7 @@ export default function WhatsAppSubscribersManager() {
         {
           key: "created_at",
           label: "Subscribed",
-          render: (value) =>
-            value ? new Date(value).toLocaleDateString() : "Local fallback",
+          render: (value) => (value ? new Date(value).toLocaleDateString() : "Local fallback"),
         },
       ]}
       defaultValues={{ phone: "", source: CHANNELS[0] }}

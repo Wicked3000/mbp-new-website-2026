@@ -66,10 +66,10 @@ export default function SiteFooter() {
             </div>
           </div>
 
-          <div>
-            <h4 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
+          <nav aria-label="Footer quick links">
+            <h2 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
               Quick Links
-            </h4>
+            </h2>
             <ul className="space-y-2.5">
               {MAIN_NAV.map((link) => (
                 <li key={link.label}>
@@ -82,12 +82,12 @@ export default function SiteFooter() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          <div>
-            <h4 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
+          <nav aria-label="Related agencies">
+            <h2 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
               Related Agencies
-            </h4>
+            </h2>
             <ul className="space-y-2.5">
               {RELATED_AGENCIES.map((l) => (
                 <li key={l.label}>
@@ -111,12 +111,12 @@ export default function SiteFooter() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           <div>
-            <h4 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
+            <h2 className="font-bold text-xs uppercase tracking-[0.14em] text-[#C9A84C] mb-4">
               Contact Us
-            </h4>
+            </h2>
             <div className="space-y-3 text-sm text-gray-400">
               <div>
                 <div className="text-white font-semibold mb-0.5 text-xs uppercase tracking-widest">

@@ -29,22 +29,45 @@ All sections fall back to hardcoded data if MySQL is offline (localStorage mock)
 4. **Configure DB** (`backend/api/config/database.php`): default `root` / `""` password. Update if you set a password.
 5. **Frontend env** (`.env`): `VITE_API_BASE=http://localhost/mbp-api`
 6. **Run site**: `npm run dev` → http://localhost:8443
-7. **Admin**: http://localhost:8443/admin/login → the seed data creates an initial `admin` account; set a unique password on first login (bcrypt hash in the `users` table).
+7. **Set the admin password**: the seed deliberately creates the `admin` account
+   with no password, so nothing works until you do this:
+
+   ```bash
+   npm run admin:password -- admin 'a long unique passphrase'
+   ```
+
+   The command also signs out any existing session. Afterwards, change it any
+   time from **Admin → Settings → Change Password**.
 
 ## API
 
 - `POST /auth/login.php` → {token, user}
-- `GET /entities.php?entity=news` (public for hero/news/notices/events/programs/stats/districts/partners/quick_links; auth for others)
+- `POST /auth/change-password.php` (auth) → rotates the password, retires every
+  other session and returns a fresh token
+- `GET /entities.php?entity=news` (public for hero/news/notices/events/programs/stats/districts/schools/leadership/partners/quick_links/downloads/site_settings/selections; auth for users, contact_messages, whatsapp_subscribers and selection_students)
 - `POST /entities.php?entity=...` / `PUT /entities.php?entity=...&id=1` / `DELETE /entities.php?entity=...&id=1` (auth required)
 - `POST /contact.php` (public)
 - `GET /stats/dashboard.php` (auth)
-- CORS allowed for localhost:8443/5173/3000.
+- `POST /upload.php` (auth) → {url, filename}
+- CORS is an allowlist: set `CORS_ORIGINS` to the origins that may call the API.
 
 ## Dev Fallback
 
-If API unreachable, `src/lib/api.ts` uses `localStorage` (`mbp_mock_db_v1`) with the same seed data. Admin CRUD still works locally.
+If API unreachable, `src/lib/api.ts` uses `localStorage` (`mbp_mock_db_v1`) with the same seed data. Admin CRUD still works locally. Real errors (a 401, a 500, a rejected file) are reported instead of being written to the local store.
 
 ## Security Notes
 
-- Current auth is simple JWT HMAC (HS256) without DB sessions; replace `jwt_secret` in `backend/api/config/auth.php` for production and use `password_hash` for users table.
-- Add rate limiting + HTTPS in production; never commit `.env` with real secrets.
+- Auth is a stateless HS256 JWT, valid for one day. Each token carries the user's
+  `auth_version`; changing a password increments it, so tokens issued from the
+  old password stop working immediately.
+- `JWT_SECRET` must be set in `.env` (32+ characters) - the API refuses to start
+  under `NODE_ENV=production` without it. Never commit a real `.env`.
+- Set `CORS_ORIGINS` to the site's real origins. Behind Apache or nginx set
+  `TRUSTED_PROXY=1` (PHP) or `TRUST_PROXY=1` (Node) so rate limiting sees the
+  real client address instead of the proxy's.
+- The public site content is world-readable by design; anything holding personal
+  data (`contact_messages`, `whatsapp_subscribers`, `selection_students`,
+  `users`) requires a token, and `selection_students` holds minors' details.
+- Serve everything over HTTPS in production and add rate limiting at the reverse
+  proxy as well.
+- `npm test` covers the API's auth, CORS, upload and CRUD guards.

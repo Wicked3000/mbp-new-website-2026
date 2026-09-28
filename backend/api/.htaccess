@@ -1,6 +1,6 @@
-Header set Access-Control-Allow-Origin "*"
-Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Authorization"
+# Authorization header forwarding only. CORS is set by config/cors.php, which
+# allowlists origins; a wildcard here would silently override that allowlist and
+# hand any website access to the admin API.
 CGIPassAuth On
 RewriteEngine On
 RewriteCond %{HTTP:Authorization} ^(.*)
