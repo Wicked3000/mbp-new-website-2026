@@ -128,12 +128,27 @@ function relativise(value) {
   return value.replace(/https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//g, "/");
 }
 
-function normalise(value) {
-  if (Array.isArray(value)) return value.map(normalise);
+// Some rows hold inline base64 images ("data:image/png;base64,...") pasted in
+// rather than uploaded as files. A handful of those is several megabytes, which
+// blows the browser's ~5 MB localStorage quota once every entity is seeded, and
+// inlining them also bloats the JS bundle for every visitor. They are dropped
+// so the row still renders, with a placeholder src.
+const DROPPED = {};
+function stripDataUrls(value, key) {
+  if (typeof value !== "string" || !value.startsWith("data:")) return value;
+  DROPPED[key] = (DROPPED[key] || 0) + 1;
+  return "";
+}
+
+function normalise(value, column = "") {
+  if (Array.isArray(value)) return value.map((v) => normalise(v, column));
   if (value && typeof value === "object") {
     return Object.fromEntries(
-      Object.entries(value).map(([k, v]) => [k, normalise(v)]),
+      Object.entries(value).map(([k, v]) => [k, normalise(v, k)]),
     );
+  }
+  if (typeof value === "string" && value.startsWith("data:")) {
+    return stripDataUrls(value, column);
   }
   return relativise(value);
 }
@@ -152,7 +167,7 @@ try {
     const [rows] = await pool.query(
       `SELECT * FROM \`${entity}\` ORDER BY id ASC`,
     );
-    block[entity] = rows.map(normalise);
+    block[entity] = rows.map((r) => normalise(r));
   }
 } finally {
   await pool.end();
@@ -164,6 +179,18 @@ const SEEDS: Record<string, any[]> = ${JSON.stringify(block, null, 2)};
 ${END}`;
 
 const next = source.slice(0, start) + body + source.slice(end + END.length);
+const sizeKb = (Buffer.byteLength(JSON.stringify(block), "utf8") / 1024).toFixed(0);
+if (Object.keys(DROPPED).length) {
+  const detail = Object.entries(DROPPED)
+    .map(([col, n]) => `${col} (${n} row${n > 1 ? "s" : ""})`)
+    .join(", ");
+  console.log(
+    `Dropped inline base64 images from: ${detail}.\n` +
+      `Those columns are cleared in the seeds only - the database is untouched.\n` +
+      `Upload them as files via the admin panel so they get a real /uploads path.`,
+  );
+}
+console.log(`Seed payload: ${sizeKb} KB (browser localStorage allows about 5120 KB)`);
 if (next === source) {
   console.log("Seeds already up to date - no changes written.");
 } else {

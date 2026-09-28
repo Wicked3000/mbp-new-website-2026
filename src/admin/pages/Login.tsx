@@ -4,7 +4,7 @@ import { api } from "@/lib/api";
 
 export default function Login() {
   const [user, setUser] = useState("admin");
-  const [pass, setPass] = useState("password");
+  const [pass, setPass] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
@@ -68,10 +68,6 @@ export default function Login() {
                 className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
                 placeholder="••••••••"
               />
-              <div className="text-xs text-gray-500 mt-1.5">
-                Default: <span className="font-mono font-bold">admin / password</span> (change after
-                first login)
-              </div>
             </div>
             <button
               disabled={loading}
