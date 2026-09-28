@@ -719,6 +719,14 @@ function SelectionListsSection() {
     };
   }, []);
 
+  // The per-student rows above are admin-only, so a public visitor always sees
+  // none. School-level placements are public, so the published figures come from
+  // selections_grade9 / selections_grade11 instead of counting name rows.
+  const { data: placed9 } = useEntity("selections_grade9", []);
+  const { data: placed11 } = useEntity("selections_grade11", []);
+  const published9 = (placed9 as any[]).filter((r) => Number(r.placed) > 0);
+  const published11 = (placed11 as any[]).filter((r) => Number(r.placed) > 0);
+
   const grade9Data = useMemo(() => {
     const grouped: Record<string, SelectionStudent[]> = {};
     students
@@ -760,10 +768,51 @@ function SelectionListsSection() {
             Grade 9 & 11 Placement Lists
           </h2>
           <p className="text-gray-500">
-            Official 2026 selection lists for Milne Bay Province. Click a school to view the student
-            placement table.
+            Official 2026 selection lists for Milne Bay Province. Published placements per school are
+            shown below; individual student names are not published on this site.
           </p>
         </div>
+
+        {(published9.length > 0 || published11.length > 0) && (
+          <div className="mb-10 rounded-2xl border border-gray-100 bg-[#F8F6F1] p-6">
+            <h3 className="text-lg font-bold text-[#0B2545] mb-4">Published placements by school</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-gray-500">
+                    <th className="px-3 py-2 font-semibold">School</th>
+                    <th className="px-3 py-2 font-semibold">Grade</th>
+                    <th className="px-3 py-2 font-semibold">District</th>
+                    <th className="px-3 py-2 font-semibold text-right">Capacity</th>
+                    <th className="px-3 py-2 font-semibold text-right">Placed</th>
+                    <th className="px-3 py-2 font-semibold text-right">Cut-off</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ...published9.map((r) => ({ ...r, grade: 9 })),
+                    ...published11.map((r) => ({ ...r, grade: 11 })),
+                  ].map((r, i) => (
+                    <tr key={`${r.grade}-${r.school}-${i}`} className="border-t border-gray-200/70">
+                      <td className="px-3 py-2 font-medium text-[#0B2545]">{r.school}</td>
+                      <td className="px-3 py-2 text-gray-700">{r.grade}</td>
+                      <td className="px-3 py-2 text-gray-700">{r.district}</td>
+                      <td className="px-3 py-2 text-right text-gray-700">{r.capacity}</td>
+                      <td className="px-3 py-2 text-right font-semibold text-amber-700">
+                        {r.placed}
+                      </td>
+                      <td className="px-3 py-2 text-right text-gray-700">{r.cutoff}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-xs text-gray-500 mt-3">
+              Schools whose placements are still being finalised are not listed. Figures are updated
+              as each district confirms its results.
+            </p>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-2 gap-8">
           <div>
@@ -774,7 +823,7 @@ function SelectionListsSection() {
               <span className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">
                 9
               </span>
-              Grade 9 Selection List ({grade9Schools.length} Schools)
+              Grade 9 Placement Summary ({published9.length} published)
             </h3>
             <div className="space-y-3">
               {grade9Schools.map((school) => (
@@ -861,7 +910,7 @@ function SelectionListsSection() {
               <span className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-sm">
                 11
               </span>
-              Grade 11 Selection List ({grade11Schools.length} Schools)
+              Grade 11 Placement Summary ({published11.length} published)
             </h3>
             <div className="space-y-3">
               {grade11Schools.map((school) => (

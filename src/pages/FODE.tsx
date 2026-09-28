@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { useState } from "react";
 import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -388,37 +387,8 @@ function CentresSection() {
   );
 }
 
-type FodeStudent = {
-  school: string;
-  position_no: number | string | null;
-  primary_school: string;
-  surname: string;
-  first_name: string;
-  gender: string;
-};
-
 function SelectionListsSection() {
   const { data: headings } = useEntity("fode_section_headings", []);
-  // Student names come from the API, which restricts selection_students to
-  // authenticated admins. There is deliberately no bundled copy.
-  const [students, setStudents] = useState<FodeStudent[]>([]);
-
-  useEffect(() => {
-    let active = true;
-    api
-      .list("selection_students")
-      .then((rows) => {
-        if (!active) return;
-        const fode = (Array.isArray(rows) ? rows : []).filter((row: any) =>
-          /FODE/i.test(String(row.school || "")),
-        );
-        setStudents(fode);
-      })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, []);
 
   const heading =
     headings.find((h: any) => h.skey === "selections") || {
@@ -458,48 +428,16 @@ function SelectionListsSection() {
               <span className="text-amber-500 transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div className="px-4 pb-4 pt-0 border-t border-gray-200">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-[#0B2545] text-white text-left">
-                      <th className="px-3 py-2 font-semibold w-12">NO.</th>
-                      <th className="px-3 py-2 font-semibold">PRIMARY SCHOOL</th>
-                      <th className="px-3 py-2 font-semibold">SURNAME</th>
-                      <th className="px-3 py-2 font-semibold">FIRST NAME</th>
-                      <th className="px-3 py-2 font-semibold w-20">GENDER</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students.map((student, i) => (
-                      <tr key={i} className={`border-b ${i % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
-                        <td className="px-3 py-2 text-center text-gray-700">
-                          {student.position_no || "-"}
-                        </td>
-                        <td className="px-3 py-2 text-gray-700">{student.primary_school}</td>
-                        <td className="px-3 py-2 font-medium text-[#0B2545]">{student.surname}</td>
-                        <td className="px-3 py-2 text-gray-700">{student.first_name}</td>
-                        <td className="px-3 py-2 text-center">
-                          <span
-                            className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                              student.gender === "M"
-                                ? "bg-blue-100 text-blue-700"
-                                : "bg-pink-100 text-pink-700"
-                            }`}
-                          >
-                            {student.gender}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <p className="text-gray-600 text-sm py-4">
+                Student names are not published on this site. Enrolment figures for the Alotau
+                FODE Centre are released by the Division once each intake is confirmed.
+              </p>
               <div className="mt-3 text-right">
                 <Link
                   to="/selections"
                   className="text-teal-600 hover:text-teal-800 text-sm font-medium"
                 >
-                  View Selection Lists →
+                  View School Selection Figures →
                 </Link>
               </div>
             </div>

@@ -525,7 +525,8 @@ function SelectionListsSection() {
                 </div>
                 {rows.length === 0 && (
                   <p className="text-gray-500 text-sm py-4 text-center">
-                    Selection data not yet available for this centre
+                    Trainee names are not published on this site. Published per-centre placement
+                    figures are released by the Division.
                   </p>
                 )}
                 <div className="mt-3 text-right">
