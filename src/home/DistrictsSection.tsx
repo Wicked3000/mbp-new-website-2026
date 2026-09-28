@@ -46,25 +46,54 @@ export function DistrictsSection() {
             <Link
               key={d.name}
               to="/basic#schools"
-              className="group rounded-2xl border border-gray-100 bg-[#F8F6F1] p-5 hover:bg-white hover:shadow-lg hover:border-[#0D9488]/20 hover:-translate-y-1 transition-all"
+              className="group rounded-2xl border border-gray-100 bg-[#F8F6F1] overflow-hidden hover:bg-white hover:shadow-lg hover:border-[#0D9488]/20 hover:-translate-y-1 transition-all"
             >
-              <div className="flex items-start justify-between">
-                <div className="w-10 h-10 rounded-xl bg-[#0B2545] text-white grid place-items-center text-sm group-hover:bg-[#0D9488] transition-colors">
+              {/* The admin offers a district thumbnail ("Coverage section
+                  thumbnails"), so it is rendered here. Without this the image
+                  saved in the admin appeared on /districts and the district
+                  page but nowhere on the home page. The emoji is the fallback
+                  for the districts that have no image yet. */}
+              <div className="relative h-24 overflow-hidden bg-[#0B2545]">
+                {d.img ? (
+                  <img
+                    src={d.img}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="absolute inset-0 opacity-25">
+                    <img
+                      src="/assets/education_programs/map/milne_bay_map.jpg"
+                      alt=""
+                      aria-hidden="true"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B2545]/70 to-transparent" />
+                <span className="absolute bottom-2 left-3 text-2xl" aria-hidden="true">
                   🏫
-                </div>
-                <span className="text-xs font-bold uppercase tracking-wider bg-white border border-gray-100 px-2 py-1 rounded-full text-gray-600">
-                  {d.type}
                 </span>
               </div>
-              <div className="mt-4 font-bold text-[#0B2545] group-hover:text-[#0D9488] transition-colors">
-                {d.name}
-              </div>
-              <div className="text-sm text-gray-500">
-                {d.schools} schools • {d.schools * 110}+ students
-              </div>
-              <div className="mt-3 text-xs font-bold text-[#0B2545] group-hover:text-[#0D9488] flex items-center gap-1">
-                View schools{" "}
-                <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+              <div className="p-5 pt-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="font-bold text-[#0B2545] group-hover:text-[#0D9488] transition-colors">
+                    {d.name}
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wider bg-white border border-gray-100 px-2 py-1 rounded-full text-gray-600 shrink-0">
+                    {d.type}
+                  </span>
+                </div>
+                <div className="text-sm text-gray-500 mt-1">
+                  {d.schools} schools • {d.schools * 110}+ students
+                </div>
+                <div className="mt-3 text-xs font-bold text-[#0B2545] group-hover:text-[#0D9488] flex items-center gap-1">
+                  View schools{" "}
+                  <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                </div>
               </div>
             </Link>
           ))}
