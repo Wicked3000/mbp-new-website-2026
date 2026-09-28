@@ -12,7 +12,10 @@ export function ProgramsSection() {
   return (
     <section className="py-14 sm:py-16 px-4 bg-white" id="programs">
       <Reveal className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
+        {/* A plain block, not the flex row the districts and events sections
+            use: those two have a link on the right to justify the row, this one
+            has only the heading block, so the flex classes were inert. */}
+        <div className="mb-10">
           <div>
             <span className="inline-flex items-center gap-2 text-[#0D9488] text-[11px] font-bold uppercase tracking-[0.14em]">
               <span className="w-6 h-[2px] bg-[#0D9488] inline-block" /> What We Oversee
@@ -23,14 +26,18 @@ export function ProgramsSection() {
             >
               Education Programs
             </h2>
+            {/* Sits inside the heading block, as in the districts and events
+                sections. As a flex sibling it was pushed to the far edge of the
+                row and right-aligned, so it read as a column of its own rather
+                than as the summary of the heading above it. */}
+            <p className="text-gray-500 mt-3 max-w-xl text-[15px] leading-relaxed">
+              From early childhood to vocational training, the Division coordinates quality learning
+              across all levels in Milne Bay Province -{" "}
+              <span className="text-[#0B2545] font-semibold">
+                equitable, inclusive, community-driven.
+              </span>
+            </p>
           </div>
-          <p className="text-gray-500 max-w-xl text-[15px] leading-relaxed lg:text-right">
-            From early childhood to vocational training, the Division coordinates quality learning
-            across all levels in Milne Bay Province -{" "}
-            <span className="text-[#0B2545] font-semibold">
-              equitable, inclusive, community-driven.
-            </span>
-          </p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
