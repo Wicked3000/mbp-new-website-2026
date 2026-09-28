@@ -1,28 +1,75 @@
-import { useState } from "react";
-import Crud from "@/admin/components/Crud";
+import ManagerTabs, { type ManagerTab } from "@/admin/components/ManagerTabs";
+import HeroManager from "@/admin/pages/HeroManager";
+import NewsManager from "@/admin/pages/NewsManager";
+import NoticesManager from "@/admin/pages/NoticesManager";
+import EventsManager from "@/admin/pages/EventsManager";
+import { QuickLinksManager } from "@/admin/pages/SimpleManagers";
 
-// Admin content for the home page.
+// Every section of the home page, in the order it appears on /, one tab each.
 //
-// Most of the home page was already database-backed before this: the hero
-// slider, quick links, stats, programs, news, notices, events, leadership,
-// districts and partners each have their own manager, all reachable from the
-// sidebar. Only the mission section, the selection banner and the WhatsApp call
-// to action were hardcoded in src/App.tsx, and those are the tabs here.
-
-type Tab = {
-  key: string;
-  label: string;
-  entity: string;
-  title: string;
-  subtitle: string;
-  fields: any[];
-  columns: any[];
-  defaultValues?: any;
-};
+// Five of these were already plain Crud tables (stats, programs, leadership,
+// districts, partners) and are inlined here as configs. Five more were
+// database-backed but needed custom UI of their own - the hero slider's upload
+// widget, the news and notices publish toggles, the events editor, the quick
+// links form - so they are rendered as their existing manager components rather
+// than rebuilt. The remaining five are the home page sections that were
+// hardcoded in src/App.tsx and gained tables in this work.
 
 const ORDER = { key: "sort_order", label: "Order", type: "number" as const };
 
-const TABS: Tab[] = [
+const TABS: ManagerTab[] = [
+  {
+    key: "hero",
+    label: "Hero Slider",
+    component: <HeroManager />,
+  },
+  {
+    key: "quicklinks",
+    label: "Quick Links",
+    component: <QuickLinksManager />,
+  },
+  {
+    key: "stats",
+    label: "Stats",
+    entity: "stats",
+    title: "Stats Bar",
+    subtitle: "4-number stats strip",
+    fields: [
+      { key: "value_text", label: "Value", required: true, placeholder: "312" },
+      { key: "label", label: "Label", required: true },
+      { key: "sub", label: "Sub", required: true, placeholder: "Province-wide" },
+      ORDER,
+    ],
+    columns: [
+      { key: "value_text", label: "Value" },
+      { key: "label", label: "Label" },
+      { key: "sub", label: "Sub" },
+    ],
+  },
+  {
+    key: "programs",
+    label: "Programs",
+    entity: "programs",
+    title: "Education Programs",
+    subtitle: "4 program cards",
+    fields: [
+      { key: "code", label: "Code", required: true, placeholder: "01" },
+      { key: "label", label: "Label", required: true },
+      { key: "level", label: "Level", required: true, placeholder: "Elementary - Grade 8" },
+      { key: "description", label: "Description", type: "textarea", required: true },
+      { key: "color", label: "Color class", placeholder: "bg-[#0B2545]" },
+      { key: "accent", label: "Accent class", placeholder: "bg-teal-500" },
+      { key: "href", label: "Link href", placeholder: "/basic" },
+      { key: "img", label: "Program image", type: "image", required: true },
+      ORDER,
+    ],
+    columns: [
+      { key: "code", label: "Code" },
+      { key: "label", label: "Label" },
+      { key: "level", label: "Level" },
+      { key: "sort_order", label: "Order" },
+    ],
+  },
   {
     key: "mission",
     label: "Mission Section",
@@ -114,6 +161,119 @@ const TABS: Tab[] = [
     },
   },
   {
+    key: "news",
+    label: "News",
+    component: <NewsManager />,
+  },
+  {
+    key: "notices",
+    label: "Notices",
+    component: <NoticesManager />,
+  },
+  {
+    key: "events",
+    label: "Events",
+    component: <EventsManager />,
+  },
+  {
+    key: "leadership",
+    label: "Leadership",
+    entity: "leadership",
+    title: "Leadership Team",
+    subtitle: "About page + home advisor section",
+    fields: [
+      { key: "name", label: "Name", required: true },
+      { key: "title", label: "Title", required: true },
+      { key: "bio", label: "Bio", type: "textarea", required: true },
+      { key: "icon", label: "Icon emoji", placeholder: "👨‍💼" },
+      { key: "photo", label: "Photo", type: "image" },
+      ORDER,
+    ],
+    columns: [
+      { key: "name", label: "Name" },
+      { key: "title", label: "Title" },
+      { key: "sort_order", label: "Order" },
+    ],
+  },
+  {
+    key: "districts",
+    label: "Districts",
+    entity: "districts",
+    title: "Districts & Schools",
+    subtitle: "Coverage section thumbnails + district table",
+    fields: [
+      { key: "name", label: "District name", required: true },
+      { key: "capital", label: "District capital", placeholder: "e.g. Alotau / Rabaraba" },
+      { key: "schools", label: "Schools count", type: "number", required: true },
+      {
+        key: "type",
+        label: "Type",
+        type: "select",
+        options: ["Urban", "Rural", "Island", "Remote", "Remote Islands", "Island / Coastal"],
+        required: true,
+      },
+      { key: "students", label: "Students (e.g. 6,800+)", required: true },
+      { key: "img", label: "Thumbnail", type: "image" },
+      ORDER,
+    ],
+    columns: [
+      {
+        key: "img",
+        label: "Thumb",
+        render: (value: string) =>
+          value ? (
+            <img
+              loading="lazy"
+              decoding="async"
+              src={value}
+              alt=""
+              className="h-10 w-16 rounded object-cover"
+            />
+          ) : (
+            <span className="text-xs text-gray-400">None</span>
+          ),
+      },
+      { key: "name", label: "Name" },
+      { key: "capital", label: "Capital" },
+      { key: "schools", label: "Schools" },
+      { key: "type", label: "Type" },
+      { key: "students", label: "Students" },
+      { key: "sort_order", label: "Order" },
+    ],
+  },
+  {
+    key: "partners",
+    label: "Partners",
+    entity: "partners",
+    title: "Partners",
+    subtitle: "Upload and manage trusted partner logos",
+    fields: [
+      { key: "name", label: "Name", required: true },
+      { key: "logo", label: "Partner logo", type: "image", required: true },
+      ORDER,
+    ],
+    columns: [
+      {
+        key: "logo",
+        label: "Logo",
+        render: (value: string) =>
+          value ? (
+            <img
+              loading="lazy"
+              decoding="async"
+              src={value}
+              alt="Partner logo"
+              className="h-9 w-16 object-contain"
+            />
+          ) : (
+            <span className="text-xs text-gray-400">No logo</span>
+          ),
+      },
+      { key: "name", label: "Name" },
+      { key: "sort_order", label: "Order" },
+    ],
+  },
+  {
     key: "cta",
     label: "WhatsApp CTA",
     entity: "home_cta",
@@ -180,47 +340,11 @@ const TABS: Tab[] = [
 ];
 
 export default function HomeManager() {
-  const [active, setActive] = useState(TABS[0].key);
-  const tab = TABS.find((t) => t.key === active) || TABS[0];
-
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#0B2545]">Home Page</h1>
-        <p className="text-sm text-gray-600 mt-1">
-          The three home page sections that were hardcoded. The rest of the home page - hero
-          slider, quick links, stats, programs, news, notices, events, leadership, districts and
-          partners - is managed from its own pages in the sidebar.
-        </p>
-      </div>
-
-      <div className="flex flex-wrap gap-2 mb-6 border-b border-gray-200 pb-3">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            onClick={() => setActive(t.key)}
-            aria-current={active === t.key ? "page" : undefined}
-            className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-              active === t.key
-                ? "bg-[#0B2545] text-white"
-                : "bg-white text-gray-700 border border-gray-200 hover:border-[#0D9488] hover:text-[#0D9488]"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      <Crud
-        key={tab.key}
-        entity={tab.entity}
-        title={tab.title}
-        subtitle={tab.subtitle}
-        fields={tab.fields}
-        columns={tab.columns}
-        defaultValues={tab.defaultValues}
-      />
-    </div>
+    <ManagerTabs
+      title="Home Page"
+      description="Every section of the home page, in the order it appears on /."
+      tabs={TABS}
+    />
   );
 }

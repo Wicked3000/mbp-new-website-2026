@@ -3,20 +3,11 @@ import { useState } from "react";
 import { api } from "@/lib/api";
 import {
   DashboardIcon,
-  HeroIcon,
-  NewsIcon,
-  NoticeIcon,
-  EventsIcon,
   ProgramsIcon,
-  StatsIcon,
-  DistrictsIcon,
   SchoolIcon,
-  LeadershipIcon,
   SelectionsIcon,
   MessagesIcon,
   WhatsAppIcon,
-  QuickLinksIcon,
-  PartnersIcon,
   DownloadsIcon,
   SettingsIcon,
 } from "@/admin/components/icons";
@@ -24,26 +15,19 @@ import { ToastProvider } from "@/admin/components/Toast";
 
 const NAV = [
   { label: "Dashboard", icon: DashboardIcon, to: "/admin" },
-  { label: "Hero Slider", icon: HeroIcon, to: "/admin/hero" },
-  { label: "News", icon: NewsIcon, to: "/admin/news" },
-  { label: "Notices", icon: NoticeIcon, to: "/admin/notices" },
-  { label: "Events", icon: EventsIcon, to: "/admin/events" },
-  { label: "Programs", icon: ProgramsIcon, to: "/admin/programs" },
-  { label: "Stats", icon: StatsIcon, to: "/admin/stats" },
-  { label: "Districts", icon: DistrictsIcon, to: "/admin/districts" },
-  { label: "Schools", icon: SchoolIcon, to: "/admin/schools" },
-  { label: "Leadership", icon: LeadershipIcon, to: "/admin/leadership" },
-  { label: "Selections", icon: SelectionsIcon, to: "/admin/selections" },
-  { label: "Messages", icon: MessagesIcon, to: "/admin/messages" },
-  { label: "WhatsApp Subscribers", icon: WhatsAppIcon, to: "/admin/whatsapp-subscribers" },
-  { label: "Quick Links", icon: QuickLinksIcon, to: "/admin/quicklinks" },
-  { label: "Partners", icon: PartnersIcon, to: "/admin/partners" },
-  { label: "Downloads", icon: DownloadsIcon, to: "/admin/downloads" },
+  // The home page's own sections - hero, quick links, stats, programs, news,
+  // notices, events, leadership, districts, partners - are tabs on the Home Page
+  // manager rather than entries here. Their routes still exist.
   { label: "Home Page", icon: SettingsIcon, to: "/admin/home" },
   { label: "Basic Education Page", icon: ProgramsIcon, to: "/admin/basic-education" },
   { label: "Post Primary Page", icon: ProgramsIcon, to: "/admin/post-primary" },
   { label: "VET Page", icon: ProgramsIcon, to: "/admin/vet" },
   { label: "FODE Page", icon: ProgramsIcon, to: "/admin/fode" },
+  { label: "Schools", icon: SchoolIcon, to: "/admin/schools" },
+  { label: "Selections", icon: SelectionsIcon, to: "/admin/selections" },
+  { label: "Messages", icon: MessagesIcon, to: "/admin/messages" },
+  { label: "WhatsApp Subscribers", icon: WhatsAppIcon, to: "/admin/whatsapp-subscribers" },
+  { label: "Downloads", icon: DownloadsIcon, to: "/admin/downloads" },
   { label: "Settings", icon: SettingsIcon, to: "/admin/settings" },
 ] as const;
 
