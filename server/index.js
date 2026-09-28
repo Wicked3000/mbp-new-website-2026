@@ -391,6 +391,25 @@ async function ensureFodeTables() {
   }
 }
 
+// The home page sections that were hardcoded. The other ten home sections
+// already read from their own tables, so there is nothing to create for those.
+async function ensureHomeTables() {
+  const common = [
+    ["home_mission", "(eyebrow VARCHAR(160) NOT NULL DEFAULT '', heading VARCHAR(255) NOT NULL DEFAULT '', heading_accent VARCHAR(255) NOT NULL DEFAULT '', para1 TEXT, para2 TEXT, image VARCHAR(255) DEFAULT NULL, image_alt VARCHAR(255) NOT NULL DEFAULT '', badge_value VARCHAR(40) NOT NULL DEFAULT '', badge_label VARCHAR(160) NOT NULL DEFAULT '', badge_sub VARCHAR(190) NOT NULL DEFAULT '', button_label VARCHAR(120) NOT NULL DEFAULT '', button_href VARCHAR(255) NOT NULL DEFAULT '/about', sort_order INT NOT NULL DEFAULT 0)"],
+    ["home_mission_points", "(feature TEXT NOT NULL, sort_order INT NOT NULL DEFAULT 0, INDEX idx_home_mission_points_order (sort_order))"],
+    ["home_selection_banner", "(icon VARCHAR(16) NOT NULL DEFAULT '', title VARCHAR(255) NOT NULL DEFAULT '', badge VARCHAR(40) NOT NULL DEFAULT '', body TEXT, primary_label VARCHAR(120) NOT NULL DEFAULT '', primary_href VARCHAR(255) NOT NULL DEFAULT '/selections', secondary_label VARCHAR(120) NOT NULL DEFAULT '', secondary_href VARCHAR(255) NOT NULL DEFAULT '/downloads', sort_order INT NOT NULL DEFAULT 0)"],
+    ["home_cta", "(badge VARCHAR(60) NOT NULL DEFAULT '', heading VARCHAR(255) NOT NULL DEFAULT '', body TEXT, sub_body TEXT, image VARCHAR(255) DEFAULT NULL, image_alt VARCHAR(255) NOT NULL DEFAULT '', tagline VARCHAR(160) NOT NULL DEFAULT '', form_title VARCHAR(200) NOT NULL DEFAULT '', form_body TEXT, phone_label VARCHAR(160) NOT NULL DEFAULT '', phone_placeholder VARCHAR(60) NOT NULL DEFAULT '', channel_label VARCHAR(160) NOT NULL DEFAULT '', channel_prompt VARCHAR(120) NOT NULL DEFAULT '', button_label VARCHAR(160) NOT NULL DEFAULT '', button_loading_label VARCHAR(160) NOT NULL DEFAULT '', response_note VARCHAR(255) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0)"],
+    ["home_cta_channels", "(name VARCHAR(160) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0, INDEX idx_home_cta_channels_order (sort_order))"],
+  ];
+  try {
+    for (const [table, columns] of common) {
+      await pool.query(`CREATE TABLE IF NOT EXISTS \`${table}\` ${columns} ENGINE=InnoDB`);
+    }
+  } catch (error) {
+    console.error("Unable to ensure home tables:", error.message);
+  }
+}
+
 // downloads gained program/sort_order so documents can be scoped to one
 // programme page instead of always showing in the shared listing.
 async function ensureDownloadsProgramColumns() {
@@ -1155,6 +1174,70 @@ const MAP = {
     table: "fode_section_headings",
     cols: ["skey", "eyebrow", "heading", "blurb", "sort_order"],
   },
+  // Home page: only the three sections that were hardcoded. The other ten
+  // home sections already read from their own existing tables.
+  home_mission: {
+    table: "home_mission",
+    cols: [
+      "eyebrow",
+      "heading",
+      "heading_accent",
+      "para1",
+      "para2",
+      "image",
+      "image_alt",
+      "badge_value",
+      "badge_label",
+      "badge_sub",
+      "button_label",
+      "button_href",
+      "sort_order",
+    ],
+  },
+  home_mission_points: {
+    table: "home_mission_points",
+    cols: ["feature", "sort_order"],
+  },
+  home_selection_banner: {
+    table: "home_selection_banner",
+    cols: [
+      "icon",
+      "title",
+      "badge",
+      "body",
+      "primary_label",
+      "primary_href",
+      "secondary_label",
+      "secondary_href",
+      "sort_order",
+    ],
+  },
+  home_cta: {
+    table: "home_cta",
+    cols: [
+      "badge",
+      "heading",
+      "body",
+      "sub_body",
+      "image",
+      "image_alt",
+      "tagline",
+      "form_title",
+      "form_body",
+      "phone_label",
+      "phone_placeholder",
+      "channel_label",
+      "channel_prompt",
+      "button_label",
+      "button_loading_label",
+      "response_note",
+      "sort_order",
+    ],
+  },
+  home_cta_channels: {
+    table: "home_cta_channels",
+    cols: ["name", "sort_order"],
+  },
   selections_grade9: {
     table: "selections_grade9",
     cols: ["school", "district", "type", "capacity", "placed", "stream", "cutoff"],
@@ -1283,6 +1366,12 @@ const publicRead = new Set([
   "fode_initiatives",
   "fode_faq",
   "fode_section_headings",
+  // Home page sections.
+  "home_mission",
+  "home_mission_points",
+  "home_selection_banner",
+  "home_cta",
+  "home_cta_channels",
 ]);
 
 app.all("/api/entities", async (req, res) => {
@@ -1507,6 +1596,7 @@ Promise.all([
   ensurePostPrimaryTables(),
   ensureVetTables(),
   ensureFodeTables(),
+  ensureHomeTables(),
   ensureDownloadsProgramColumns(),
 ]).finally(() => {
   app.listen(PORT, () =>

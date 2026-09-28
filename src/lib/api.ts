@@ -3783,6 +3783,104 @@ const SEEDS: Record<string, any[]> = {
       "blurb": null,
       "sort_order": 9
     }
+  ],
+  "home_mission": [
+    {
+      "id": 1,
+      "eyebrow": "Our Mission",
+      "heading": "Empowering Communities",
+      "heading_accent": "Through Education",
+      "para1": "The Milne Bay Province Division of Education is committed to delivering equitable, quality education to every child and young person from the islands of Samarai to the highlands of Alotau.",
+      "para2": "We work in partnership with teachers, parents, community leaders, and national agencies to build a generation of capable, informed, and resilient citizens of Papua New Guinea.",
+      "image": "/assets/slider/mbp-img3.jpg",
+      "image_alt": "Milne Bay students",
+      "badge_value": "25+",
+      "badge_label": "Years of service",
+      "badge_sub": "Serving Milne Bay communities",
+      "button_label": "Our Programs",
+      "button_href": "/about",
+      "sort_order": 1
+    }
+  ],
+  "home_mission_points": [
+    {
+      "id": 1,
+      "feature": "Inclusive & equitable access",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "feature": "Qualified teachers in every school",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "feature": "Community-led improvement",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "feature": "Safe learning environments",
+      "sort_order": 4
+    }
+  ],
+  "home_selection_banner": [
+    {
+      "id": 1,
+      "icon": "🎓",
+      "title": "2026 Grade 9 & 11 Selections are Live",
+      "badge": "NEW",
+      "body": "Search placements by school, district or student name: official provincial lists.",
+      "primary_label": "View Selections",
+      "primary_href": "/selections",
+      "secondary_label": "Download PDF",
+      "secondary_href": "/downloads",
+      "sort_order": 1
+    }
+  ],
+  "home_cta": [
+    {
+      "id": 1,
+      "badge": "Support",
+      "heading": "Stay connected to education updates",
+      "body": "Subscribe your WhatsApp number to receive official announcements, school updates, examination information, and Division notices.",
+      "sub_body": "Choose the channel that best matches your needs. We will add your number to the appropriate Division WhatsApp channel or group.",
+      "image": "/assets/whatsapp/whatsapp-cartoon-img.png",
+      "image_alt": "Person holding a phone with WhatsApp",
+      "tagline": "Milne Bay, connected",
+      "form_title": "Join WhatsApp updates",
+      "form_body": "Enter your mobile number to subscribe to official education updates.",
+      "phone_label": "WhatsApp number",
+      "phone_placeholder": "+675 7XXX XXXX",
+      "channel_label": "Updates channel",
+      "channel_prompt": "Select a channel",
+      "button_label": "Subscribe to WhatsApp updates",
+      "button_loading_label": "Subscribing...",
+      "response_note": "Avg. response within 24 hours • Mon–Fri 8am–4:30pm",
+      "sort_order": 1
+    }
+  ],
+  "home_cta_channels": [
+    {
+      "id": 1,
+      "name": "Official announcements",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Parent and guardian updates",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Teacher updates",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "FODE and distance learning",
+      "sort_order": 4
+    }
   ]
 };
 

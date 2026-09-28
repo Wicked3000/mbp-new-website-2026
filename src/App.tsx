@@ -39,6 +39,7 @@ import BasicEducationManager from "@/admin/pages/BasicEducationManager";
 import PostPrimaryManager from "@/admin/pages/PostPrimaryManager";
 import VETManager from "@/admin/pages/VETManager";
 import FODEManager from "@/admin/pages/FODEManager";
+import HomeManager from "@/admin/pages/HomeManager";
 import MessagesManager from "@/admin/pages/MessagesManager";
 import WhatsAppSubscribersManager from "@/admin/pages/WhatsAppSubscribersManager";
 import SettingsManager from "@/admin/pages/SettingsManager";
@@ -655,6 +656,18 @@ function NewsSection() {
 }
 
 function SelectionBanner() {
+  const FALLBACK = {
+    icon: "🎓",
+    title: "2026 Grade 9 & 11 Selections are Live",
+    badge: "NEW",
+    body: "Search placements by school, district or student name: official provincial lists.",
+    primary_label: "View Selections",
+    primary_href: "/selections",
+    secondary_label: "Download PDF",
+    secondary_href: "/downloads",
+  };
+  const { data } = useEntity("home_selection_banner", [FALLBACK]);
+  const banner = { ...FALLBACK, ...(data?.[0] || {}) };
   return (
     <section className="px-4 py-6 bg-white">
       <div className="max-w-7xl mx-auto">
@@ -662,36 +675,38 @@ function SelectionBanner() {
           <div className="rounded-[17px] bg-gradient-to-r from-[#0B2545] via-[#163663] to-[#0D9488] px-6 py-5 flex flex-col lg:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex w-12 h-12 rounded-xl bg-white text-[#0B2545] items-center justify-center text-xl shadow-sm">
-                🎓
+                {banner.icon}
               </div>
               <div>
                 <div
                   className="text-white font-bold leading-tight flex flex-wrap items-center gap-2"
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                  <span>2026 Grade 9 & 11 Selections are Live</span>
-                  <span className="bg-[#C9A84C] text-[#0B2545] text-xs font-bold px-2 py-1 rounded-full">
-                    NEW
-                  </span>
+                  <span>{banner.title}</span>
+                  {banner.badge && (
+                    <span className="bg-[#C9A84C] text-[#0B2545] text-xs font-bold px-2 py-1 rounded-full">
+                      {banner.badge}
+                    </span>
+                  )}
                 </div>
-                <div className="text-blue-100 text-sm mt-1">
-                  Search placements by school, district or student name: official provincial lists.
-                </div>
+                <div className="text-blue-100 text-sm mt-1">{banner.body}</div>
               </div>
             </div>
             <div className="flex gap-3 shrink-0">
               <Link
-                to="/selections"
+                to={banner.primary_href}
                 className="bg-white text-[#0B2545] font-bold px-5 py-2.5 rounded-full hover:bg-[#C9A84C] transition-colors shadow-sm text-sm"
               >
-                View Selections →
+                {banner.primary_label} →
               </Link>
-              <Link
-                to="/downloads"
-                className="hidden sm:inline-flex items-center bg-white/10 border border-white/20 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white hover:text-[#0B2545] transition-colors text-sm"
-              >
-                Download PDF
-              </Link>
+              {banner.secondary_label && (
+                <Link
+                  to={banner.secondary_href}
+                  className="hidden sm:inline-flex items-center bg-white/10 border border-white/20 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white hover:text-[#0B2545] transition-colors text-sm"
+                >
+                  {banner.secondary_label}
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -833,6 +848,32 @@ function StatsSection() {
 }
 
 function AboutMissionSection() {
+  const MISSION_FALLBACK = {
+    eyebrow: "Our Mission",
+    heading: "Empowering Communities",
+    heading_accent: "Through Education",
+    para1:
+      "The Milne Bay Province Division of Education is committed to delivering equitable, quality education to every child and young person from the islands of Samarai to the highlands of Alotau.",
+    para2:
+      "We work in partnership with teachers, parents, community leaders, and national agencies to build a generation of capable, informed, and resilient citizens of Papua New Guinea.",
+    image: "/assets/slider/mbp-img3.jpg",
+    image_alt: "Milne Bay students",
+    badge_value: "25+",
+    badge_label: "Years of service",
+    badge_sub: "Serving Milne Bay communities",
+    button_label: "Our Programs",
+    button_href: "/about",
+  };
+  const POINTS_FALLBACK = [
+    { feature: "Inclusive & equitable access" },
+    { feature: "Qualified teachers in every school" },
+    { feature: "Community-led improvement" },
+    { feature: "Safe learning environments" },
+  ];
+  const { data: missionRows } = useEntity("home_mission", [MISSION_FALLBACK]);
+  const { data: points } = useEntity("home_mission_points", POINTS_FALLBACK);
+  const mission = { ...MISSION_FALLBACK, ...(missionRows?.[0] || {}) };
+
   return (
     <section className="bg-[#F8F6F1] py-16 px-4" id="about">
       <div className="max-w-7xl mx-auto">
@@ -840,8 +881,8 @@ function AboutMissionSection() {
           <div className="lg:col-span-6 relative">
             <div className="rounded-[22px] overflow-hidden shadow-[0_20px_60px_rgba(11,37,69,0.12)] border border-white">
               <img loading="lazy" decoding="async"
-                src="/assets/slider/mbp-img3.jpg"
-                alt="Milne Bay students"
+                src={mission.image}
+                alt={mission.image_alt}
                 className="w-full h-[380px] object-cover"
               />
             </div>
@@ -850,61 +891,49 @@ function AboutMissionSection() {
                 className="w-14 h-14 rounded-xl bg-[#0D9488] text-white grid place-items-center text-2xl font-bold"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
-                25+
+                {mission.badge_value}
               </div>
               <div>
-                <div className="text-[#0B2545] font-bold leading-tight">Years of service</div>
-                <div className="text-gray-500 text-xs">Serving Milne Bay communities</div>
+                <div className="text-[#0B2545] font-bold leading-tight">{mission.badge_label}</div>
+                <div className="text-gray-500 text-xs">{mission.badge_sub}</div>
               </div>
             </div>
           </div>
 
           <div className="lg:col-span-6 lg:pl-6">
             <span className="inline-flex items-center gap-2 text-[#0D9488] text-[11px] font-bold uppercase tracking-[0.14em]">
-              <span className="w-6 h-[2px] bg-[#0D9488] inline-block" /> Our Mission
+              <span className="w-6 h-[2px] bg-[#0D9488] inline-block" /> {mission.eyebrow}
             </span>
             <h2
               className="text-[32px] sm:text-4xl font-bold text-[#0B2545] mt-3 leading-[1.1] tracking-tight"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
-              Empowering Communities <span className="text-[#0D9488]">Through Education</span>
+              {mission.heading}{" "}
+              <span className="text-[#0D9488]">{mission.heading_accent}</span>
             </h2>
-            <p className="text-gray-600 leading-relaxed mt-4 text-[15px]">
-              The Milne Bay Province Division of Education is committed to delivering equitable,
-              quality education to every child and young person from the islands of Samarai to the
-              highlands of Alotau.
-            </p>
-            <p className="text-gray-600 leading-relaxed mt-3 text-[15px]">
-              We work in partnership with teachers, parents, community leaders, and national
-              agencies to build a generation of capable, informed, and resilient citizens of Papua
-              New Guinea.
-            </p>
+            <p className="text-gray-600 leading-relaxed mt-4 text-[15px]">{mission.para1}</p>
+            <p className="text-gray-600 leading-relaxed mt-3 text-[15px]">{mission.para2}</p>
 
             <div className="grid sm:grid-cols-2 gap-3 mt-6">
-              {[
-                "Inclusive & equitable access",
-                "Qualified teachers in every school",
-                "Community-led improvement",
-                "Safe learning environments",
-              ].map((t) => (
+              {points.map((row: any, i: number) => (
                 <div
-                  key={t}
+                  key={i}
                   className="flex items-center gap-2.5 bg-white border border-gray-100 rounded-xl px-3.5 py-3 shadow-sm"
                 >
                   <span className="w-7 h-7 rounded-full bg-emerald-50 text-emerald-600 grid place-items-center text-sm">
                     ✓
                   </span>
-                  <span className="text-sm font-semibold text-[#0B2545]">{t}</span>
+                  <span className="text-sm font-semibold text-[#0B2545]">{row.feature}</span>
                 </div>
               ))}
             </div>
 
             <div className="flex flex-wrap gap-3 mt-8">
               <Link
-                to="/about"
+                to={mission.button_href}
                 className="bg-[#0B2545] text-white font-bold px-6 py-3 rounded-full hover:bg-[#163663] transition-colors shadow-sm text-sm inline-flex items-center gap-2"
               >
-                Our Programs <span>→</span>
+                {mission.button_label} <span>→</span>
               </Link>
             </div>
           </div>
@@ -1303,6 +1332,35 @@ function PartnersSection() {
 }
 
 function HelpCTASection() {
+  const CTA_FALLBACK = {
+    badge: "Support",
+    heading: "Stay connected to education updates",
+    body: "Subscribe your WhatsApp number to receive official announcements, school updates, examination information, and Division notices.",
+    sub_body:
+      "Choose the channel that best matches your needs. We will add your number to the appropriate Division WhatsApp channel or group.",
+    image: "/assets/whatsapp/whatsapp-cartoon-img.png",
+    image_alt: "Person holding a phone with WhatsApp",
+    tagline: "Milne Bay, connected",
+    form_title: "Join WhatsApp updates",
+    form_body: "Enter your mobile number to subscribe to official education updates.",
+    phone_label: "WhatsApp number",
+    phone_placeholder: "+675 7XXX XXXX",
+    channel_label: "Updates channel",
+    channel_prompt: "Select a channel",
+    button_label: "Subscribe to WhatsApp updates",
+    button_loading_label: "Subscribing...",
+    response_note: "Avg. response within 24 hours • Mon–Fri 8am–4:30pm",
+  };
+  const CHANNELS_FALLBACK = [
+    { name: "Official announcements" },
+    { name: "Parent and guardian updates" },
+    { name: "Teacher updates" },
+    { name: "FODE and distance learning" },
+  ];
+  const { data: ctaRows } = useEntity("home_cta", [CTA_FALLBACK]);
+  const { data: channels } = useEntity("home_cta_channels", CHANNELS_FALLBACK);
+  const cta = { ...CTA_FALLBACK, ...(ctaRows?.[0] || {}) };
+
   const [phone, setPhone] = useState("");
   const [channel, setChannel] = useState("Official announcements");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -1335,49 +1393,41 @@ function HelpCTASection() {
           <div className="relative grid lg:grid-cols-2 gap-8 p-8 sm:p-10">
             <div>
               <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-[#C9A84C] text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                Support
+                {cta.badge}
               </span>
               <h2
                 className="text-3xl font-bold text-white mt-3 leading-tight"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
-                Stay connected to education updates
+                {cta.heading}
               </h2>
-              <p className="text-blue-100/80 mt-3 leading-relaxed">
-                Subscribe your WhatsApp number to receive official announcements, school updates,
-                examination information, and Division notices.
-              </p>
-              <p className="text-blue-100/70 mt-3 text-sm leading-relaxed">
-                Choose the channel that best matches your needs. We will add your number to the
-                appropriate Division WhatsApp channel or group.
-              </p>
+              <p className="text-blue-100/80 mt-3 leading-relaxed">{cta.body}</p>
+              <p className="text-blue-100/70 mt-3 text-sm leading-relaxed">{cta.sub_body}</p>
               <div className="relative mt-7 overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[#164e72]/70 via-white/5 to-[#0D9488]/20 p-3 shadow-2xl">
                 <div className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-[#C9A84C]/20 blur-2xl" />
                 <div className="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-[#0D9488]/30 blur-2xl" />
                 <div className="relative flex items-center justify-center">
                   <img loading="lazy" decoding="async"
-                    src="/assets/whatsapp/whatsapp-cartoon-img.png"
-                    alt="Person holding a phone with WhatsApp"
+                    src={cta.image}
+                    alt={cta.image_alt}
                     className="h-64 w-full object-contain object-bottom drop-shadow-[0_20px_18px_rgba(0,0,0,0.28)] sm:h-72"
                   />
                 </div>
                 <span className="relative mt-1 block text-center text-[10px] font-bold uppercase tracking-[0.28em] text-[#C9A84C]">
-                  Milne Bay, connected
+                  {cta.tagline}
                 </span>
               </div>
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-xl">
-              <div className="text-lg font-bold text-[#0B2545]">Join WhatsApp updates</div>
-              <p className="text-sm text-gray-500 mt-1">
-                Enter your mobile number to subscribe to official education updates.
-              </p>
+              <div className="text-lg font-bold text-[#0B2545]">{cta.form_title}</div>
+              <p className="text-sm text-gray-500 mt-1">{cta.form_body}</p>
               <form onSubmit={subscribe} className="mt-5 space-y-4">
                 <div>
                   <label
                     htmlFor="whatsapp-phone"
                     className="text-xs font-bold uppercase tracking-widest text-gray-600"
                   >
-                    WhatsApp number
+                    {cta.phone_label}
                   </label>
                   <input
                     id="whatsapp-phone"
@@ -1386,7 +1436,7 @@ function HelpCTASection() {
                     required
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
-                    placeholder="+675 7XXX XXXX"
+                    placeholder={cta.phone_placeholder}
                     className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20"
                   />
                 </div>
@@ -1395,7 +1445,7 @@ function HelpCTASection() {
                     htmlFor="whatsapp-channel"
                     className="text-xs font-bold uppercase tracking-widest text-gray-600"
                   >
-                    Updates channel
+                    {cta.channel_label}
                   </label>
                   <select
                     id="whatsapp-channel"
@@ -1404,11 +1454,12 @@ function HelpCTASection() {
                     required
                     className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm outline-none focus:border-[#0D9488]"
                   >
-                    <option value="">Select a channel</option>
-                    <option>Official announcements</option>
-                    <option>Parent and guardian updates</option>
-                    <option>Teacher updates</option>
-                    <option>FODE and distance learning</option>
+                    <option value="">{cta.channel_prompt}</option>
+                    {channels.map((row: any) => (
+                      <option key={row.id ?? row.name} value={row.name}>
+                        {row.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <button
@@ -1416,7 +1467,7 @@ function HelpCTASection() {
                   disabled={status === "loading"}
                   className="w-full bg-[#0D9488] text-white font-bold px-6 py-3 rounded-full hover:bg-[#0b7a6e] transition-colors text-sm disabled:opacity-60"
                 >
-                  {status === "loading" ? "Subscribing..." : "Subscribe to WhatsApp updates"}
+                  {status === "loading" ? cta.button_loading_label : cta.button_label}
                 </button>
                 <div aria-live="polite" className="min-h-5 text-sm font-semibold">
                   {status === "success" && (
@@ -1432,8 +1483,8 @@ function HelpCTASection() {
                 </div>
               </form>
               <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" /> Avg. response
-                within 24 hours • Mon–Fri 8am–4:30pm
+                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                {cta.response_note}
               </div>
             </div>
           </div>
@@ -1554,6 +1605,7 @@ export default function App() {
         <Route path="post-primary" element={<PostPrimaryManager />} />
         <Route path="vet" element={<VETManager />} />
         <Route path="fode" element={<FODEManager />} />
+        <Route path="home" element={<HomeManager />} />
         <Route path="settings" element={<SettingsManager />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

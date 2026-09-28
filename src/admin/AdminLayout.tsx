@@ -39,6 +39,7 @@ const NAV = [
   { label: "Quick Links", icon: QuickLinksIcon, to: "/admin/quicklinks" },
   { label: "Partners", icon: PartnersIcon, to: "/admin/partners" },
   { label: "Downloads", icon: DownloadsIcon, to: "/admin/downloads" },
+  { label: "Home Page", icon: SettingsIcon, to: "/admin/home" },
   { label: "Basic Education Page", icon: ProgramsIcon, to: "/admin/basic-education" },
   { label: "Post Primary Page", icon: ProgramsIcon, to: "/admin/post-primary" },
   { label: "VET Page", icon: ProgramsIcon, to: "/admin/vet" },
