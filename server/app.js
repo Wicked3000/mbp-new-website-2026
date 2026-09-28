@@ -7,7 +7,21 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const UPLOAD_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "uploads");
+// Uploads are written into public/uploads, which is the single copy of that
+// content for the whole project.
+//
+// It has to be this directory. The browser is handed a /uploads/... URL, and
+// that path is served statically from public/ - by Vite in development and from
+// dist/ in a build. Writing anywhere else means the file is stored somewhere the
+// site never reads, so an image uploaded through the admin 404s in the browser
+// while the API reports success. public/ is also what gets committed and
+// deployed, so an upload reaches production without a second copy step.
+export const UPLOAD_DIR = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "public",
+  "uploads",
+);
 
 // Public site content. selection_students holds minors' names, SLF numbers and
 // gender, so it is deliberately absent: it stays admin-only.
