@@ -85,7 +85,6 @@ img {
     transform: translateX(-50%);
   }
 }
-
 .partner-marquee-track {
   display: flex;
   width: max-content;
@@ -113,16 +112,112 @@ img {
   will-change: transform;
 }
 
+/* ---------------------------------------------------------------- motion
+ *
+ * One vocabulary for the whole site, so animation reads as one system rather
+ * than a per-component decision. Three scales, chosen for what each is for:
+ *
+ *   --motion-quick  160ms  feedback on a control the visitor just pressed
+ *   --motion-base   320ms  a card, row or panel appearing
+ *   --motion-slow   560ms  a whole page or section settling in
+ *
+ * Easing is split the same way. Anything entering uses --ease-out, which
+ * decelerates into its resting state, so the page appears to arrive. Anything
+ * leaving uses --ease-in. --ease-standard is for moves that both arrive and
+ * depart in view (a carousel slide).
+ *
+ * Durations are deliberately short. Motion here is orientation - telling the
+ * visitor that something changed and where it went - not decoration, and long
+ * eases on scroll are the thing that makes a site feel sluggish.
+ */
+
+:root {
+  --motion-quick: 160ms;
+  --motion-base: 320ms;
+  --motion-slow: 560ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Route change. A short fade with a few pixels of lift: enough to signal that
+   the page changed without making the visitor wait for content. Scoped to a
+   keyed wrapper so it replays on every navigation. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-enter {
+  animation: page-enter var(--motion-slow) var(--ease-out) both;
+}
+
+/* Scroll reveal. Elements start hidden and play the animation once the observer
+   marks them revealed. `both` fill keeps them hidden until that point, so
+   nothing flashes into place and then animates. */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal[data-revealed="true"] {
+  animation: reveal-up var(--motion-slow) var(--ease-out) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+/* Stagger for lists: each child waits a little longer than the last, so a grid
+   resolves in reading order instead of appearing as one block. Capped so a long
+   list does not leave the final row waiting seconds. */
+.reveal-group > * {
+  --reveal-delay: min(calc(var(--reveal-index, 0) * 60ms), 360ms);
+}
+
+/* Under reduced motion the site must not move. The reveal is the dangerous one:
+   if it were disabled by simply removing the animation, .reveal would keep its
+   opacity: 0 and the content would never appear at all. So it is forced visible
+   here rather than left to fail. */
 @media (prefers-reduced-motion: reduce) {
-  .contact-banner-wave {
-    animation: none;
+  :root {
+    --motion-quick: 1ms;
+    --motion-base: 1ms;
+    --motion-slow: 1ms;
   }
 
-  .partner-marquee-track {
+  .page-enter,
+  .reveal,
+  .reveal[data-revealed="false"],
+  .reveal[data-revealed="true"] {
     animation: none;
+    opacity: 1;
+    transform: none;
   }
 
-  .partner-marquee {
-    overflow-x: auto;
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
   }
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEntity } from "@/hooks/useDynamic";
 import { api } from "@/lib/api";
+import Reveal from "@/components/Reveal";
 
 export function HelpCTASection() {
   const CTA_FALLBACK = {
@@ -51,7 +52,7 @@ export function HelpCTASection() {
 
   return (
     <section className="py-14 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="rounded-[22px] bg-[#0B2545] overflow-hidden relative">
           <div
             className="absolute inset-0 opacity-20"
@@ -160,7 +161,7 @@ export function HelpCTASection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

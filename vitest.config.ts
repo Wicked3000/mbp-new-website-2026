@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["server/**/*.test.js", "src/**/*.test.ts"],
+    include: ["server/**/*.test.js", "src/**/*.test.{ts,tsx}"],
     environment: "node",
   },
 });

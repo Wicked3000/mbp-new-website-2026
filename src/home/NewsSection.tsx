@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import { NEWS, NOTICES } from "./fallbackData";
+import Reveal from "@/components/Reveal";
 
 export function NewsSection() {
   const { data: newsData } = useEntity("news", NEWS as any);
@@ -24,7 +25,7 @@ export function NewsSection() {
   }));
   return (
     <section className="bg-[#F8F6F1] py-14 sm:py-16 px-4" id="news">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
             <div className="flex items-end justify-between mb-8 gap-4">
@@ -169,7 +170,7 @@ export function NewsSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

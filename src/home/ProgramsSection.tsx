@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import { PROGRAMS } from "./fallbackData";
+import Reveal from "@/components/Reveal";
 
 export function ProgramsSection() {
   const { data } = useEntity("programs", PROGRAMS as any);
@@ -10,7 +11,7 @@ export function ProgramsSection() {
   }));
   return (
     <section className="py-14 sm:py-16 px-4 bg-white" id="programs">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
           <div>
             <span className="inline-flex items-center gap-2 text-[#0D9488] text-[11px] font-bold uppercase tracking-[0.14em]">
@@ -89,7 +90,7 @@ export function ProgramsSection() {
             </Link>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

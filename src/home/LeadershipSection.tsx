@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function LeadershipSection() {
   const { data } = useEntity("leadership", []);
   const leader = (data as any[])[0];
   return (
     <section className="py-14 sm:py-16 px-4 bg-[#F8F6F1]">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5">
             <div className="relative rounded-[22px] overflow-hidden shadow-[0_20px_60px_rgba(11,37,69,0.12)] border border-white bg-white">
@@ -97,7 +98,7 @@ export function LeadershipSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

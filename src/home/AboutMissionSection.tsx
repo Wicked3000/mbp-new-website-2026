@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function AboutMissionSection() {
   const MISSION_FALLBACK = {
@@ -30,7 +31,7 @@ export function AboutMissionSection() {
 
   return (
     <section className="bg-[#F8F6F1] py-16 px-4" id="about">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-6 relative">
             <div className="rounded-[22px] overflow-hidden shadow-[0_20px_60px_rgba(11,37,69,0.12)] border border-white">
@@ -92,7 +93,7 @@ export function AboutMissionSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

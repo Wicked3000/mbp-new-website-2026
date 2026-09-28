@@ -1,4 +1,5 @@
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function PartnersSection() {
   const FALLBACK_PARTNERS = [
@@ -22,7 +23,7 @@ export function PartnersSection() {
     .sort((left: any, right: any) => (left.sort_order ?? 0) - (right.sort_order ?? 0));
   return (
     <section className="py-10 px-4 bg-[#F8F6F1] border-y border-gray-100">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div className="text-xs font-bold uppercase tracking-[0.14em] text-gray-500">
             Trusted partners & agencies
@@ -67,7 +68,7 @@ export function PartnersSection() {
             ))}
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

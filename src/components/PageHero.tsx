@@ -99,7 +99,10 @@ export default function PageHero({
       />
       <div className={`absolute inset-0 ${theme.gradient}`} />
       {overlay}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
+      {/* Only the text settles in. The banner image is the first thing on the
+          page and is already at full opacity when the route animation runs, so
+          animating it too would just delay the content behind a second effect. */}
+      <div className="page-enter relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
         <div className={contentClassName}>
           <div
             className={`inline-flex items-center gap-2 border text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5 ${theme.badge}`}

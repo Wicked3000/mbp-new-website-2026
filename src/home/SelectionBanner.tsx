@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function SelectionBanner() {
   const FALLBACK = {
@@ -16,7 +17,7 @@ export function SelectionBanner() {
   const banner = { ...FALLBACK, ...(data?.[0] || {}) };
   return (
     <section className="px-4 py-6 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="rounded-[18px] bg-gradient-to-r from-[#0B2545] via-[#163663] to-[#0D9488] p-[1px]">
           <div className="rounded-[17px] bg-gradient-to-r from-[#0B2545] via-[#163663] to-[#0D9488] px-6 py-5 flex flex-col lg:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -56,7 +57,7 @@ export function SelectionBanner() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
