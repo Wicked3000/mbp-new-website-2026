@@ -1002,6 +1002,102 @@ const SEEDS: Record<string, any[]> = {
       "program": "post",
       "created_at": {},
       "sort_order": 10
+    },
+    {
+      "id": 48,
+      "name": "VET Prospectus 2026",
+      "type": "PDF",
+      "size_text": "4.5 MB",
+      "category": "Guide",
+      "description": "VET programme prospectus",
+      "file_path": "",
+      "program": "vet",
+      "created_at": {},
+      "sort_order": 1
+    },
+    {
+      "id": 49,
+      "name": "Course Information Sheets (All Trades)",
+      "type": "PDF",
+      "size_text": "8.2 MB",
+      "category": "Curriculum",
+      "description": "Course information for every trade",
+      "file_path": "",
+      "program": "vet",
+      "created_at": {},
+      "sort_order": 2
+    },
+    {
+      "id": 50,
+      "name": "Enrolment Application Form",
+      "type": "PDF",
+      "size_text": "650 KB",
+      "category": "Forms",
+      "description": "VET enrolment application form",
+      "file_path": "",
+      "program": "vet",
+      "created_at": {},
+      "sort_order": 3
+    },
+    {
+      "id": 51,
+      "name": "Apprenticeship Guidelines for Employers",
+      "type": "PDF",
+      "size_text": "2.1 MB",
+      "category": "Guidelines",
+      "description": "Guidelines for employers taking apprentices",
+      "file_path": "",
+      "program": "vet",
+      "created_at": {},
+      "sort_order": 4
+    },
+    {
+      "id": 52,
+      "name": "RPL Application & Evidence Guide",
+      "type": "PDF",
+      "size_text": "1.8 MB",
+      "category": "Assessment",
+      "description": "Recognition of Prior Learning guide",
+      "file_path": "",
+      "program": "vet",
+      "created_at": {},
+      "sort_order": 5
+    },
+    {
+      "id": 53,
+      "name": "Centre Facility Standards",
+      "type": "PDF",
+      "size_text": "3.4 MB",
+      "category": "Standards",
+      "description": "Standards for training centre facilities",
+      "file_path": "",
+      "program": "vet",
+      "created_at": {},
+      "sort_order": 6
+    },
+    {
+      "id": 54,
+      "name": "Trainer Qualification Requirements",
+      "type": "PDF",
+      "size_text": "920 KB",
+      "category": "HR",
+      "description": "Trainer qualification requirements",
+      "file_path": "",
+      "program": "vet",
+      "created_at": {},
+      "sort_order": 7
+    },
+    {
+      "id": 55,
+      "name": "Graduate Tracer Study 2024",
+      "type": "PDF",
+      "size_text": "2.7 MB",
+      "category": "Reports",
+      "description": "Graduate tracer study report",
+      "file_path": "",
+      "program": "vet",
+      "created_at": {},
+      "sort_order": 8
     }
   ],
   "selections_grade9": [
@@ -2121,6 +2217,741 @@ const SEEDS: Record<string, any[]> = {
       "heading": "Common Questions",
       "blurb": null,
       "sort_order": 7
+    }
+  ],
+  "vet_hero": [
+    {
+      "id": 1,
+      "eyebrow": "Program 03 - Vocational Education & Training",
+      "title": "Vocational Education",
+      "subtitle": " & Training (VET)",
+      "description": "Skills and trades training for out-of-school youth and adults, delivered through registered VET providers across Milne Bay Province - building a skilled workforce for PNG's future.",
+      "banner": "/assets/vet/vet-banner.jpg",
+      "alt": "VET training workshop",
+      "sort_order": 1
+    }
+  ],
+  "vet_overview": [
+    {
+      "id": 1,
+      "eyebrow": "Program Overview",
+      "heading": "Skills for Employment & Entrepreneurship",
+      "intro": "The VET program provides competency-based skills training aligned with national qualifications. The Division coordinates 6 registered VET centres across the province, offering certificate and diploma programs in priority trade areas.",
+      "body": "Training is open to Grade 10 and Grade 12 school leavers, out-of-school youth, and existing workers seeking formal recognition. Programs range from 6-month certificates to 2-year diplomas, with pathways to higher education and apprenticeships.",
+      "features_title": "Key Features",
+      "sort_order": 1
+    }
+  ],
+  "vet_overview_cards": [
+    {
+      "id": 1,
+      "icon": "🔧",
+      "title": "Competency-Based Training",
+      "desc": "Industry-aligned qualifications (NC1–NC3) assessed against national competency standards",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "🏭",
+      "title": "Workplace Learning",
+      "desc": "Structured workplace training & industry attachments mandatory for all programs",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "📜",
+      "title": "National Certification",
+      "desc": "TVET Authority accredited; qualifications recognized nationally and regionally",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "🚀",
+      "title": "Pathways to Higher Study",
+      "desc": "Credit articulation into technical colleges, universities, and apprenticeship schemes",
+      "sort_order": 4
+    }
+  ],
+  "vet_overview_features": [
+    {
+      "id": 1,
+      "feature": "Free tuition for eligible students under Government subsidy",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "feature": "8 trade programs across 6 training centres",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "feature": "Industry partnerships with PNG LNG, Ok Tedi, local businesses",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "feature": "Recognition of Prior Learning (RPL) for experienced workers",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "feature": "Entrepreneurship & business skills embedded in all courses",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "feature": "Job placement support through provincial industry links",
+      "sort_order": 6
+    }
+  ],
+  "vet_overview_stats": [
+    {
+      "id": 1,
+      "value_text": "6",
+      "label": "Training Centres",
+      "color": "bg-[#0D9488]",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "value_text": "8",
+      "label": "Trade Programs",
+      "color": "bg-[#14B8A6]",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "value_text": "1,200+",
+      "label": "Annual Trainees",
+      "color": "bg-teal-600",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "value_text": "85%",
+      "label": "Employment Rate",
+      "color": "bg-teal-700",
+      "sort_order": 4
+    }
+  ],
+  "vet_programs": [
+    {
+      "id": 1,
+      "code": "CPC10120",
+      "name": "Certificate I in Construction",
+      "duration": "6 months",
+      "level": "NC1",
+      "trades": "Carpentry, Masonry, Concreting",
+      "icon": "🔨",
+      "color": "bg-amber-500",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "code": "MEM10119",
+      "name": "Certificate I in Engineering",
+      "duration": "6 months",
+      "level": "NC1",
+      "trades": "Welding, Fitting, Machining",
+      "icon": "⚙️",
+      "color": "bg-blue-500",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "code": "AUR10120",
+      "name": "Certificate I in Automotive",
+      "duration": "6 months",
+      "level": "NC1",
+      "trades": "Light Vehicle, Diesel, Electrical",
+      "icon": "🚗",
+      "color": "bg-red-500",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "code": "UEE10120",
+      "name": "Certificate I in Electrotechnology",
+      "duration": "6 months",
+      "level": "NC1",
+      "trades": "Electrical, Renewable Energy",
+      "icon": "⚡",
+      "color": "bg-yellow-500",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "code": "SIT10122",
+      "name": "Certificate I in Hospitality",
+      "duration": "6 months",
+      "level": "NC1",
+      "trades": "Cookery, Front Office, Housekeeping",
+      "icon": "🍳",
+      "color": "bg-pink-500",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "code": "AHC10116",
+      "name": "Certificate I in Agriculture",
+      "duration": "6 months",
+      "level": "NC1",
+      "trades": "Crop Production, Livestock, Machinery",
+      "icon": "🌱",
+      "color": "bg-green-500",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "code": "ICT10119",
+      "name": "Certificate I in ICT",
+      "duration": "6 months",
+      "level": "NC1",
+      "trades": "Computer Hardware, Networking, Support",
+      "icon": "💻",
+      "color": "bg-purple-500",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "code": "MST10119",
+      "name": "Certificate I in Maritime",
+      "duration": "8 months",
+      "level": "NC1",
+      "trades": "Deck Rating, Engine Rating, Safety",
+      "icon": "⚓",
+      "color": "bg-cyan-500",
+      "sort_order": 8
+    }
+  ],
+  "vet_centres": [
+    {
+      "id": 1,
+      "name": "Alotau VET Centre",
+      "district": "Alotau",
+      "status": "Operational",
+      "programs": "Construction, Engineering, Automotive, Hospitality",
+      "capacity": "300",
+      "facilities": "Workshops, Computer Lab, Dormitory",
+      "icon": "🏢",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Samarai VET Centre",
+      "district": "Samarai-Murua",
+      "status": "Opening 2026",
+      "programs": "Maritime, Construction, Agriculture",
+      "capacity": "150",
+      "facilities": "Workshops, Jetty Access, Staff Housing",
+      "icon": "⚓",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Kiriwina Skills Centre",
+      "district": "Kiriwina-Goodenough",
+      "status": "Operational",
+      "programs": "Hospitality, Construction, ICT",
+      "capacity": "120",
+      "facilities": "Kitchen, Workshop, Solar Power",
+      "icon": "🏝️",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "Esa'ala Training Centre",
+      "district": "Esa'ala",
+      "status": "Operational",
+      "programs": "Maritime, Agriculture, Hospitality",
+      "capacity": "100",
+      "facilities": "Workshop, Boat Access, Garden",
+      "icon": "🌊",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "name": "Rabaruana Technical School",
+      "district": "Rabaruana",
+      "status": "Operational",
+      "programs": "Engineering, Automotive, Construction",
+      "capacity": "200",
+      "facilities": "Modern Workshops, Library, Boarding",
+      "icon": "🔧",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "name": "Misima Skills Centre",
+      "district": "Samarai-Murua",
+      "status": "Planned",
+      "programs": "Maritime, Agriculture, ICT",
+      "capacity": "80",
+      "facilities": "Workshop, Satellite Internet",
+      "icon": "📡",
+      "sort_order": 6
+    }
+  ],
+  "vet_centre_names": [
+    {
+      "id": 1,
+      "name": "Kwato TVET",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Rabaraba TVET",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Sideia TVET",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "Ubuya TVET",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "name": "Kaubwaga TVET",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "name": "Nabusa TVET",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "name": "Watuluma TVET",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "name": "Bolubolu TVET",
+      "sort_order": 8
+    },
+    {
+      "id": 9,
+      "name": "Ailuluai TVET",
+      "sort_order": 9
+    }
+  ],
+  "vet_partners": [
+    {
+      "id": 1,
+      "name": "PNG LNG Project",
+      "sector": "Oil & Gas",
+      "programs": "Engineering, Welding, Electrical, Safety",
+      "icon": "🛢️",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Ok Tedi Mining",
+      "sector": "Mining",
+      "programs": "Heavy Diesel, Electrical, Mechanical",
+      "icon": "⛏️",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Pacific Towing",
+      "sector": "Maritime",
+      "programs": "Deck Rating, Engine Rating, Marine Engineering",
+      "icon": "🚢",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "Kumul Consolidated Holdings",
+      "sector": "State Enterprises",
+      "programs": "Multiple trades across subsidiaries",
+      "icon": "🏛️",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "name": "Alotau Chamber of Commerce",
+      "sector": "Private Sector",
+      "programs": "Hospitality, Business, Construction",
+      "icon": "🤝",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "name": "Provincial Health Authority",
+      "sector": "Health",
+      "programs": "Biomedical Equipment, Maintenance",
+      "icon": "🏥",
+      "sort_order": 6
+    }
+  ],
+  "vet_apprenticeship": [
+    {
+      "id": 1,
+      "icon": "🎓",
+      "heading": "Apprenticeship & Traineeship Program",
+      "body": "The Division facilitates formal apprenticeships combining on-the-job training with structured off-the-job learning. Employers receive wage subsidies; apprentices earn while they learn.",
+      "bullet": "4-year apprenticeships in Engineering, Construction, Automotive",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "🎓",
+      "heading": "Apprenticeship & Traineeship Program",
+      "body": "The Division facilitates formal apprenticeships combining on-the-job training with structured off-the-job learning. Employers receive wage subsidies; apprentices earn while they learn.",
+      "bullet": "2-year traineeships in Hospitality, Business, ICT",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "🎓",
+      "heading": "Apprenticeship & Traineeship Program",
+      "body": "The Division facilitates formal apprenticeships combining on-the-job training with structured off-the-job learning. Employers receive wage subsidies; apprentices earn while they learn.",
+      "bullet": "Competency-based progression (not time-based)",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "🎓",
+      "heading": "Apprenticeship & Traineeship Program",
+      "body": "The Division facilitates formal apprenticeships combining on-the-job training with structured off-the-job learning. Employers receive wage subsidies; apprentices earn while they learn.",
+      "bullet": "National Trade Testing on completion",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "icon": "🎓",
+      "heading": "Apprenticeship & Traineeship Program",
+      "body": "The Division facilitates formal apprenticeships combining on-the-job training with structured off-the-job learning. Employers receive wage subsidies; apprentices earn while they learn.",
+      "bullet": "Pathway to Certificate IV & Diploma",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "icon": "🎓",
+      "heading": "Apprenticeship & Traineeship Program",
+      "body": "The Division facilitates formal apprenticeships combining on-the-job training with structured off-the-job learning. Employers receive wage subsidies; apprentices earn while they learn.",
+      "bullet": "Employer incentives & training support",
+      "sort_order": 6
+    }
+  ],
+  "vet_initiatives": [
+    {
+      "id": 1,
+      "title": "New Centres in Alotau & Samarai",
+      "desc": "K5M investment for two new VET centres opening 2026. Alotau: expanded engineering/automotive. Samarai: maritime focus for island communities.",
+      "icon": "🏫",
+      "status": "Underway",
+      "color": "bg-teal-500",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "title": "Mobile Training Units",
+      "desc": "Fully equipped training trucks delivering short courses to remote districts. 3 units operational reaching 500+ trainees annually in villages.",
+      "icon": "🚚",
+      "status": "Active",
+      "color": "bg-blue-500",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "title": "Recognition of Prior Learning (RPL)",
+      "desc": "Fast-track certification for experienced workers without formal qualifications. Assessment weekends at all centres. 200+ certified in 2025.",
+      "icon": "📜",
+      "status": "Expanding",
+      "color": "bg-amber-500",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "title": "Women in Trades Initiative",
+      "desc": "Targeted recruitment, mentoring, and support for women in non-traditional trades. 35% female enrolment target by 2027. Childcare at centres.",
+      "icon": "👩‍🔧",
+      "status": "Active",
+      "color": "bg-pink-500",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "title": "Green Skills & Renewable Energy",
+      "desc": "New solar installation, biogas, and energy efficiency modules. Partnership with PNG Power & international NGOs. Aligned with PNG Climate Goals.",
+      "icon": "☀️",
+      "status": "New",
+      "color": "bg-green-500",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "title": "Digital Skills Integration",
+      "desc": "Basic ICT & digital literacy embedded in all trade programs. Computer labs at all centres. E-portfolio for competency evidence.",
+      "icon": "💻",
+      "status": "Rolling Out",
+      "color": "bg-indigo-500",
+      "sort_order": 6
+    }
+  ],
+  "vet_enrolment_steps": [
+    {
+      "id": 1,
+      "step": "01",
+      "title": "Choose a Trade",
+      "desc": "Review programs at vet.mbpeducation.gov.pg or visit your nearest centre. Consider your interests, aptitude, and local job market.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "step": "02",
+      "title": "Check Eligibility",
+      "desc": "Grade 10 certificate (minimum), medical fitness, age 16+. Mature entry (21+) considered with work experience. RPL available.",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "step": "03",
+      "title": "Submit Application",
+      "desc": "Online at VET portal or paper form at any centre. Attach: certificates, ID, medical report, references. No application fee.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "step": "04",
+      "title": "Selection & Interview",
+      "desc": "Aptitude test + panel interview. Ranking based on grades, test, interview. Results within 2 weeks. Waitlist maintained.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "step": "05",
+      "title": "Enrol & Commence",
+      "desc": "Accept offer, pay subsidized fees (K200–K500/term), attend orientation. Tools & PPE provided. Training starts first Monday of term.",
+      "sort_order": 5
+    }
+  ],
+  "vet_intake_dates": [
+    {
+      "id": 1,
+      "label": "January Intake Applications Open",
+      "date_text": "1 October 2025",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "label": "January Intake Applications Close",
+      "date_text": "30 November 2025",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "label": "January Intake Interviews",
+      "date_text": "8–12 December 2025",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "label": "January Intake Commences",
+      "date_text": "26 January 2026",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "label": "July Intake Applications Open",
+      "date_text": "1 April 2026",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "label": "July Intake Applications Close",
+      "date_text": "31 May 2026",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "label": "July Intake Interviews",
+      "date_text": "9–13 June 2026",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "label": "July Intake Commences",
+      "date_text": "20 July 2026",
+      "sort_order": 8
+    }
+  ],
+  "vet_support": [
+    {
+      "id": 1,
+      "icon": "📚",
+      "title": "Training Resources",
+      "desc": "Learning guides, assessment tools, e-learning portal, industry-standard equipment",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "icon": "👨‍🏫",
+      "title": "Trainer Development",
+      "desc": "Certificate IV in Training & Assessment, industry currency programs, moderation",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "icon": "🏢",
+      "title": "Employer Services",
+      "desc": "Apprentice sign-up, wage subsidies, workplace assessor training, skills audits",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "icon": "💰",
+      "title": "Funding & Scholarships",
+      "desc": "Government subsidies, industry scholarships, tool allowances, travel support",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "icon": "📊",
+      "title": "Quality Assurance",
+      "desc": "Internal audit, external moderation, TVET Authority compliance, tracer studies",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "icon": "🎯",
+      "title": "Job Placement",
+      "desc": "Industry job board, resume workshops, interview prep, graduate tracking system",
+      "sort_order": 6
+    }
+  ],
+  "vet_support_contact": [
+    {
+      "id": 1,
+      "heading": "VET Helpdesk",
+      "body": "Information on courses, enrolment, apprenticeships, RPL, employer incentives, and centre locations.",
+      "phone_label": "Provincial VET Coordinator",
+      "phone_value": "+675 641 1234 (ext. 4)",
+      "email_label": "Email",
+      "email_value": "vet@mbpeducation.gov.pg",
+      "office_label": "Office",
+      "office_value": "Alotau VET Centre, Milne Bay",
+      "button_label": "Contact VET Team",
+      "button_href": "/contact",
+      "sort_order": 1
+    }
+  ],
+  "vet_faq": [
+    {
+      "id": 1,
+      "q": "What are the entry requirements for VET certificate courses?",
+      "a": "Minimum Grade 10 certificate pass. Some trades require specific subjects (e.g., Maths/Science for Engineering). Mature age entry (21+) with relevant work experience considered. Medical fitness certificate required.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "q": "How much does VET training cost?",
+      "a": "Government-subsidized fees: K200–K500 per term depending on trade. Full fee-paying options available. Tool kits and PPE provided. Scholarships available for high-performing and disadvantaged students.",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "q": "Can I do VET while working?",
+      "a": "Yes. Evening/weekend classes available for Certificate I in some trades. Block release (2 weeks on, 2 weeks off) for apprentices. RPL allows experienced workers to certify without full-time study.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "q": "What qualification will I receive?",
+      "a": "National Certificate Level 1 (NC1) on completion. Recognized by TVET Authority PNG. Pathways: NC2 → NC3 → Certificate IV → Diploma. Credit transfer to technical colleges and universities.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "q": "How do I apply for an apprenticeship?",
+      "a": "Employer must register with Division. Apprentice signs training contract. Division facilitates registration with TVET Authority. Wage subsidies available for employers. Contact VET Helpdesk for forms.",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "q": "Are the new Samarai and Alotau centres open for 2026?",
+      "a": "Alotau VET Centre expansion: operational January 2026. Samarai VET Centre: opening July 2026 (maritime focus). Applications for both open October 2025. Limited places - apply early.",
+      "sort_order": 6
+    }
+  ],
+  "vet_section_headings": [
+    {
+      "id": 1,
+      "skey": "programs",
+      "eyebrow": "Trade Programs",
+      "heading": "Certificate Courses Offered",
+      "blurb": "All programs are TVET Authority accredited. Graduates receive National Certificates (NC1) with pathways to NC2/NC3 and diploma programs.",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "skey": "centres",
+      "eyebrow": "Training Network",
+      "heading": "6 VET Centres Province-Wide",
+      "blurb": null,
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "skey": "selections",
+      "eyebrow": "2026 VET Selection",
+      "heading": "VET Centre Selection Lists",
+      "blurb": "Official 2026 VET trainee selection lists for Milne Bay Province TVET centres. Click a centre to view the selected trainees.",
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "skey": "industry",
+      "eyebrow": "Industry Partnerships",
+      "heading": "Training for Real Jobs",
+      "blurb": "Strong industry links ensure curriculum relevance, workplace placements, and employment pathways for graduates.",
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "skey": "initiatives",
+      "eyebrow": "Key Initiatives",
+      "heading": "Innovating Skills Development",
+      "blurb": "Strategic programs expanding access, improving quality, and aligning VET with emerging industry needs across Milne Bay.",
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "skey": "enrolment",
+      "eyebrow": "How to Enrol",
+      "heading": "Start Your Trade Career",
+      "blurb": "VET enrolments open twice yearly (January & July intakes). Priority given to Grade 10/12 school leavers and out-of-school youth aged 16–35.",
+      "sort_order": 6
+    },
+    {
+      "id": 7,
+      "skey": "support",
+      "eyebrow": "Support & Resources",
+      "heading": "For Trainees, Employers & Trainers",
+      "blurb": "Comprehensive support ecosystem ensuring quality training delivery and successful outcomes for all VET stakeholders.",
+      "sort_order": 7
+    },
+    {
+      "id": 8,
+      "skey": "downloads",
+      "eyebrow": "Resources",
+      "heading": "Documents & Downloads",
+      "blurb": null,
+      "sort_order": 8
+    },
+    {
+      "id": 9,
+      "skey": "faq",
+      "eyebrow": "Frequently Asked",
+      "heading": "Common Questions",
+      "blurb": null,
+      "sort_order": 9
     }
   ]
 };

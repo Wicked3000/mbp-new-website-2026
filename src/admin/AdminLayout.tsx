@@ -41,6 +41,7 @@ const NAV = [
   { label: "Downloads", icon: DownloadsIcon, to: "/admin/downloads" },
   { label: "Basic Education Page", icon: ProgramsIcon, to: "/admin/basic-education" },
   { label: "Post Primary Page", icon: ProgramsIcon, to: "/admin/post-primary" },
+  { label: "VET Page", icon: ProgramsIcon, to: "/admin/vet" },
   { label: "Settings", icon: SettingsIcon, to: "/admin/settings" },
 ] as const;
 

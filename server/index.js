@@ -325,6 +325,40 @@ async function ensurePostPrimaryTables() {
   }
 }
 
+// The VET page sections. Same shape as the basic_* and post_* sets; see
+// backend/database/vet_sections.sql for the seeded content.
+//
+// No table here holds trainee names. Those stay in selection_students, which
+// is admin-only, so they cannot leak into a static export.
+async function ensureVetTables() {
+  const common = [
+    ["vet_hero", "(eyebrow VARCHAR(160) NOT NULL DEFAULT '', title VARCHAR(160) NOT NULL DEFAULT '', subtitle VARCHAR(160) NOT NULL DEFAULT '', description TEXT, banner VARCHAR(255) DEFAULT NULL, alt VARCHAR(255) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0)"],
+    ["vet_overview", "(eyebrow VARCHAR(160) NOT NULL DEFAULT '', heading VARCHAR(255) NOT NULL DEFAULT '', intro TEXT, body TEXT, features_title VARCHAR(160) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0)"],
+    ["vet_overview_cards", "(icon VARCHAR(16) NOT NULL DEFAULT '', title VARCHAR(255) NOT NULL DEFAULT '', `desc` TEXT, sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_overview_cards_order (sort_order))"],
+    ["vet_overview_features", "(feature TEXT NOT NULL, sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_overview_features_order (sort_order))"],
+    ["vet_overview_stats", "(value_text VARCHAR(80) NOT NULL DEFAULT '', label VARCHAR(120) NOT NULL DEFAULT '', color VARCHAR(60) NOT NULL DEFAULT 'bg-[#0D9488]', sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_overview_stats_order (sort_order))"],
+    ["vet_programs", "(code VARCHAR(40) NOT NULL DEFAULT '', name VARCHAR(200) NOT NULL DEFAULT '', duration VARCHAR(60) NOT NULL DEFAULT '', level VARCHAR(40) NOT NULL DEFAULT '', trades TEXT, icon VARCHAR(16) NOT NULL DEFAULT '', color VARCHAR(60) NOT NULL DEFAULT 'bg-amber-500', sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_programs_order (sort_order))"],
+    ["vet_centres", "(name VARCHAR(200) NOT NULL DEFAULT '', district VARCHAR(120) NOT NULL DEFAULT '', status VARCHAR(60) NOT NULL DEFAULT 'Operational', programs TEXT, capacity VARCHAR(40) NOT NULL DEFAULT '', facilities TEXT, icon VARCHAR(16) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_centres_order (sort_order))"],
+    ["vet_centre_names", "(name VARCHAR(200) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_centre_names_order (sort_order))"],
+    ["vet_partners", "(name VARCHAR(200) NOT NULL DEFAULT '', sector VARCHAR(160) NOT NULL DEFAULT '', programs TEXT, icon VARCHAR(16) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_partners_order (sort_order))"],
+    ["vet_apprenticeship", "(icon VARCHAR(16) NOT NULL DEFAULT '', heading VARCHAR(255) NOT NULL DEFAULT '', body TEXT, bullet TEXT, sort_order INT NOT NULL DEFAULT 0)"],
+    ["vet_initiatives", "(title VARCHAR(255) NOT NULL DEFAULT '', `desc` TEXT, icon VARCHAR(16) NOT NULL DEFAULT '', status VARCHAR(60) NOT NULL DEFAULT '', color VARCHAR(60) NOT NULL DEFAULT 'bg-teal-500', sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_initiatives_order (sort_order))"],
+    ["vet_enrolment_steps", "(step VARCHAR(8) NOT NULL DEFAULT '', title VARCHAR(200) NOT NULL DEFAULT '', `desc` TEXT, sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_enrolment_steps_order (sort_order))"],
+    ["vet_intake_dates", "(label VARCHAR(200) NOT NULL DEFAULT '', date_text VARCHAR(80) NOT NULL DEFAULT '', sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_intake_dates_order (sort_order))"],
+    ["vet_support", "(icon VARCHAR(16) NOT NULL DEFAULT '', title VARCHAR(255) NOT NULL DEFAULT '', `desc` TEXT, sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_support_order (sort_order))"],
+    ["vet_support_contact", "(heading VARCHAR(255) NOT NULL DEFAULT '', body TEXT, phone_label VARCHAR(160) NOT NULL DEFAULT '', phone_value VARCHAR(120) NOT NULL DEFAULT '', email_label VARCHAR(160) NOT NULL DEFAULT '', email_value VARCHAR(190) NOT NULL DEFAULT '', office_label VARCHAR(160) NOT NULL DEFAULT '', office_value VARCHAR(255) NOT NULL DEFAULT '', button_label VARCHAR(120) NOT NULL DEFAULT '', button_href VARCHAR(255) NOT NULL DEFAULT '/contact', sort_order INT NOT NULL DEFAULT 0)"],
+    ["vet_faq", "(q TEXT NOT NULL, a TEXT, sort_order INT NOT NULL DEFAULT 0, INDEX idx_vet_faq_order (sort_order))"],
+    ["vet_section_headings", "(skey VARCHAR(80) NOT NULL UNIQUE, eyebrow VARCHAR(160) NOT NULL DEFAULT '', heading VARCHAR(255) NOT NULL DEFAULT '', blurb TEXT, sort_order INT NOT NULL DEFAULT 0)"],
+  ];
+  try {
+    for (const [table, columns] of common) {
+      await pool.query(`CREATE TABLE IF NOT EXISTS \`${table}\` ${columns} ENGINE=InnoDB`);
+    }
+  } catch (error) {
+    console.error("Unable to ensure VET tables:", error.message);
+  }
+}
+
 // downloads gained program/sort_order so documents can be scoped to one
 // programme page instead of always showing in the shared listing.
 async function ensureDownloadsProgramColumns() {
@@ -918,6 +952,88 @@ const MAP = {
     table: "post_section_headings",
     cols: ["skey", "eyebrow", "heading", "blurb", "sort_order"],
   },
+  // VET page sections. centres and centre_names are place data and public;
+  // selection rows are not in this file at all.
+  vet_hero: {
+    table: "vet_hero",
+    cols: ["eyebrow", "title", "subtitle", "description", "banner", "alt", "sort_order"],
+  },
+  vet_overview: {
+    table: "vet_overview",
+    cols: ["eyebrow", "heading", "intro", "body", "features_title", "sort_order"],
+  },
+  vet_overview_cards: {
+    table: "vet_overview_cards",
+    cols: ["icon", "title", "desc", "sort_order"],
+  },
+  vet_overview_features: {
+    table: "vet_overview_features",
+    cols: ["feature", "sort_order"],
+  },
+  vet_overview_stats: {
+    table: "vet_overview_stats",
+    cols: ["value_text", "label", "color", "sort_order"],
+  },
+  vet_programs: {
+    table: "vet_programs",
+    cols: ["code", "name", "duration", "level", "trades", "icon", "color", "sort_order"],
+  },
+  vet_centres: {
+    table: "vet_centres",
+    cols: ["name", "district", "status", "programs", "capacity", "facilities", "icon", "sort_order"],
+  },
+  vet_centre_names: {
+    table: "vet_centre_names",
+    cols: ["name", "sort_order"],
+  },
+  vet_partners: {
+    table: "vet_partners",
+    cols: ["name", "sector", "programs", "icon", "sort_order"],
+  },
+  vet_apprenticeship: {
+    table: "vet_apprenticeship",
+    cols: ["icon", "heading", "body", "bullet", "sort_order"],
+  },
+  vet_initiatives: {
+    table: "vet_initiatives",
+    cols: ["title", "desc", "icon", "status", "color", "sort_order"],
+  },
+  vet_enrolment_steps: {
+    table: "vet_enrolment_steps",
+    cols: ["step", "title", "desc", "sort_order"],
+  },
+  vet_intake_dates: {
+    table: "vet_intake_dates",
+    cols: ["label", "date_text", "sort_order"],
+  },
+  vet_support: {
+    table: "vet_support",
+    cols: ["icon", "title", "desc", "sort_order"],
+  },
+  vet_support_contact: {
+    table: "vet_support_contact",
+    cols: [
+      "heading",
+      "body",
+      "phone_label",
+      "phone_value",
+      "email_label",
+      "email_value",
+      "office_label",
+      "office_value",
+      "button_label",
+      "button_href",
+      "sort_order",
+    ],
+  },
+  vet_faq: {
+    table: "vet_faq",
+    cols: ["q", "a", "sort_order"],
+  },
+  vet_section_headings: {
+    table: "vet_section_headings",
+    cols: ["skey", "eyebrow", "heading", "blurb", "sort_order"],
+  },
   selections_grade9: {
     table: "selections_grade9",
     cols: ["school", "district", "type", "capacity", "placed", "stream", "cutoff"],
@@ -1011,6 +1127,24 @@ const publicRead = new Set([
   "post_support_contact",
   "post_faq",
   "post_section_headings",
+  // VET page sections.
+  "vet_hero",
+  "vet_overview",
+  "vet_overview_cards",
+  "vet_overview_features",
+  "vet_overview_stats",
+  "vet_programs",
+  "vet_centres",
+  "vet_centre_names",
+  "vet_partners",
+  "vet_apprenticeship",
+  "vet_initiatives",
+  "vet_enrolment_steps",
+  "vet_intake_dates",
+  "vet_support",
+  "vet_support_contact",
+  "vet_faq",
+  "vet_section_headings",
 ]);
 
 app.all("/api/entities", async (req, res) => {
@@ -1233,6 +1367,7 @@ Promise.all([
   ensureSelectionGrade11Columns(),
   ensureBasicEducationTables(),
   ensurePostPrimaryTables(),
+  ensureVetTables(),
   ensureDownloadsProgramColumns(),
 ]).finally(() => {
   app.listen(PORT, () =>
