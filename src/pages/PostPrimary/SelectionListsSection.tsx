@@ -318,38 +318,6 @@ export function SelectionListsSection() {
             </div>
           </div>
         </div>
-
-        <div className="mt-10 p-6 bg-amber-50 rounded-xl border border-amber-100 text-center">
-          <h3
-            className="text-lg font-bold text-[#0B2545] mb-2"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Need the complete lists?
-          </h3>
-          <p className="text-gray-600 mb-4">
-            Full PDF downloads with all students for each school are available.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              to="/selections"
-              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-5 py-2.5 rounded transition-colors"
-            >
-              View Grade 9 Lists
-            </Link>
-            <Link
-              to="/selections"
-              className="inline-flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white font-semibold px-5 py-2.5 rounded transition-colors"
-            >
-              View Grade 11 Lists
-            </Link>
-            <Link
-              to="/selections"
-              className="inline-flex items-center gap-2 border border-amber-500 text-amber-600 hover:bg-amber-50 font-semibold px-5 py-2.5 rounded transition-colors"
-            >
-              View Summary Tables →
-            </Link>
-          </div>
-        </div>
       </div>
     </section>
   );

@@ -3,19 +3,26 @@ import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import { HERO_FALLBACK } from "./fallbackData";
 
+// Two minutes per slide. Long enough that a visitor reading the heading and
+// paragraph is not interrupted mid-sentence, which is what a carousel set to
+// seconds effectively does.
+const ROTATION_MS = 120_000;
+
 export function HeroSection() {
   const { data: slides } = useEntity("hero_slides", HERO_FALLBACK);
   const list = (slides as any[]).filter((s: any) => s.is_active !== 0);
   const [current, setCurrent] = useState(0);
-  const [userPaused, setUserPaused] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [focusWithin, setFocusWithin] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   // Auto-rotation is a moving, non-essential effect, so it stops for anyone who
-  // has asked for reduced motion, for keyboard users inside the slider, and for
-  // the explicit pause button.
-  const paused = userPaused || hovered || focusWithin || reducedMotion;
+  // has asked for reduced motion, and while a pointer or keyboard focus is
+  // inside the slider - reading a slide mid-fade should not have a new image
+  // appear underneath the reader. There is deliberately no pause button: the
+  // hero is presentation, and the only thing it competes with is the text above
+  // it, which is static.
+  const paused = hovered || focusWithin || reducedMotion;
 
   const go = useCallback(
     (dir: number) => {
@@ -39,7 +46,7 @@ export function HeroSection() {
 
   useEffect(() => {
     if (paused || list.length < 2) return;
-    const id = setInterval(() => go(1), 4500);
+    const id = setInterval(() => go(1), ROTATION_MS);
     return () => clearInterval(id);
   }, [paused, go]);
 
@@ -119,20 +126,6 @@ export function HeroSection() {
           />
         ))}
       </div>
-
-      {/* Autoplay control */}
-      {list.length > 1 && (
-        <div className="absolute bottom-6 right-4 sm:right-8 z-20">
-          <button
-            onClick={() => setUserPaused((p) => !p)}
-            aria-pressed={paused}
-            className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white text-xs font-semibold px-3 py-1.5 hover:bg-white hover:text-[#0B2545] transition-colors"
-          >
-            <span aria-hidden="true">{paused ? "▶" : "❚❚"}</span>
-            {paused ? "Play slideshow" : "Pause slideshow"}
-          </button>
-        </div>
-      )}
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-14 sm:py-16 lg:py-20">
         <div className="max-w-3xl">

@@ -59,33 +59,6 @@ export function SelectionListsSection() {
             </div>
           </details>
         </div>
-
-        <div className="mt-10 p-6 bg-teal-50 rounded-xl border border-teal-100 text-center">
-          <h3
-            className="text-lg font-bold text-[#0B2545] mb-2"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            FODE Enrolment Information
-          </h3>
-          <p className="text-gray-600 mb-4">
-            The Alotau FODE Centre is the main provincial centre. Additional correspondence sites
-            across the 4 districts support remote learners.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              to="/selections"
-              className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded transition-colors"
-            >
-              View FODE Selection Lists
-            </Link>
-            <Link
-              to="#centres"
-              className="inline-flex items-center gap-2 border border-teal-500 text-teal-600 hover:bg-teal-50 font-semibold px-5 py-2.5 rounded transition-colors"
-            >
-              View All Centres →
-            </Link>
-          </div>
-        </div>
       </div>
     </section>
   );
