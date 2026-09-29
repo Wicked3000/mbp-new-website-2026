@@ -9,7 +9,7 @@ SELECT 'Our Mission', 'Empowering Communities', 'Through Education',
   'We work in partnership with teachers, parents, community leaders, and national agencies to build a generation of capable, informed, and resilient citizens of Papua New Guinea.',
   '/assets/slider/mbp-img3.jpg', 'Milne Bay students',
   '25+', 'Years of service', 'Serving Milne Bay communities',
-  'Our Programs', '/about', 1
+  'Find out more', '/about', 1
 WHERE NOT EXISTS (SELECT 1 FROM home_mission);
 
 INSERT INTO home_mission_points (feature, sort_order)

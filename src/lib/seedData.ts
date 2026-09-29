@@ -3737,7 +3737,7 @@ export const SEEDS: Record<string, any[]> = {
         "badge_value": "25+",
         "badge_label": "Years of service",
         "badge_sub": "Serving Milne Bay communities",
-        "button_label": "Our Programs",
+        "button_label": "Find out more",
         "button_href": "/about",
         "sort_order": 1
       }

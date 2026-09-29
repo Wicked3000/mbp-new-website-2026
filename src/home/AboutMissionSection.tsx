@@ -17,7 +17,7 @@ export function AboutMissionSection() {
     badge_value: "25+",
     badge_label: "Years of service",
     badge_sub: "Serving Milne Bay communities",
-    button_label: "Our Programs",
+    button_label: "Find out more",
     button_href: "/about",
   };
   const POINTS_FALLBACK = [
@@ -89,7 +89,7 @@ export function AboutMissionSection() {
                 to={mission.button_href}
                 className="bg-[#0B2545] text-white font-bold px-6 py-3 rounded-full hover:bg-[#163663] transition-colors shadow-sm text-sm inline-flex items-center gap-2"
               >
-                {mission.button_label} <span>→</span>
+                {mission.button_label}
               </Link>
             </div>
           </div>
