@@ -10,10 +10,13 @@ export default function SiteHeader() {
   const [query, setQuery] = useState("");
   const location = useLocation();
 
+  // Matched against the label and any keywords, so an entry is reachable by the
+  // words a visitor would type as well as the words it is labelled with.
   const searchSuggestions = useMemo(() => {
-    if (!query) return [];
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
     return SEARCH_SUGGESTIONS.filter((s) =>
-      s.label.toLowerCase().includes(query.toLowerCase()),
+      [s.label, ...(s.keywords ?? [])].some((w) => w.toLowerCase().includes(q)),
     ).slice(0, 5);
   }, [query]);
 
@@ -166,7 +169,7 @@ export default function SiteHeader() {
                   <input
                     type="search"
                     aria-label="Search the site"
-                    placeholder="Search term dates, schools, forms…"
+                    placeholder="Search the calendar, schools, forms…"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     autoFocus

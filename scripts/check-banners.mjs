@@ -42,7 +42,13 @@ hero.includes("data-page-hero")
   : fail("has no data-page-hero marker");
 
 console.log("\n[the banner image]");
-hero.includes("alt={imageAlt}")
+// The alt has to come from the caller, not be written into the markup. The
+// rotating banner renders each frame's image, so the expression is
+// alt={f.imageAlt} rather than alt={imageAlt} - both are the caller's, and
+// either satisfies the rule. Matching on the name rather than one exact
+// spelling is what keeps a later refactor from failing this silently.
+const altFromCaller = /alt=\{[^{}]*imageAlt\}/.test(hero);
+altFromCaller
   ? pass("takes its alt text from the caller")
   : fail("image alt is hardcoded or missing");
 hero.includes("data-page-hero")
