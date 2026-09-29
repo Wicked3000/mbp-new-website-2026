@@ -196,15 +196,27 @@ describe("a rotating page banner", () => {
     expect(container.querySelector("h1")!.textContent).toContain("Empowering Communities");
   });
 
-  it("advances the words on a button, not only on a timer", () => {
+  it("has no arrows, leaving the dots as the only manual control", () => {
     renderSlides();
-    const next = [...container.querySelectorAll("button")].find(
-      (b) => b.getAttribute("aria-label") === "Next slide",
+    const labels = [...container.querySelectorAll("button")].map(
+      (b) => b.getAttribute("aria-label") || "",
+    );
+    // The banner advances on its own, so a pair of arrows either sit there
+    // duplicating the timer or invite a click that only skips one frame.
+    expect(labels.some((l) => l === "Next slide" || l === "Previous slide")).toBe(false);
+    expect(labels.filter((l) => l.startsWith("Go to slide"))).toHaveLength(3);
+  });
+
+  it("jumps straight to a frame on a dot, rather than stepping through", () => {
+    renderSlides();
+    const third = [...container.querySelectorAll("button")].find(
+      (b) => b.getAttribute("aria-label") === "Go to slide 3",
     )!;
     act(() => {
-      next.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      third.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(container.querySelector("h1")!.textContent).toContain("Empowering Communities");
+    // Straight to the third, not to the second on the way there.
+    expect(container.querySelector("h1")!.textContent).toContain("Serving Every Community");
   });
 
   it("marks the current frame for assistive tech and hides the rest", () => {
@@ -214,10 +226,10 @@ describe("a rotating page banner", () => {
     expect(groups[0].getAttribute("aria-hidden")).toBe("false");
     expect(groups[1].getAttribute("aria-hidden")).toBe("true");
     act(() => {
-      const next = [...container.querySelectorAll("button")].find(
-        (b) => b.getAttribute("aria-label") === "Next slide",
+      const second = [...container.querySelectorAll("button")].find(
+        (b) => b.getAttribute("aria-label") === "Go to slide 2",
       )!;
-      next.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      second.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(container.querySelectorAll("[aria-roledescription=slide]")[0].getAttribute("aria-hidden")).toBe(
       "true",

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 /**
@@ -165,11 +165,6 @@ export default function PageHero({
   // have the words change underneath the reader.
   const paused = hovered || focusWithin || reducedMotion;
 
-  const go = useCallback(
-    (dir: number) => setCurrent((p) => (p + dir + frames.length) % frames.length),
-    [frames.length],
-  );
-
   useEffect(() => {
     setCurrent((p) => (frames.length ? p % frames.length : 0));
   }, [frames.length]);
@@ -184,9 +179,14 @@ export default function PageHero({
 
   useEffect(() => {
     if (!rotating || paused) return;
-    const id = setInterval(() => go(1), ROTATION_MS);
+    // The timer is now the only thing that advances the banner, so the step is
+    // inline rather than a callback shared with controls that no longer exist.
+    const id = setInterval(
+      () => setCurrent((p) => (p + 1) % frames.length),
+      ROTATION_MS,
+    );
     return () => clearInterval(id);
-  }, [rotating, paused, go]);
+  }, [rotating, paused, frames.length]);
 
   const frame = frames[Math.min(current, frames.length - 1)];
 
@@ -296,35 +296,25 @@ export default function PageHero({
         </div>
       </div>
       {rotating ? (
-        <>
-          <button
-            onClick={() => go(-1)}
-            aria-label="Previous slide"
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white hover:bg-white hover:text-[#0B2545] transition-colors hidden sm:grid place-items-center"
-          >
-            <span aria-hidden="true">‹</span>
-          </button>
-          <button
-            onClick={() => go(1)}
-            aria-label="Next slide"
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white hover:bg-white hover:text-[#0B2545] transition-colors hidden sm:grid place-items-center"
-          >
-            <span aria-hidden="true">›</span>
-          </button>
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-            {frames.map((f, i) => (
-              <button
-                key={`dot-${i}`}
-                onClick={() => setCurrent(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                aria-current={i === current}
-                className={`transition-all rounded-full ${
-                  i === current ? "w-7 h-2 bg-[#C9A84C]" : "w-2 h-2 bg-white/50 hover:bg-white/80"
-                }`}
-              />
-            ))}
-          </div>
-        </>
+        /*
+          Dots only. The banner advances on its own, so the arrows were
+          redundant with that: a visitor who wants a different frame now waits
+          seconds for it, but the dots put any frame a single click away. The
+          hover pause covers the reader who is halfway through a sentence.
+        */
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+          {frames.map((f, i) => (
+            <button
+              key={`dot-${i}`}
+              onClick={() => setCurrent(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              aria-current={i === current}
+              className={`transition-all rounded-full ${
+                i === current ? "w-7 h-2 bg-[#C9A84C]" : "w-2 h-2 bg-white/50 hover:bg-white/80"
+              }`}
+            />
+          ))}
+        </div>
       ) : null}
     </section>
   );
