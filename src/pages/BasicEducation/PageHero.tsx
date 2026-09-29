@@ -23,10 +23,6 @@ export function BasicEducationPageHero() {
       title={hero.title}
       highlight={hero.subtitle}
       lead={hero.description}
-      actions={[
-        { label: "Overview", to: "#overview", variant: "primary" },
-        { label: "Find Schools", to: "#schools", variant: "secondary" },
-      ]}
     />
   );
 }
