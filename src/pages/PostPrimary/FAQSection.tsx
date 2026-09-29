@@ -1,4 +1,5 @@
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function FAQSection() {
   const FAQS_FALLBACK = [
@@ -37,7 +38,7 @@ export function FAQSection() {
 
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-3xl mx-auto">
+      <Reveal className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
             {heading.eyebrow}
@@ -65,7 +66,7 @@ export function FAQSection() {
             </details>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

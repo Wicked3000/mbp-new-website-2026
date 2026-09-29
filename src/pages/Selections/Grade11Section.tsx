@@ -8,6 +8,7 @@ import {
   recordTotal,
   type Grade11Row,
 } from "./selectionData";
+import Reveal from "@/components/Reveal";
 
 export function Grade11Section() {
   const [rows, setRows] = useState<Grade11Row[]>([]);
@@ -43,7 +44,7 @@ export function Grade11Section() {
 
   return (
     <section id="grade11" className="py-16 px-4 bg-[#F8F6F1]">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="mb-8">
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
             Grade 11 Selection 2026
@@ -141,7 +142,7 @@ export function Grade11Section() {
             </Link>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

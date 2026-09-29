@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero, { TEAL_HERO } from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 
 export type LegalSection = { heading: string; body: ReactNode };
 
@@ -39,7 +40,7 @@ export default function LegalLayout({
       </PageHero>
 
       <section className="py-14 px-4 bg-white">
-        <div className="max-w-4xl mx-auto lg:flex lg:gap-12">
+        <Reveal className="max-w-4xl mx-auto lg:flex lg:gap-12">
           <nav aria-label="On this page" className="lg:w-56 shrink-0 mb-10 lg:mb-0">
             <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-gray-500 mb-4">
               On this page
@@ -94,7 +95,7 @@ export default function LegalLayout({
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <SiteFooter />

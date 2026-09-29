@@ -1,4 +1,5 @@
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function OverviewSection() {
   const OVERVIEW_FALLBACK = {
@@ -54,7 +55,7 @@ export function OverviewSection() {
 
   return (
     <section id="overview" className="bg-[#F8F6F1] py-16 px-4">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
             <span className="text-teal-500 text-xs font-bold uppercase tracking-widest">
@@ -131,7 +132,7 @@ export function OverviewSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

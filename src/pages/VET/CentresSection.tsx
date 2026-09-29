@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function CentresSection() {
   const CENTRES_FALLBACK = [
@@ -33,7 +34,7 @@ export function CentresSection() {
 
   return (
     <section id="centres" className="bg-[#F8F6F1] py-16 px-4">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
@@ -125,7 +126,7 @@ export function CentresSection() {
             </div>
           )}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

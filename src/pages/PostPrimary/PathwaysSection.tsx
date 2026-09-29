@@ -1,4 +1,5 @@
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function PathwaysSection() {
   const PATHWAYS_FALLBACK = [
@@ -70,7 +71,7 @@ export function PathwaysSection() {
 
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
             {heading.eyebrow}
@@ -107,7 +108,7 @@ export function PathwaysSection() {
             </div>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

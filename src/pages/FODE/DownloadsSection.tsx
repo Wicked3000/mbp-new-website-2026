@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function DownloadsSection() {
   const DOWNLOADS_FALLBACK = [
@@ -24,7 +25,7 @@ export function DownloadsSection() {
 
   return (
     <section className="py-16 px-4 bg-[#F8F6F1]">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
@@ -69,7 +70,7 @@ export function DownloadsSection() {
             </Link>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

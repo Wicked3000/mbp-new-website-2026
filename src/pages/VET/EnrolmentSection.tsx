@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function EnrolmentSection() {
   const STEPS_FALLBACK = [
@@ -31,7 +32,7 @@ export function EnrolmentSection() {
 
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
@@ -88,7 +89,7 @@ export function EnrolmentSection() {
             </Link>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

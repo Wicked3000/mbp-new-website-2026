@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import Reveal from "@/components/Reveal";
 
 export function KeyInfoSection() {
   return (
     <section className="bg-[#F8F6F1] py-12 px-4">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
           {[
             {
@@ -46,7 +47,7 @@ export function KeyInfoSection() {
             </div>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

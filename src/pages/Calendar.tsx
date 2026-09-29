@@ -4,6 +4,7 @@ import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero, { NAVY_HERO } from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 
 type EventRow = {
   id?: number | string;
@@ -245,7 +246,7 @@ export default function CalendarPage() {
         </div>
 
         <section className="mt-12">
-          <div className="flex items-end justify-between gap-4 mb-6">
+          <Reveal className="flex items-end justify-between gap-4 mb-6">
             <div>
               <span className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
                 Schedule
@@ -260,7 +261,7 @@ export default function CalendarPage() {
             <span className="text-sm text-gray-500">
               {filteredEvents.length} {filteredEvents.length === 1 ? "event" : "events"}
             </span>
-          </div>
+          </Reveal>
           {loading && <div className="text-gray-500">Loading calendar...</div>}
           {!loading && sortedEvents.length === 0 && (
             <div className="rounded-2xl border border-gray-100 bg-white p-10 text-center text-gray-500">

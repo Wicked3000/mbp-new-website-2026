@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function SupportSection() {
   const SUPPORT_FALLBACK = [
@@ -37,7 +38,7 @@ export function SupportSection() {
 
   return (
     <section className="bg-[#0B2545] py-16 px-4">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8">
           <div>
             <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
@@ -116,7 +117,7 @@ export function SupportSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

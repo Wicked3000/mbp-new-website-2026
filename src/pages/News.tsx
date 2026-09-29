@@ -4,6 +4,7 @@ import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero, { NAVY_HERO } from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 
 const FALLBACK_NEWS = [
   {
@@ -154,7 +155,7 @@ export default function NewsPage() {
         </PageHero>
 
         <section className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex flex-wrap gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm w-fit">
+          <Reveal className="flex flex-wrap gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm w-fit">
             {[
               { k: "latest", label: "Latest News", count: filteredLatest.length },
               { k: "previous", label: "Previous News", count: previous.length },
@@ -181,7 +182,7 @@ export default function NewsPage() {
                 </span>
               </button>
             ))}
-          </div>
+          </Reveal>
         </section>
 
         <section className="max-w-7xl mx-auto px-4 pb-16">

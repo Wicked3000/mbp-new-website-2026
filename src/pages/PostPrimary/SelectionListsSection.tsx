@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "@/lib/api";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 type SelectionStudent = {
   grade_level: number;
@@ -89,7 +90,7 @@ export function SelectionListsSection() {
 
   return (
     <section id="selections" className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="mb-8">
           <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
             2026 Selection Lists
@@ -318,7 +319,7 @@ export function SelectionListsSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

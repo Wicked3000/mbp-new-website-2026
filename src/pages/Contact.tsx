@@ -7,6 +7,7 @@ import { api } from "@/lib/api";
 import PageHeroBanner, { NAVY_HERO } from "@/components/PageHero";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import Reveal from "@/components/Reveal";
 
 function ContactIcon({ name, className = "w-5 h-5" }: { name: string; className?: string }) {
   const paths = {
@@ -93,7 +94,7 @@ function PageHero() {
 function ContactCards() {
   return (
     <section className="py-14 px-4 bg-[#F8F6F1] -mt-8 relative z-20">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[
             {
@@ -151,7 +152,7 @@ function ContactCards() {
             </div>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -231,7 +232,7 @@ function FormSection() {
   }
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-5 gap-10">
           <div className="lg:col-span-3">
             <span className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
@@ -438,7 +439,7 @@ function FormSection() {
           </div>
         </div>
         <VisitMap />
-      </div>
+      </Reveal>
     </section>
   );
 }

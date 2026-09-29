@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import PageHeroBanner, { NAVY_HERO } from "@/components/PageHero";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import Reveal from "@/components/Reveal";
 
 function PageHero() {
   return (
@@ -20,7 +21,7 @@ function PageHero() {
 function MissionSection() {
   return (
     <section className="bg-[#F8F6F1] py-16 px-4">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <span className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
@@ -73,7 +74,7 @@ function MissionSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -108,7 +109,7 @@ function LeadershipSection() {
 
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
             Leadership Team
@@ -145,7 +146,7 @@ function LeadershipSection() {
             </div>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

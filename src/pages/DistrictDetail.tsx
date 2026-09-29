@@ -5,6 +5,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero, { NAVY_HERO } from "@/components/PageHero";
 import { DISTRICT_FALLBACK, SCHOOL_FALLBACK, hasCoords, mapsUrl } from "@/data/fallbacks";
+import Reveal from "@/components/Reveal";
 
 export default function DistrictDetailPage() {
   const { id } = useParams();
@@ -113,7 +114,7 @@ export default function DistrictDetailPage() {
 
       {/* Filters */}
       <section className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-3">
+        <Reveal className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">⌕</span>
             <input
@@ -136,7 +137,7 @@ export default function DistrictDetailPage() {
               </option>
             ))}
           </select>
-        </div>
+        </Reveal>
       </section>
 
       {/* School list */}

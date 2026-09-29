@@ -4,6 +4,7 @@ import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero, { NAVY_HERO } from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 
 const FALLBACK_NOTICES = [
   {
@@ -116,7 +117,7 @@ export default function NoticesPage() {
         </PageHero>
 
         <section className="max-w-4xl mx-auto px-4 py-12">
-          <div className="flex items-end justify-between mb-6 gap-4">
+          <Reveal className="flex items-end justify-between mb-6 gap-4">
             <h2
               className="text-2xl font-bold text-[#0B2545]"
               style={{ fontFamily: "'Playfair Display', serif" }}
@@ -126,7 +127,7 @@ export default function NoticesPage() {
             <span className="text-xs text-gray-400">
               {filtered.length} of {notices.length} notices
             </span>
-          </div>
+          </Reveal>
 
           {filtered.length === 0 && (
             <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 text-gray-500">

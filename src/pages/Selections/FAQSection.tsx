@@ -1,3 +1,4 @@
+import Reveal from "@/components/Reveal";
 export function FAQSection() {
   const FAQS = [
     {
@@ -36,7 +37,7 @@ export function FAQSection() {
 
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-3xl mx-auto">
+      <Reveal className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-[#C9A84C] text-xs font-bold uppercase tracking-widest">
             Frequently Asked
@@ -64,7 +65,7 @@ export function FAQSection() {
             </details>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

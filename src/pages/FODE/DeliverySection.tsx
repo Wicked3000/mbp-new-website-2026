@@ -1,4 +1,5 @@
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function DeliverySection() {
   const METHODS_FALLBACK = [
@@ -30,7 +31,7 @@ export function DeliverySection() {
 
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
             {heading.eyebrow}
@@ -88,7 +89,7 @@ export function DeliverySection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

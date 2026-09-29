@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "@/lib/api";
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 // Centre names are place data and safe to publish; the trainee rows are not.
 const CENTRE_NAMES_FALLBACK = [
@@ -58,7 +59,7 @@ export function SelectionListsSection() {
 
   return (
     <section id="vet-selections" className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="mb-8">
           <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
             {heading.eyebrow}
@@ -152,7 +153,7 @@ export function SelectionListsSection() {
             );
           })}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

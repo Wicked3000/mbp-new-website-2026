@@ -1,4 +1,5 @@
 import { useEntity } from "@/hooks/useDynamic";
+import Reveal from "@/components/Reveal";
 
 export function CurriculumSection() {
   const SUBJECTS_FALLBACK = [
@@ -62,7 +63,7 @@ export function CurriculumSection() {
 
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-500 text-xs font-bold uppercase tracking-widest">
             {heading.eyebrow}
@@ -132,7 +133,7 @@ export function CurriculumSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

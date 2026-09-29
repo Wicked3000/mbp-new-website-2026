@@ -19,6 +19,7 @@
     "sync:php": "node scripts/sync-php-entities.mjs",
     "verify": "node scripts/verify.mjs",
     "check:banners": "node scripts/check-banners.mjs",
+    "check:motion": "node scripts/check-motion.mjs",
     "verify:sync": "node scripts/check-api-sync.mjs",
     "verify:wiring": "node scripts/verify-wiring.mjs"
   },

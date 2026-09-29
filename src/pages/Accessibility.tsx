@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import PageHeroBanner, { TEAL_HERO } from "@/components/PageHero";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import Reveal from "@/components/Reveal";
 
 function PageHero() {
   return (
@@ -20,7 +21,7 @@ function PageHero() {
 function StatementSection() {
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-3xl mx-auto">
+      <Reveal className="max-w-3xl mx-auto">
         <div className="bg-teal-50 rounded-2xl p-8 border border-teal-100 mb-12">
           <h2
             className="text-2xl font-bold text-[#0B2545] mb-4"
@@ -98,7 +99,7 @@ function StatementSection() {
             </div>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -169,7 +170,7 @@ function FeaturesSection() {
 
   return (
     <section className="py-16 px-4 bg-[#F8F6F1]">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-teal-400 text-xs font-bold uppercase tracking-widest">
             Features
@@ -204,7 +205,7 @@ function FeaturesSection() {
             </div>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -212,7 +213,7 @@ function FeaturesSection() {
 function TestingSection() {
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-3xl mx-auto">
+      <Reveal className="max-w-3xl mx-auto">
         <h2
           className="text-3xl font-bold text-[#0B2545] mb-8 text-center"
           style={{ fontFamily: "'Playfair Display', serif" }}
@@ -287,7 +288,7 @@ function TestingSection() {
             </li>
           </ul>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -295,7 +296,7 @@ function TestingSection() {
 function FeedbackSection() {
   return (
     <section className="py-16 px-4 bg-[#F8F6F1]">
-      <div className="max-w-2xl mx-auto text-center">
+      <Reveal className="max-w-2xl mx-auto text-center">
         <h2
           className="text-3xl font-bold text-[#0B2545] mb-4"
           style={{ fontFamily: "'Playfair Display', serif" }}
@@ -337,7 +338,7 @@ function FeedbackSection() {
           Please include: page URL, assistive technology used, description of the barrier, and
           suggested improvement.
         </p>
-      </div>
+      </Reveal>
     </section>
   );
 }

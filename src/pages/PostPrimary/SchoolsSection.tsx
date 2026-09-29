@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Reveal from "@/components/Reveal";
 
 export function SchoolsSection() {
   const SCHOOLS = [
@@ -210,7 +211,7 @@ export function SchoolsSection() {
 
   return (
     <section id="schools" className="bg-[#F8F6F1] py-16 px-4">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
             <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
@@ -324,7 +325,7 @@ export function SchoolsSection() {
             Full Directory →
           </button>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

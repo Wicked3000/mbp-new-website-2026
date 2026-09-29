@@ -5,6 +5,7 @@ import { DISTRICT_FALLBACK, SCHOOL_FALLBACK, hasCoords, mapsUrl } from "@/data/f
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero, { NAVY_HERO } from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 
 function Stat({ label, value, tone = "default" }: { label: string; value: any; tone?: string }) {
   return (
@@ -182,12 +183,12 @@ export default function SchoolDetailPage() {
 
       {/* Key figures */}
       <section className="max-w-5xl mx-auto px-4 -mt-8 relative z-20">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <Reveal className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <Stat label="Total students" value={enrolled} tone="accent" />
           <Stat label="Teachers" value={teachers} />
           <Stat label="Non-teaching staff" value={staff} />
           <Stat label="Capacity" value={capacity || null} />
-        </div>
+        </Reveal>
       </section>
 
       <section className="max-w-5xl mx-auto px-4 py-10 space-y-6">

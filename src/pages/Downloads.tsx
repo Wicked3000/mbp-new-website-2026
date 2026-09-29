@@ -3,6 +3,7 @@ import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SharedPageHero, { NAVY_HERO } from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 
 function usableFilePath(value: unknown) {
   const path = typeof value === "string" ? value.trim() : "";
@@ -85,7 +86,7 @@ function DownloadsSection() {
 
   return (
     <section className="py-14 sm:py-16 px-4 bg-[#F8F6F1]">
-      <div className="max-w-7xl mx-auto">
+      <Reveal className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-8">
           <div>
             <span className="text-[#0D9488] text-xs font-bold uppercase tracking-widest">
@@ -189,7 +190,7 @@ function DownloadsSection() {
             );
           })}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
