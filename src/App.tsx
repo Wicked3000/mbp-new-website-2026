@@ -18,6 +18,7 @@ import TermsPage from "./pages/Terms";
 import AccessibilityPage from "./pages/Accessibility";
 import DownloadsPage from "./pages/Downloads";
 import CalendarPage from "./pages/Calendar";
+import SearchPage from "./pages/Search";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFound";
 import { api } from "@/lib/api";
@@ -91,6 +92,7 @@ export default function App() {
           <Route path="/schools/:id" element={<SchoolDetailPage />} />
           <Route path="/downloads" element={<DownloadsPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/selections" element={<SelectionsPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/news/:id" element={<NewsDetail />} />

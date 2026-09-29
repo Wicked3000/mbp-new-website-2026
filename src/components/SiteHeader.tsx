@@ -177,9 +177,20 @@ export default function SiteHeader() {
                     className="w-full pl-9 pr-4 py-2.5 text-sm text-gray-800 bg-transparent outline-none placeholder:text-gray-400"
                   />
                 </div>
+                {/*
+                  Carries the typed text through to the results page. It
+                  previously went to "/selections" whenever there was a query and
+                  to "#news" when there was not, so pressing Search discarded what
+                  had been typed and always landed on the same unrelated page.
+                  An empty query goes to the page itself rather than to a
+                  fragment of wherever the header happened to be sitting.
+                */}
                 <Link
-                  to={query ? "/selections" : "#news"}
-                  onClick={() => setSearchOpen(false)}
+                  to={query.trim() ? `/search?q=${encodeURIComponent(query.trim())}` : "/search"}
+                  onClick={() => {
+                    setQuery("");
+                    setSearchOpen(false);
+                  }}
                   className="bg-[#0B2545] hover:bg-[#0D9488] text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-colors shrink-0 shadow-sm inline-flex items-center justify-center"
                 >
                   Search
