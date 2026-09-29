@@ -674,7 +674,7 @@ export const SEEDS: Record<string, any[]> = {
         "icon": "calendar",
         "label": "Term Dates",
         "description": "2026 Academic Calendar",
-        "href": "/#news",
+        "href": "/calendar",
         "sort_order": 1
       },
       {
@@ -690,7 +690,7 @@ export const SEEDS: Record<string, any[]> = {
         "icon": "file",
         "label": "Forms & Downloads",
         "description": "Official documents",
-        "href": "/basic",
+        "href": "/downloads",
         "sort_order": 3
       },
       {

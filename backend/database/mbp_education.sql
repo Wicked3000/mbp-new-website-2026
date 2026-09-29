@@ -405,9 +405,9 @@ INSERT INTO partners (name,sort_order) VALUES
 ('World Bank',6);
 
 INSERT INTO quick_links (icon,label,description,href,sort_order) VALUES
-('calendar','Term Dates','2026 Academic Calendar','/#news',1),
+('calendar','Term Dates','2026 Academic Calendar','/calendar',1),
 ('school','School Directory','Find schools in Milne Bay','/basic#schools',2),
-('file','Forms & Downloads','Official documents','/basic',3),
+('file','Forms & Downloads','Official documents','/downloads',3),
 ('phone','Emergency Contacts','Helpline & support','/contact',4);
 
 INSERT INTO selections_grade9 (school,district,type,capacity,placed,stream,cutoff) VALUES

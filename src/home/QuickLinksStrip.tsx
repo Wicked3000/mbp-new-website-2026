@@ -122,32 +122,53 @@ function QuickLinkIcon({ name }: { name: string }) {
 export function QuickLinksStrip() {
   const { data } = useEntity("quick_links", QUICK_LINKS as any);
   const links = data as any[];
-  const linkHref = (ql: any) =>
-    ql.icon === "file" || /download|form/i.test(ql.label || "") ? "/downloads" : ql.href || "/";
+  /*
+   * The destination is whatever the admin stored. This used to override it
+   * whenever the icon was "file" or the label mentioned a download, forcing
+   * those tiles to /downloads. That hid a real bug rather than fixing one: the
+   * "Forms & Downloads" row was stored as /basic, so the admin was shown - and
+   * had saved - a link the page never used. A view that rewrites admin content
+   * makes the stored value a fiction.
+   *
+   * A row with no destination is rendered as plain content instead of a link,
+   * so an unconfigured tile is not a dead click back to the current page.
+   */
+  const hrefFor = (ql: any) => (typeof ql.href === "string" ? ql.href.trim() : "");
   return (
     <section className="bg-white border-y border-gray-100">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-gray-100">
-          {links.map((ql: any) => (
-            <Link
-              key={ql.label}
-              to={linkHref(ql)}
-              className="flex items-center gap-4 px-5 py-6 hover:bg-[#F8F6F1] transition-colors group"
-            >
-              <div className="w-11 h-11 rounded-xl bg-[#0B2545] group-hover:bg-[#0D9488] text-white flex items-center justify-center shrink-0 transition-colors shadow-sm">
-                <QuickLinkIcon name={ql.icon} />
-              </div>
-              <div className="min-w-0">
-                <div className="text-[#0B2545] font-bold text-sm leading-tight group-hover:text-[#0D9488] transition-colors">
-                  {ql.label}
+          {links.map((ql: any) => {
+            const href = hrefFor(ql);
+            const body = (
+              <>
+                <div className="w-11 h-11 rounded-xl bg-[#0B2545] group-hover:bg-[#0D9488] text-white flex items-center justify-center shrink-0 transition-colors shadow-sm">
+                  <QuickLinkIcon name={ql.icon} />
                 </div>
-                <div className="text-gray-500 text-xs truncate">{ql.desc ?? ql.description}</div>
+                <div className="min-w-0">
+                  <div className="text-[#0B2545] font-bold text-sm leading-tight group-hover:text-[#0D9488] transition-colors">
+                    {ql.label}
+                  </div>
+                  <div className="text-gray-500 text-xs truncate">{ql.desc ?? ql.description}</div>
+                </div>
+                <span className="ml-auto hidden sm:block text-gray-300 group-hover:text-[#0D9488] group-hover:translate-x-1 transition-all">
+                  →
+                </span>
+              </>
+            );
+            const className =
+              "flex items-center gap-4 px-5 py-6 hover:bg-[#F8F6F1] transition-colors group";
+            return href ? (
+              <Link key={ql.label} to={href} className={className}>
+                {body}
+              </Link>
+            ) : (
+              // A tile with nowhere to go is content, not a link.
+              <div key={ql.label} className={className} aria-disabled="true">
+                {body}
               </div>
-              <span className="ml-auto hidden sm:block text-gray-300 group-hover:text-[#0D9488] group-hover:translate-x-1 transition-all">
-                →
-              </span>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

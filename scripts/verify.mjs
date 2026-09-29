@@ -379,6 +379,58 @@ brokenSeeds.length
   ? fail(`seed data with a broken escape: ${brokenSeeds.slice(0, 8).join("; ")}`)
   : pass("no seed string contains a broken escape fragment");
 
+// A quick link has to point at the page its label promises, and the stored
+// destination has to be the one the site actually uses.
+//
+// The "Term Dates" tile pointed at /#news, so the calendar tile on the home
+// page scrolled to the news. Nothing caught it: the link rendered, the tile
+// looked right, and the code fallback held the correct /calendar - but the API
+// response replaced the fallback, so visitors got the stored value. The
+// "Forms & Downloads" row was stored as /basic while a /downloads page exists,
+// and the view masked it by forcing that tile's href, which meant the admin was
+// shown a destination the page never used.
+const PUBLIC_ROUTES = new Set([
+  "/", "/about", "/basic", "/post", "/vet", "/fode", "/contact", "/accessibility",
+  "/privacy", "/terms", "/districts", "/downloads", "/calendar", "/selections",
+  "/news", "/notices",
+]);
+
+const [quickLinks] = await pool.query("SELECT label, href FROM quick_links ORDER BY sort_order, id");
+const badHref = quickLinks.filter((r) => {
+  const href = (r.href || "").trim();
+  if (!href) return false;
+  // Strip a hash anchor and a query string before checking the path.
+  const route = href.split("#")[0].split("?")[0] || "/";
+  return !PUBLIC_ROUTES.has(route);
+});
+badHref.length
+  ? fail(
+      `quick link(s) pointing at a page that does not exist: ` +
+        badHref.map((r) => `${r.label} -> ${r.href}`).join("; "),
+    )
+  : pass(`every quick link points at a real page (${quickLinks.length} checked)`);
+
+// A tile and the page it names have to agree. The existence check above cannot
+// see this: /#news and /basic are both real pages, they are just the wrong ones
+// for a calendar and a downloads tile. Two tiles name a page outright, so those
+// two are pinned here - the same spot check the banner tests use for their
+// heading text.
+const NAMED_TILES = [
+  { label: "Term Dates", route: "/calendar" },
+  { label: "Forms & Downloads", route: "/downloads" },
+];
+const mismatched = NAMED_TILES.filter(
+  (t) => (quickLinks.find((r) => r.label === t.label)?.href || "").split("#")[0] !== t.route,
+);
+mismatched.length
+  ? fail(
+      `quick link(s) not pointing at the page they name: ` +
+        mismatched
+          .map((t) => `${t.label} -> ${quickLinks.find((r) => r.label === t.label)?.href} (expected ${t.route})`)
+          .join("; "),
+    )
+  : pass(`every quick link that names a page points at it (${NAMED_TILES.length} checked)`);
+
 await pool.end();
 console.log(failures ? `\n${failures} FAILURE(S)\n` : "\nAll checks passed.\n");
 process.exit(failures ? 1 : 0);
