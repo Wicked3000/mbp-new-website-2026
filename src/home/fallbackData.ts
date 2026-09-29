@@ -6,10 +6,10 @@ export const QUICK_LINKS = [
     href: "/calendar",
   },
   {
-    icon: "school",
-    label: "School Directory",
-    desc: "Find schools in Milne Bay",
-    href: "/districts",
+    icon: "clipboard-list",
+    label: "Selections",
+    desc: "Grade 9 & 11 placement lists",
+    href: "/selections",
   },
   {
     icon: "file",

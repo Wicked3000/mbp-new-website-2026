@@ -59,9 +59,9 @@ describe("home page quick links", () => {
     expect(hrefFor("Forms & Downloads")).toBe("/downloads");
   });
 
-  it("sends School Directory to the districts page", () => {
+  it("sends Selections to the selections page", () => {
     render();
-    expect(hrefFor("School Directory")).toBe("/districts");
+    expect(hrefFor("Selections")).toBe("/selections");
   });
 
   it("uses the stored destination rather than overriding it", () => {
@@ -73,7 +73,7 @@ describe("home page quick links", () => {
     const byLabel = Object.fromEntries(QUICK_LINKS.map((q) => [q.label, q.href]));
     expect(byLabel["Term Dates"]).toBe("/calendar");
     expect(byLabel["Forms & Downloads"]).toBe("/downloads");
-    expect(byLabel["School Directory"]).toBe("/districts");
+    expect(byLabel["Selections"]).toBe("/selections");
   });
 
   it("points every tile at a real in-site page", () => {
@@ -86,6 +86,20 @@ describe("home page quick links", () => {
       const path = (a.getAttribute("href") || "").split("#")[0];
       expect(known.has(path), `${a.textContent?.trim()} -> ${path}`).toBe(true);
     }
+  });
+
+  it("draws a clipboard for Selections rather than the unknown-icon placeholder", () => {
+    render();
+    const tile = [...container.querySelectorAll("a")].find((a) =>
+      a.textContent?.includes("Selections"),
+    )!;
+    const svg = tile.querySelector("svg")!;
+    // The strip falls back to a circle-and-plus for any icon it does not know.
+    // A clipboard has a rectangle at the top; the placeholder does not, so a
+    // missing case would still render *something* and pass a count check.
+    const marks = svg.innerHTML;
+    expect(marks).toContain("<rect");
+    expect(marks).not.toContain("M12 8v8M8 12h8");
   });
 
   it("renders a tile with no destination as content, not a dead link", () => {

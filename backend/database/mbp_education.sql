@@ -406,7 +406,7 @@ INSERT INTO partners (name,sort_order) VALUES
 
 INSERT INTO quick_links (icon,label,description,href,sort_order) VALUES
 ('calendar','Term Dates','2026 Academic Calendar','/calendar',1),
-  ('school','School Directory','Find schools in Milne Bay','/districts',2),
+  ('clipboard-list','Selections','Grade 9 & 11 placement lists','/selections',2),
 ('file','Forms & Downloads','Official documents','/downloads',3),
 ('phone','Emergency Contacts','Helpline & support','/contact',4);
 

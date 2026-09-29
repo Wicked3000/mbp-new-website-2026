@@ -679,10 +679,10 @@ export const SEEDS: Record<string, any[]> = {
       },
       {
         "id": 2,
-        "icon": "school",
-        "label": "School Directory",
-        "description": "Find schools in Milne Bay",
-        "href": "/districts",
+        "icon": "clipboard-list",
+        "label": "Selections",
+        "description": "Grade 9 & 11 placement lists",
+        "href": "/selections",
         "sort_order": 2
       },
       {
