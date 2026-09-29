@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { MAIN_NAV, SEARCH_SUGGESTIONS } from "@/components/siteNav";
+import { ClockIcon, MailIcon, PhoneIcon } from "@/components/chromeIcons";
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,28 +21,42 @@ export default function SiteHeader() {
       <div className="bg-[#07192E] text-white text-[13px] py-2 px-4 border-b border-white/5">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
           <div className="flex gap-5 items-center">
-            <span className="flex items-center gap-1.5 opacity-90">
-              <span className="opacity-60" aria-hidden="true">
-                📞
-              </span>{" "}
+            {/* SVG glyphs rather than emoji: 📞 and ✉️ render differently per
+                platform, and the emoji presentation adds a colour that no other
+                text in this bar has. */}
+            <a
+              href="tel:+6756411234"
+              className="flex items-center gap-1.5 opacity-90 hover:text-[#C9A84C] transition-colors"
+            >
+              <PhoneIcon className="opacity-60 shrink-0" />
               +675 641 1234
-            </span>
-            <span className="hidden sm:flex items-center gap-1.5 opacity-90">
-              <span className="opacity-60" aria-hidden="true">
-                ✉️
-              </span>{" "}
+            </a>
+            <a
+              href="mailto:info@mbpeducation.gov.pg"
+              className="hidden sm:flex items-center gap-1.5 opacity-90 hover:text-[#C9A84C] transition-colors"
+            >
+              <MailIcon className="opacity-60 shrink-0" />
               info@mbpeducation.gov.pg
-            </span>
+            </a>
           </div>
           <div className="flex gap-4 items-center opacity-80 text-xs">
-            <span className="hidden md:inline">Mon – Fri: 8:00am – 4:30pm</span>
+            <span className="hidden md:inline-flex items-center gap-1.5">
+              <ClockIcon className="opacity-60 shrink-0" />
+              Mon – Fri: 8:00am – 4:30pm
+            </span>
             <span className="hidden sm:block opacity-30" aria-hidden="true">
               |
             </span>
-            <a href="#" className="hover:text-[#C9A84C] transition-colors font-medium">
+            <a
+              href="#"
+              className="hover:text-[#C9A84C] transition-colors font-medium"
+            >
               NDoE Portal
             </a>
-            <a href="#" className="hover:text-[#C9A84C] transition-colors font-medium">
+            <a
+              href="#"
+              className="hover:text-[#C9A84C] transition-colors font-medium"
+            >
               TSC Online
             </a>
           </div>
