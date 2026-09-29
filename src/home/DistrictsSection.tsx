@@ -1,20 +1,10 @@
 import { Link } from "react-router-dom";
-import { useEntity } from "@/hooks/useDynamic";
+import { useDistricts } from "@/hooks/useDistricts";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 
 export function DistrictsSection() {
-  const FALLBACK = [
-    { name: "Alotau", schools: 42, type: "Urban" },
-    { name: "Samarai-Murua", schools: 22, type: "Island" },
-    { name: "Esa'ala", schools: 15, type: "Island" },
-    { name: "Kiriwina-Goodenough", schools: 18, type: "Island" },
-    { name: "Huhu", schools: 21, type: "Rural" },
-    { name: "Rabaruana", schools: 28, type: "Rural" },
-    { name: "Losuia", schools: 17, type: "Island" },
-    { name: "Dobu", schools: 16, type: "Island" },
-  ];
-  const { data } = useEntity("districts", FALLBACK as any);
+  const { data } = useDistricts();
   const districts = (data as any[]).slice(0, 8);
   return (
     <section className="py-14 sm:py-16 px-4 bg-white">
@@ -30,9 +20,11 @@ export function DistrictsSection() {
             >
               Every District, Every Learner
             </h2>
+            {/* Counted from the rows below, not typed in. The two used to be
+                independent - a hand-written 17 above a list of four. */}
             <p className="text-gray-500 mt-3 max-w-xl text-[15px] leading-relaxed">
-              312 schools across 17 districts, from mainland highlands to remote atolls. Find a
-              school near you.
+              312 schools across {data.length} districts, from mainland highlands to remote atolls.
+              Find a school near you.
             </p>
           </div>
           <Link

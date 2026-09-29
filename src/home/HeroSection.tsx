@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import { useDistrictCount } from "@/hooks/useDistricts";
 import { HERO_FALLBACK } from "./fallbackData";
 
 // Two minutes per slide. Long enough that a visitor reading the heading and
@@ -10,6 +11,10 @@ const ROTATION_MS = 120_000;
 
 export function HeroSection() {
   const { data: slides } = useEntity("hero_slides", HERO_FALLBACK);
+  // Counted, not typed. This line used to state a district figure far higher
+  // than the one the site actually holds, and a visitor could see the
+  // disagreement by opening the districts page.
+  const districtCount = useDistrictCount();
   const list = (slides as any[]).filter((s: any) => s.is_active !== 0);
   const [current, setCurrent] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -159,7 +164,9 @@ export function HeroSection() {
           <p className="text-blue-100/90 text-[17px] leading-relaxed mt-4 max-w-xl font-light">
             The Division of Education oversees and supports all levels of schooling from elementary
             through post-secondary across{" "}
-            <span className="text-white font-semibold">17 districts & 312 schools.</span>
+            <span className="text-white font-semibold">
+              {districtCount} districts &amp; 312 schools.
+            </span>
           </p>
 
           <div className="flex flex-wrap gap-3 mt-8">

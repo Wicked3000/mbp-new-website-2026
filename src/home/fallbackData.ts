@@ -102,7 +102,7 @@ export const STATS = [
   { value: "312", label: "Schools", sub: "Province-wide" },
   { value: "48,200+", label: "Students", sub: "Enrolled 2026" },
   { value: "2,140", label: "Teachers", sub: "Qualified staff" },
-  { value: "17", label: "Districts", sub: "Covered" },
+  { value: "4", label: "Districts", sub: "Covered" },
 ];
 
 export const NOTICES = [

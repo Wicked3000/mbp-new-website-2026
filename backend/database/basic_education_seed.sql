@@ -50,7 +50,7 @@ SELECT * FROM (
   SELECT '312' AS value_text, 'Schools' AS label, 'bg-[#0B2545]' AS color, 1 AS sort_order
   UNION ALL SELECT '35,200+', 'Students', 'bg-[#163663]', 2
   UNION ALL SELECT '1,840', 'Teachers', 'bg-teal-600', 3
-  UNION ALL SELECT '17', 'Districts', 'bg-teal-700', 4
+  UNION ALL SELECT '4', 'Districts', 'bg-teal-700', 4
 ) AS rows_to_insert
 WHERE NOT EXISTS (SELECT 1 FROM basic_overview_stats);
 

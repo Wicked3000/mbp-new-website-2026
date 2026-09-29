@@ -1,10 +1,18 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
+import { useDistrictCount } from "@/hooks/useDistricts";
 import Reveal from "@/components/Reveal";
+import { STATS } from "./fallbackData";
 
 export function LeadershipSection() {
   const { data } = useEntity("leadership", []);
   const leader = (data as any[])[0];
+  const districtCount = useDistrictCount();
+  const { data: stats } = useEntity("stats", STATS as any);
+  const byLabel = (label: string) => {
+    const row = (stats as any[]).find((s: any) => s.label === label);
+    return row?.value_text ?? row?.value;
+  };
   return (
     <section className="py-14 sm:py-16 px-4 bg-[#F8F6F1]">
       <Reveal className="max-w-7xl mx-auto">
@@ -78,10 +86,15 @@ export function LeadershipSection() {
               </Link>
             </div>
             <div className="mt-8 grid grid-cols-3 gap-4 text-center border-t border-gray-200 pt-6">
+              {/* Schools, students and districts, from the stats table and the
+                  districts count. These three were typed in here, and had
+                  already drifted: the district figure was a hand-entered
+                  number, and the student figure was rounded differently from
+                  the one the rest of the site uses. */}
               {[
-                { v: "312", l: "Schools" },
-                { v: "48k+", l: "Students" },
-                { v: "17", l: "Districts" },
+                { v: byLabel("Schools") ?? "312", l: "Schools" },
+                { v: byLabel("Students") ?? "48,200+", l: "Students" },
+                { v: String(districtCount), l: "Districts" },
               ].map((s) => (
                 <div key={s.l}>
                   <div

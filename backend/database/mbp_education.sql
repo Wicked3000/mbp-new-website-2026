@@ -368,7 +368,7 @@ INSERT INTO stats (value_text,label,sub,sort_order) VALUES
 ('312','Schools','Province-wide',1),
 ('48,200+','Students','Enrolled 2026',2),
 ('2,140','Teachers','Qualified staff',3),
-('17','Districts','Covered',4);
+  ('4','Districts','Covered',4);
 
 -- Milne Bay Province has FOUR districts. Do not add rows for settlements or
 -- islands (Losuia, Rabaruana, Dobu, Huhu ...) - those are towns, not districts.

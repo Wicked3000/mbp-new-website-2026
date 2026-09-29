@@ -238,7 +238,7 @@ export const SEEDS: Record<string, any[]> = {
       },
       {
         "id": 4,
-        "value_text": "17",
+        "value_text": "4",
         "label": "Districts",
         "sub": "Covered",
         "sort_order": 4
@@ -1475,7 +1475,7 @@ export const SEEDS: Record<string, any[]> = {
       },
       {
         "id": 4,
-        "value_text": "17",
+        "value_text": "4",
         "label": "Districts",
         "color": "bg-teal-700",
         "sort_order": 4

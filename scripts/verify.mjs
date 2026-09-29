@@ -245,6 +245,81 @@ missingImgs.length
   ? fail(`${missingImgs.length} school photo(s) not on disk: ${missingImgs.map((r) => `${r.name} -> ${r.img}`).join(", ")}`)
   : pass(`${badImgs.length} school photos resolve to a real file`);
 
+// A stated district count has to match the districts actually held. The site
+// once claimed 17 districts on four pages while the table held four, and the
+// only reason anyone noticed was a visitor counting the list by hand. Both
+// stored figures and the code's fallback are checked against the row count.
+const [[{ districtsHeld: districtsHeld }]] = await pool.query(
+  "SELECT COUNT(*) districtsHeld FROM districts",
+);
+
+const [storedCounts] = await pool.query(
+  "SELECT value_text, label FROM stats WHERE label = 'Districts' UNION ALL SELECT value_text, label FROM basic_overview_stats WHERE label = 'Districts'",
+);
+const badCounts = storedCounts.filter((r) => Number(r.value_text) !== districtsHeld);
+badCounts.length
+  ? fail(
+      `stored district count disagrees with the ${districtsHeld} district(s) held: ` +
+        badCounts.map((r) => `${r.label} says ${r.value_text}`).join("; "),
+    )
+  : pass(`every stored district count matches the ${districtsHeld} district(s) held`);
+
+// The fallback the site shows when the API is down has to agree too, or the
+// number would change depending on whether the request succeeded.
+const fallbackSrc = fs.readFileSync(
+  path.join("src", "hooks", "useDistricts.ts"),
+  "utf8",
+);
+const fallbackRows = (fallbackSrc.match(/\{\s*name:/g) || []).length;
+fallbackRows === districtsHeld
+  ? pass(`the districts fallback holds the same ${districtsHeld} row(s)`)
+  : fail(
+      `the districts fallback holds ${fallbackRows} row(s) but the table holds ${districtsHeld}: ` +
+        "the site would show a different number when the API is unreachable",
+    );
+
+// No page may state a district count that disagrees with the data. Pages read
+// the count from the districts table precisely so it cannot drift; this catches
+// any that go back to typing a number, and any that type the wrong one. Prose
+// that already agrees ("all 4 districts") is fine and is not flagged.
+const walkSrc = (dir) => {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name === "__tests__") continue;
+      out.push(...walkSrc(p));
+    } else if (/\.tsx?$/.test(entry.name)) {
+      out.push(p);
+    }
+  }
+  return out;
+};
+const wrong = [];
+for (const file of walkSrc(path.join("src"))) {
+  const rel = path.relative(".", file);
+  fs.readFileSync(file, "utf8")
+    .split("\n")
+    .forEach((line, i) => {
+      // Comments record the old figure on purpose; they are not rendered.
+      const code = line.replace(/\/\/.*$/, "").replace(/\*.*$/, "");
+      // "across 17 districts" in prose, or a number in a Districts stat row.
+      const prose = /\b(\d{1,3})\s+districts\b/i.exec(code);
+      // A bare quoted number on a Districts row. Requiring the quotes to hold
+      // digits alone is what keeps the row's colour (bg-teal-700) out of it,
+      // and it does not care what the value field happens to be called - the
+      // keys in use are value, value_text and v.
+      const row = /"Districts"|'Districts'/.test(code) && /"(\d{1,3})"|'(\d{1,3})'/.exec(code);
+      const stated = prose ? prose[1] : row ? row[1] || row[2] : null;
+      if (stated !== null && Number(stated) !== districtsHeld) {
+        wrong.push(`${rel}:${i + 1} (says ${stated})`);
+      }
+    });
+}
+wrong.length
+  ? fail(`pages stating a district count other than ${districtsHeld}: ${wrong.join(", ")}`)
+  : pass(`no page states a district count other than the ${districtsHeld} held`);
+
 await pool.end();
 console.log(failures ? `\n${failures} FAILURE(S)\n` : "\nAll checks passed.\n");
 process.exit(failures ? 1 : 0);

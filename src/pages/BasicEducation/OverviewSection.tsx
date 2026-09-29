@@ -1,4 +1,5 @@
 import { useEntity } from "@/hooks/useDynamic";
+import { DISTRICTS_FALLBACK } from "@/hooks/useDistricts";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 
@@ -45,7 +46,8 @@ export function OverviewSection() {
     { value_text: "312", label: "Schools", color: "bg-[#0B2545]" },
     { value_text: "35,200+", label: "Students", color: "bg-[#163663]" },
     { value_text: "1,840", label: "Teachers", color: "bg-teal-600" },
-    { value_text: "17", label: "Districts", color: "bg-teal-700" },
+    // Counted, so this cannot claim more districts than the site holds.
+    { value_text: String(DISTRICTS_FALLBACK.length), label: "Districts", color: "bg-teal-700" },
   ];
 
   const { data: overviewRows } = useEntity("basic_overview", [OVERVIEW_FALLBACK]);

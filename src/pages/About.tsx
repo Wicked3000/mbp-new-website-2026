@@ -4,6 +4,22 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
+import { useEntity } from "@/hooks/useDynamic";
+import { DISTRICTS_FALLBACK } from "@/hooks/useDistricts";
+
+/**
+ * Shown only if the stats API is unreachable. The district row is counted from
+ * the districts table rather than written here, so the fallback cannot state a
+ * different number from the rest of the site.
+ */
+const STATS_FALLBACK = [
+  { value_text: "312", label: "Schools", sub: "Province-wide" },
+  { value_text: "48,200+", label: "Students", sub: "Enrolled 2026" },
+  { value_text: "2,140", label: "Teachers", sub: "Qualified staff" },
+  { value_text: String(DISTRICTS_FALLBACK.length), label: "Districts", sub: "Covered" },
+  { value_text: "25+", label: "Years", sub: "Of Service" },
+  { value_text: "4", label: "Programs", sub: "Education Streams" },
+];
 
 /**
  * The banner rotates: each photograph brings its own words with it, rather than
@@ -263,20 +279,24 @@ function HistorySection() {
 }
 
 function StatsSection() {
-  const STATS = [
-    { value: "312", label: "Schools", sub: "Province-wide" },
-    { value: "48,200+", label: "Students", sub: "Enrolled 2026" },
-    { value: "2,140", label: "Teachers", sub: "Qualified staff" },
-    { value: "17", label: "Districts", sub: "Covered" },
-    { value: "25+", label: "Years", sub: "Of Service" },
-    { value: "4", label: "Programs", sub: "Education Streams" },
-  ];
+  /*
+   * Read from the stats entity rather than a local array. This used to hold its
+   * own copy of these six figures, which meant the Division could edit them in
+   * the admin and the About page would silently keep showing the old numbers -
+   * it had already drifted, claiming more districts than the site held.
+   */
+  const { data } = useEntity("stats", STATS_FALLBACK as any);
+  const list = (data as any[]).map((s: any) => ({
+    value: s.value_text ?? s.value,
+    label: s.label,
+    sub: s.sub,
+  }));
 
   return (
     <section className="bg-[#0B2545] py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-8 text-center">
-          {STATS.map((s) => (
+          {list.map((s: any) => (
             <div key={s.label}>
               <div
                 className="text-4xl sm:text-5xl font-bold text-[#C9A84C]"
