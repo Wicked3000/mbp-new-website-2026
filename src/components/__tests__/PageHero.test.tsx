@@ -8,7 +8,7 @@
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import PageHero, { NAVY_HERO, TEAL_HERO } from "../PageHero";
 
@@ -124,5 +124,138 @@ describe("the shared page banner", () => {
     render({ theme: TEAL_HERO });
     const cls = container.querySelector("section")!.className;
     expect(cls).toContain(TEAL_HERO.background);
+  });
+});
+
+const SLIDES = [
+  {
+    image: "/assets/slider/mbp-img1.jpg",
+    imageAlt: "Students and community learning",
+    eyebrow: "Milne Bay Province - Papua New Guinea",
+    title: "About the Division",
+    highlight: " of Education",
+    lead: "Learn about our mission and leadership.",
+  },
+  {
+    image: "/assets/slider/mbp-img2.jpg",
+    imageAlt: "Province schools",
+    eyebrow: "Our Mission",
+    title: "Empowering Communities",
+    lead: "Equitable education for every child.",
+  },
+  {
+    image: "/assets/slider/mbp-img3.jpg",
+    imageAlt: "Coastal education community",
+    eyebrow: "Our Commitment",
+    title: "Serving Every Community",
+    lead: "From Samarai to the highlands of Alotau.",
+  },
+];
+
+describe("a rotating page banner", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const renderSlides = () =>
+    render({ image: undefined, imageAlt: undefined, eyebrow: undefined, title: undefined, lead: undefined, slides: SLIDES });
+
+  it("shows the first frame's words, not every frame's", () => {
+    renderSlides();
+    const text = container.textContent || "";
+    expect(text).toContain("About the Division");
+    // The other frames' words are not mounted. Rendering all three would put
+    // three sets of headings in the banner and repeat the eyebrow three times.
+    expect(text).not.toContain("Our Mission");
+    expect(container.querySelectorAll("h1")).toHaveLength(1);
+  });
+
+  it("brings each frame's own words with its image", () => {
+    renderSlides();
+    // Every frame's photograph is mounted, so the next one is decoded before it
+    // is shown and the crossfade has nothing to wait for.
+    const images = [...container.querySelectorAll("img")];
+    expect(images).toHaveLength(3);
+    expect(images[0].getAttribute("src")).toBe(SLIDES[0].image);
+    expect(images[2].getAttribute("src")).toBe(SLIDES[2].image);
+  });
+
+  it("moves to the next frame on the timer, changing the words too", () => {
+    renderSlides();
+    act(() => {
+      vi.advanceTimersByTime(8_000);
+    });
+    const text = container.textContent || "";
+    expect(text).toContain("Empowering Communities");
+    expect(text).not.toContain("About the Division");
+    // Still one heading, and still the first: the text swaps, it does not stack.
+    expect(container.querySelectorAll("h1")).toHaveLength(1);
+    expect(container.querySelector("h1")!.textContent).toContain("Empowering Communities");
+  });
+
+  it("advances the words on a button, not only on a timer", () => {
+    renderSlides();
+    const next = [...container.querySelectorAll("button")].find(
+      (b) => b.getAttribute("aria-label") === "Next slide",
+    )!;
+    act(() => {
+      next.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(container.querySelector("h1")!.textContent).toContain("Empowering Communities");
+  });
+
+  it("marks the current frame for assistive tech and hides the rest", () => {
+    renderSlides();
+    const groups = [...container.querySelectorAll("[aria-roledescription=slide]")];
+    expect(groups).toHaveLength(3);
+    expect(groups[0].getAttribute("aria-hidden")).toBe("false");
+    expect(groups[1].getAttribute("aria-hidden")).toBe("true");
+    act(() => {
+      const next = [...container.querySelectorAll("button")].find(
+        (b) => b.getAttribute("aria-label") === "Next slide",
+      )!;
+      next.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(container.querySelectorAll("[aria-roledescription=slide]")[0].getAttribute("aria-hidden")).toBe(
+      "true",
+    );
+  });
+
+  it("does not rotate on its own once the visitor wants reduced motion", () => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    vi.spyOn(window, "matchMedia").mockImplementation((q: string) =>
+      q.includes("reduced-motion")
+        ? ({ ...mq, matches: true, addEventListener() {}, removeEventListener() {} } as MediaQueryList)
+        : mq,
+    );
+    renderSlides();
+    act(() => {
+      vi.advanceTimersByTime(40_000);
+    });
+    expect(container.querySelector("h1")!.textContent).toContain("About the Division");
+    vi.restoreAllMocks();
+  });
+
+  it("stops rotating while the pointer is over it", () => {
+    renderSlides();
+    const section = container.querySelector("section")!;
+    act(() => {
+      section.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+    act(() => {
+      vi.advanceTimersByTime(40_000);
+    });
+    expect(container.querySelector("h1")!.textContent).toContain("About the Division");
+  });
+
+  it("behaves as a fixed banner when given a single slide", () => {
+    render({ slides: [SLIDES[0]] });
+    // No controls, and no carousel role: one frame has nothing to rotate to.
+    expect(container.querySelector("[aria-roledescription=carousel]")).toBeNull();
+    expect(container.querySelectorAll("img")).toHaveLength(1);
+    expect(container.querySelector("h1")!.textContent).toContain("About the Division");
   });
 });

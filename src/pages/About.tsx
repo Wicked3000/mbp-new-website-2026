@@ -5,18 +5,43 @@ import SiteFooter from "@/components/SiteFooter";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 
+/**
+ * The banner rotates: each photograph brings its own words with it, rather than
+ * a fixed heading sitting over a changing picture. The wording is taken from the
+ * sections further down this page, so the banner and the content agree.
+ *
+ * The images are the site's own slider photographs rather than remote ones, so
+ * the banner does not depend on a third-party host being reachable.
+ */
+const HERO_SLIDES = [
+  {
+    image: "/assets/slider/mbp-img1.jpg",
+    imageAlt: "Milne Bay students and community learning",
+    eyebrow: "Milne Bay Province - Papua New Guinea",
+    title: "About the Division",
+    highlight: " of Education",
+    lead: "Learn about our mission, leadership, and commitment to quality education across Milne Bay Province.",
+  },
+  {
+    image: "/assets/slider/mbp-img2.jpg",
+    imageAlt: "Milne Bay Province schools and education",
+    eyebrow: "Our Mission",
+    title: "Empowering Communities",
+    highlight: " Through Education",
+    lead: "Committed to delivering equitable, quality education to every child and young person across our province.",
+  },
+  {
+    image: "/assets/slider/mbp-img3.jpg",
+    imageAlt: "Milne Bay coastal education community",
+    eyebrow: "Our Commitment",
+    title: "Serving Every",
+    highlight: " Community",
+    lead: "Working in partnership with teachers, parents and community leaders - from the islands of Samarai to the highlands of Alotau.",
+  },
+];
+
 function PageHero() {
-  return (
-    <PageHeroBanner
-      theme={NAVY_HERO}
-      image="https://images.unsplash.com/photo-1671883240914-22753874f0de?w=1600&h=900&fit=crop&auto=format"
-      imageAlt="Milne Bay Province landscape"
-      eyebrow="Milne Bay Province - Papua New Guinea"
-      title="About the Division"
-      highlight=" of Education"
-      lead="Learn about our mission, leadership, and commitment to quality education across Milne Bay Province."
-    />
-  );
+  return <PageHeroBanner theme={NAVY_HERO} slides={HERO_SLIDES} />;
 }
 
 function MissionSection() {

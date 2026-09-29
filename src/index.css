@@ -193,6 +193,26 @@ img {
   --reveal-delay: min(calc(var(--reveal-index, 0) * 60ms), 360ms);
 }
 
+/* Hero carousel. The photograph crossfades between frames in the component;
+   the words rise and fade in with it, keyed to the active frame so the
+   animation restarts on every change. Opacity and transform only, for the same
+   reason as page-enter above - a transformed ancestor would capture the fixed
+   back-to-top button and the sticky header. */
+@keyframes hero-slide-text {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-slide-text {
+  animation: hero-slide-text var(--motion-slow) var(--ease-out) both;
+}
+
 /* Under reduced motion the site must not move. The reveal is the dangerous one:
    if it were disabled by simply removing the animation, .reveal would keep its
    opacity: 0 and the content would never appear at all. So it is forced visible
@@ -205,6 +225,7 @@ img {
   }
 
   .page-enter,
+  .hero-slide-text,
   .reveal,
   .reveal[data-revealed="false"],
   .reveal[data-revealed="true"] {
