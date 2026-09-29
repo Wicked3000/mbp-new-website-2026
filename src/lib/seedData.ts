@@ -682,7 +682,7 @@ export const SEEDS: Record<string, any[]> = {
         "icon": "school",
         "label": "School Directory",
         "description": "Find schools in Milne Bay",
-        "href": "/basic#schools",
+        "href": "/districts",
         "sort_order": 2
       },
       {

@@ -418,6 +418,7 @@ badHref.length
 const NAMED_TILES = [
   { label: "Term Dates", route: "/calendar" },
   { label: "Forms & Downloads", route: "/downloads" },
+  { label: "School Directory", route: "/districts" },
 ];
 const mismatched = NAMED_TILES.filter(
   (t) => (quickLinks.find((r) => r.label === t.label)?.href || "").split("#")[0] !== t.route,

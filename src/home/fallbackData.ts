@@ -9,7 +9,7 @@ export const QUICK_LINKS = [
     icon: "school",
     label: "School Directory",
     desc: "Find schools in Milne Bay",
-    href: "/basic#schools",
+    href: "/districts",
   },
   {
     icon: "file",

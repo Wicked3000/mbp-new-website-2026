@@ -59,6 +59,11 @@ describe("home page quick links", () => {
     expect(hrefFor("Forms & Downloads")).toBe("/downloads");
   });
 
+  it("sends School Directory to the districts page", () => {
+    render();
+    expect(hrefFor("School Directory")).toBe("/districts");
+  });
+
   it("uses the stored destination rather than overriding it", () => {
     // The strip reads quick_links and falls back to QUICK_LINKS when the API
     // is unreachable, so the fallback is what renders here. It has to agree
@@ -68,6 +73,7 @@ describe("home page quick links", () => {
     const byLabel = Object.fromEntries(QUICK_LINKS.map((q) => [q.label, q.href]));
     expect(byLabel["Term Dates"]).toBe("/calendar");
     expect(byLabel["Forms & Downloads"]).toBe("/downloads");
+    expect(byLabel["School Directory"]).toBe("/districts");
   });
 
   it("points every tile at a real in-site page", () => {
