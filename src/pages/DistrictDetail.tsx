@@ -119,6 +119,7 @@ export default function DistrictDetailPage() {
           <div className="flex-1 relative">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><Icon name="search" size={20} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" /></span>
             <input
+              id="district-detail-search"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search schools, head teacher, township…"
@@ -127,6 +128,7 @@ export default function DistrictDetailPage() {
             />
           </div>
           <select
+            id="district-detail-filter"
             value={level}
             onChange={(e) => setLevel(e.target.value)}
             aria-label="Filter by level"

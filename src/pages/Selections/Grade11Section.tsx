@@ -63,6 +63,7 @@ export function Grade11Section() {
 
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <input
+            id="selections-grade11-search"
             type="search"
             aria-label="Search school or district"
             placeholder="Search school or district..."

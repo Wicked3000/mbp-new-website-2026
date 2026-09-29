@@ -145,6 +145,7 @@ export default function NewsPage() {
               <Icon name="search" size={20} />
             </span>
             <input
+              id="news-search"
               type="search"
               aria-label="Search news"
               value={q}

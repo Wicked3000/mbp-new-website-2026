@@ -166,6 +166,7 @@ export default function CalendarPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
+              id="calendar-search"
               type="search"
               aria-label="Search events"
               value={query}
@@ -174,6 +175,7 @@ export default function CalendarPage() {
               className="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm outline-none focus:border-[#0D9488]"
             />
             <select
+              id="calendar-filter"
               aria-label="Filter events by category"
               value={category}
               onChange={(event) => setCategory(event.target.value)}

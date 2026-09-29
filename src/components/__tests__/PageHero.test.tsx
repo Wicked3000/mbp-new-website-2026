@@ -103,7 +103,7 @@ describe("the shared page banner", () => {
 
   it("renders page-specific children inside the banner", () => {
     render({
-      children: <input type="search" aria-label="Search districts" />,
+      children: <input id="tests-pagehero-search" type="search" aria-label="Search districts" />,
     });
     expect(container.querySelector("input[type=search]")).not.toBeNull();
   });

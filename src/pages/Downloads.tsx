@@ -102,6 +102,7 @@ function DownloadsSection() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
+              id="downloads-search"
               type="search"
               aria-label="Search downloads"
               value={query}
@@ -110,6 +111,7 @@ function DownloadsSection() {
               className="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm outline-none focus:border-[#0D9488]"
             />
             <select
+              id="downloads-filter"
               aria-label="Filter downloads by category"
               value={category}
               onChange={(event) => setCategory(event.target.value)}

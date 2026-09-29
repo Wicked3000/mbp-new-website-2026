@@ -20,6 +20,7 @@
     "verify": "node scripts/verify.mjs",
     "check:banners": "node scripts/check-banners.mjs",
     "check:emoji": "node scripts/check-emoji.mjs",
+    "check:form-fields": "node scripts/check-form-fields.mjs",
     "check:motion": "node scripts/check-motion.mjs",
     "verify:sync": "node scripts/check-api-sync.mjs",
     "verify:wiring": "node scripts/verify-wiring.mjs"

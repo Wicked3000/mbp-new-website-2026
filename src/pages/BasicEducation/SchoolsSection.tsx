@@ -52,6 +52,7 @@ export function SchoolsSection() {
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
             <select
+              id="basiceducation-schools-filter"
               value={district}
               onChange={(event) => setDistrict(event.target.value)}
               aria-label="Filter by district"
@@ -65,6 +66,7 @@ export function SchoolsSection() {
               ))}
             </select>
             <input
+              id="basiceducation-schools-search"
               type="text"
               value={query}
               onChange={(event) => setQuery(event.target.value)}

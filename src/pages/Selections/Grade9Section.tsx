@@ -71,6 +71,7 @@ export function Grade9Section() {
 
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <input
+            id="selections-grade9-search"
             type="search"
             aria-label="Search school or district"
             placeholder="Search school or district..."
@@ -79,6 +80,7 @@ export function Grade9Section() {
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
+            id="selections-grade9-filter"
             aria-label="Filter by district"
             value={districtFilter}
             onChange={(e) => setDistrictFilter(e.target.value)}

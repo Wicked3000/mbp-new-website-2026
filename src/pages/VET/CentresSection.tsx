@@ -50,6 +50,7 @@ export function CentresSection() {
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
             <select
+              id="vet-centres-filter"
               value={status}
               onChange={(event) => setStatus(event.target.value)}
               aria-label="Filter centres by status"
@@ -61,6 +62,7 @@ export function CentresSection() {
               <option>Planned</option>
             </select>
             <input
+              id="vet-centres-search"
               type="text"
               value={query}
               onChange={(event) => setQuery(event.target.value)}

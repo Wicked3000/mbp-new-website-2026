@@ -107,6 +107,7 @@ export default function NoticesPage() {
               <Icon name="search" size={20} />
             </span>
             <input
+              id="notices-search"
               type="search"
               aria-label="Search notices"
               value={q}

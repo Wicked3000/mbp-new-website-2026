@@ -166,6 +166,7 @@ export default function MessagesManager() {
                   </td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <select
+                      id="messages-status"
                       value={r.status}
                       aria-label={`Status for message from ${r.full_name}`}
                       onChange={(e) => setStatus(r.id, e.target.value)}

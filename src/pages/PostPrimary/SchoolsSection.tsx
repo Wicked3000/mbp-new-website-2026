@@ -227,6 +227,7 @@ export function SchoolsSection() {
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
             <select
+              id="postprimary-schools-filter"
               value={schoolType}
               onChange={(event) => setSchoolType(event.target.value)}
               aria-label="Filter by school type"
@@ -238,6 +239,7 @@ export function SchoolsSection() {
               <option>Permitted (Church)</option>
             </select>
             <input
+              id="postprimary-schools-search"
               type="text"
               value={query}
               onChange={(event) => setQuery(event.target.value)}

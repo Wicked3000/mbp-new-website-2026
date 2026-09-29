@@ -167,6 +167,7 @@ export default function SiteHeader() {
                     <Icon name="search" size={20} />
                   </span>
                   <input
+                    id="siteheader-search"
                     type="search"
                     aria-label="Search the site"
                     placeholder="Search the calendar, schools, forms…"

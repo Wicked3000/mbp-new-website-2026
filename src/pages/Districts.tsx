@@ -76,6 +76,7 @@ export default function DistrictsPage() {
           <div className="flex-1 relative">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><Icon name="search" size={20} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" /></span>
             <input
+              id="districts-search"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search districts…"
@@ -84,6 +85,7 @@ export default function DistrictsPage() {
             />
           </div>
           <select
+            id="districts-filter"
             value={type}
             onChange={(e) => setType(e.target.value)}
             aria-label="Filter by district type"

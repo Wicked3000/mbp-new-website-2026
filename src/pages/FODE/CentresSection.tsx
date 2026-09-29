@@ -61,6 +61,7 @@ export function CentresSection() {
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
             <select
+              id="fode-centres-filter"
               value={centreType}
               onChange={(event) => setCentreType(event.target.value)}
               aria-label="Filter centres by type"
@@ -75,6 +76,7 @@ export function CentresSection() {
               <option>Remote Island</option>
             </select>
             <input
+              id="fode-centres-search"
               type="text"
               value={query}
               onChange={(event) => setQuery(event.target.value)}

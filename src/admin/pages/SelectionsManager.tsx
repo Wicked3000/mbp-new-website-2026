@@ -257,6 +257,7 @@ function SelectionStudentsManager() {
           <label className="inline-flex items-center cursor-pointer bg-[#0D9488] text-white text-sm font-bold px-4 py-2.5 rounded-full hover:bg-[#0b7a6e] focus-within:ring-2 focus-within:ring-[#0D9488]/40 focus-within:ring-offset-2">
             {uploading ? "Importing…" : "Upload CSV"}
             <input
+              id="selections-upload"
               type="file"
               accept=".csv,text/csv"
               onChange={uploadCsv}
