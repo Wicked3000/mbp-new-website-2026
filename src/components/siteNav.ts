@@ -1,3 +1,11 @@
+/*
+ * The main menu, shown in the header and in the mobile drawer.
+ *
+ * The school calendar is deliberately not here. It was added to make the page
+ * findable, but it crowded the primary menu for something most visitors reach
+ * by search or from the term-dates card on the home page. It is still in the
+ * footer and still offered by the header search - see FOOTER_NAV below.
+ */
 export const MAIN_NAV = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
@@ -5,9 +13,15 @@ export const MAIN_NAV = [
   { label: "Post Primary", href: "/post" },
   { label: "VET", href: "/vet" },
   { label: "FODE", href: "/fode" },
-  { label: "School Calendar", href: "/calendar" },
   { label: "Contact", href: "/contact" },
 ];
+
+/*
+ * The footer's quick links. A superset of the main menu: the footer has room to
+ * list the pages people arrive looking for rather than the ones that structure
+ * the site, so the calendar is here and not in the menu.
+ */
+export const FOOTER_NAV = [...MAIN_NAV, { label: "School Calendar", href: "/calendar" }];
 
 // Quick-jump entries for the header search dropdown. Each one points at a real
 // page on this site, so a suggestion click always lands somewhere useful.

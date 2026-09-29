@@ -11,7 +11,7 @@ import { act } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { MAIN_NAV, SEARCH_SUGGESTIONS } from "@/components/siteNav";
+import { FOOTER_NAV, MAIN_NAV, SEARCH_SUGGESTIONS } from "@/components/siteNav";
 import SiteHeader from "@/components/SiteHeader";
 
 let container: HTMLDivElement;
@@ -61,9 +61,17 @@ function search(term: string) {
 }
 
 describe("finding the school calendar", () => {
-  it("is in the main navigation, so it is in the header and the footer", () => {
-    // The footer renders MAIN_NAV too, so one entry covers both.
-    expect(MAIN_NAV.some((l) => l.href === "/calendar")).toBe(true);
+  it("is not in the main menu, which the Division asked to be kept short", () => {
+    // It was added to the menu to make the page findable, then taken out again
+    // because it crowded the primary navigation. It stays in the footer and in
+    // the search suggestions, so the page is still reachable.
+    expect(MAIN_NAV.some((l) => l.href === "/calendar")).toBe(false);
+    expect(FOOTER_NAV.some((l) => l.href === "/calendar")).toBe(true);
+    expect(SEARCH_SUGGESTIONS.some((s) => s.to === "/calendar")).toBe(true);
+  });
+
+  it("is in the footer's quick links, so it stays reachable from every page", () => {
+    expect(FOOTER_NAV.map((l) => l.href)).toContain("/calendar");
   });
 
   it.each([

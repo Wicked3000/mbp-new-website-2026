@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MAIN_NAV } from "@/components/siteNav";
+import { FOOTER_NAV } from "@/components/siteNav";
 import SocialFloat, { SOCIAL_NETWORKS } from "@/components/SocialFloat";
 import BackToTop from "@/components/BackToTop";
 
@@ -71,7 +71,7 @@ export default function SiteFooter() {
               Quick Links
             </h2>
             <ul className="space-y-2.5">
-              {MAIN_NAV.map((link) => (
+              {FOOTER_NAV.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
