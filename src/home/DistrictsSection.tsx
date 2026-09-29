@@ -7,7 +7,12 @@ export function DistrictsSection() {
   const { data } = useDistricts();
   const districts = (data as any[]).slice(0, 8);
   return (
-    <section className="py-14 sm:py-16 px-4 bg-white">
+    // id="coverage" is the target of the "Back to Coverage" and "All districts"
+    // links on the district and school detail pages. Those three links pointed
+    // at /#coverage while this section carried no id at all, so they scrolled
+    // to the top of the home page. The eyebrow already calls this section
+    // Coverage, so the id matches what the links call it.
+    <section id="coverage" className="py-14 sm:py-16 px-4 bg-white">
       <Reveal className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
           <div>

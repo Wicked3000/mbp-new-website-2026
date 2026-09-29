@@ -432,6 +432,43 @@ mismatched.length
     )
   : pass(`every quick link that names a page points at it (${NAMED_TILES.length} checked)`);
 
+/*
+ * Every in-page fragment link has to name an element that exists.
+ *
+ * Two separate defects lived here. The app reset the scroll to the top on every
+ * client-side navigation, so a browser never honoured a fragment and no anchor
+ * link on the site moved the page - fixed in useScrollOnRouteChange. And three
+ * "Back to Coverage" links pointed at /#coverage while the home page's coverage
+ * section carried no id at all, so even with the scroll working they had nowhere
+ * to go. Reading a link's href does not reveal either problem.
+ */
+const srcFiles = walkSrc(path.join("src"));
+const declaredIds = new Set();
+const fragmentLinks = [];
+for (const file of srcFiles) {
+  const rel = path.relative(".", file).replace(/\\/g, "/");
+  const text = fs.readFileSync(file, "utf8");
+  for (const m of text.matchAll(/\bid=["']([A-Za-z][\w-]*)["']/g)) {
+    declaredIds.add(m[1]);
+  }
+  // to="/page#frag" and href="/page#frag" on a Link or anchor. The skip link's
+  // bare #main-content counts too - it is the same kind of link.
+  for (const m of text.matchAll(/(?:to|href)=["']([^"']*#[A-Za-z][\w-]*)["']/g)) {
+    fragmentLinks.push({ rel, target: m[1] });
+  }
+}
+
+const dangling = fragmentLinks.filter((l) => {
+  const frag = l.target.split("#")[1];
+  return !declaredIds.has(frag);
+});
+dangling.length
+  ? fail(
+      `in-page link(s) naming an id that does not exist: ` +
+        dangling.map((l) => `${l.rel} -> ${l.target}`).join(", "),
+    )
+  : pass(`every in-page link names an element that exists (${fragmentLinks.length} checked)`);
+
 await pool.end();
 console.log(failures ? `\n${failures} FAILURE(S)\n` : "\nAll checks passed.\n");
 process.exit(failures ? 1 : 0);

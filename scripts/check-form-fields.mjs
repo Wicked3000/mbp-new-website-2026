@@ -79,7 +79,16 @@ for (const file of files) {
   // A repeated id in one file binds a <label for> or a fragment link to the
   // first match only, which is checkable and always wrong.
   const counts = new Map();
-  for (const m of text.matchAll(/\bid="([^"]+)"/g)) {
+  // Comments are stripped first. An explanatory comment that quotes the id it
+  // is explaining - 'id="coverage" is the target of...' - is not a second use
+  // of that id, and counting it reported a file as having a duplicate. Only
+  // whole-line comments are removed, so a URL's "//" mid-line is left alone.
+  const code = text
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .split("\n")
+    .map((l) => (/^\s*\/\//.test(l) ? "" : l))
+    .join("\n");
+  for (const m of code.matchAll(/\bid="([^"]+)"/g)) {
     counts.set(m[1], (counts.get(m[1]) ?? 0) + 1);
   }
   for (const [id, count] of counts) {

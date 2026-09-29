@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useScrollOnRouteChange } from "@/hooks/useScrollOnRouteChange";
 import AboutPage from "./pages/About";
 import BasicEducationPage from "./pages/BasicEducation";
 import PostPrimaryPage from "./pages/PostPrimary";
@@ -55,15 +55,9 @@ export default function App() {
   // public skip link stays out of it.
   const isAdmin = pathname.startsWith("/admin");
 
-  // A new route starts at the top of the document. Without this a visitor who
-  // clicks a footer link from halfway down a long page lands on the new page
-  // still scrolled to the same offset, which on a short page looks like a blank
-  // screen. Instant rather than smooth, because the route change is already
-  // signalled by the page-enter animation and a long smooth scroll on top of
-  // that just delays the content.
-  useEffect(() => {
-    if (!isAdmin) window.scrollTo(0, 0);
-  }, [pathname, isAdmin]);
+  // Reset to the top on a new route, or jump to the fragment the link named.
+  // Extracted so it can be tested without mounting the whole route table.
+  useScrollOnRouteChange(isAdmin);
 
   return (
     <>
