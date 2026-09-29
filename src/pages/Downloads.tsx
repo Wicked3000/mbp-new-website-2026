@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import SharedPageHero, { NAVY_HERO } from "@/components/PageHero";
 
 function usableFilePath(value: unknown) {
   const path = typeof value === "string" ? value.trim() : "";
@@ -51,29 +52,16 @@ function FileTypeIcon({ type }: { type?: string }) {
 
 function PageHero() {
   return (
-    <section className="relative overflow-hidden bg-[#0B2545]">
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-          backgroundSize: "24px 24px",
-        }}
-      />
-      <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20">
-        <span className="text-[#C9A84C] text-xs font-bold uppercase tracking-widest">
-          Official Resources
-        </span>
-        <h1
-          className="text-4xl sm:text-5xl font-bold text-white mt-3"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          Forms & Downloads
-        </h1>
-        <p className="text-blue-100 text-lg leading-relaxed max-w-2xl mt-4">
-          Access official Division handbooks, forms, policies, and other public resources.
-        </p>
-      </div>
-    </section>
+    <SharedPageHero
+      theme={NAVY_HERO}
+      image="/assets/logo/mbp-logo-bg-removed.png"
+      imageAlt=""
+      imageOpacity={10}
+      imagePosition="object-[100%_0%]"
+      eyebrow="Official Resources"
+      title="Forms & Downloads"
+      lead="Access official Division handbooks, forms, policies, and other public resources."
+    />
   );
 }
 

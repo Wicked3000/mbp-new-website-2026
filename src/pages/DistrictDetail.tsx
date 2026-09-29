@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import PageHero, { NAVY_HERO } from "@/components/PageHero";
 import { DISTRICT_FALLBACK, SCHOOL_FALLBACK, hasCoords, mapsUrl } from "@/data/fallbacks";
 
 export default function DistrictDetailPage() {
@@ -84,48 +85,15 @@ export default function DistrictDetailPage() {
     <div className="min-h-screen bg-[#F8F6F1]" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
       <SiteHeader />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[#0B2545]">
-        {district.img ? (
-          <img
-            src={district.img}
-            alt={`${district.name} district`}
-            className="absolute inset-0 w-full h-full object-cover opacity-35"
-            decoding="async"
-          />
-        ) : (
-          <img
-            src="/assets/education_programs/map/milne_bay_map.jpg"
-            alt=""
-            aria-hidden="true"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover opacity-20"
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07192E]/92 via-[#0B2545]/80 to-[#0B2545]/50" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 py-14 sm:py-20">
-          <nav aria-label="Breadcrumb" className="mb-5">
-            <Link
-              to="/#coverage"
-              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#C9A84C] hover:text-white transition-colors"
-            >
-              ← All districts
-            </Link>
-          </nav>
-          <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-[#E2C47A] text-[11px] font-bold uppercase tracking-[0.14em] px-3 py-1.5 rounded-full mb-4">
-            {district.type} District
-          </span>
-          <h1
-            className="text-4xl sm:text-5xl font-bold text-white leading-tight"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            {district.name}
-          </h1>
-          <p className="text-blue-100 mt-3 max-w-2xl">
-            {district.schools} schools{district.students ? ` • ${district.students} students` : ""}
-            {listed > 0 ? ` • ${listed} listed below` : ""}
-          </p>
-
+      <PageHero
+        theme={NAVY_HERO}
+        image={district.img || "/assets/education_programs/map/milne_bay_map.jpg"}
+        imageAlt={district.img ? `${district.name} district` : ""}
+        imageOpacity={district.img ? 35 : 20}
+        eyebrow={`${district.type} District`}
+        title={district.name}
+        lead={`${district.schools} schools${district.students ? ` • ${district.students} students` : ""}${listed > 0 ? ` • ${listed} listed below` : ""}`}
+      >
           <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
             {[
               { k: "District capital", v: district.capital || "—" },
@@ -141,8 +109,7 @@ export default function DistrictDetailPage() {
               </div>
             ))}
           </dl>
-        </div>
-      </section>
+      </PageHero>
 
       {/* Filters */}
       <section className="bg-white border-b border-gray-100">

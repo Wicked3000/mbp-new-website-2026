@@ -4,6 +4,7 @@ import { useEntity } from "@/hooks/useDynamic";
 import { DISTRICT_FALLBACK, SCHOOL_FALLBACK, hasCoords, mapsUrl } from "@/data/fallbacks";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import PageHero, { NAVY_HERO } from "@/components/PageHero";
 
 function Stat({ label, value, tone = "default" }: { label: string; value: any; tone?: string }) {
   return (
@@ -143,68 +144,16 @@ export default function SchoolDetailPage() {
     >
       <SiteHeader />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[#0B2545]">
-        {school.img ? (
-          <img
-            src={school.img}
-            alt=""
-            aria-hidden="true"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover opacity-35"
-          />
-        ) : (
-          <img
-            src="/assets/education_programs/map/milne_bay_map.jpg"
-            alt=""
-            aria-hidden="true"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover opacity-20"
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07192E]/92 via-[#0B2545]/85 to-[#0B2545]/55" />
-        <div className="relative z-10 max-w-5xl mx-auto px-4 py-14 sm:py-20">
-          <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-widest">
-            <Link to="/#coverage" className="text-[#C9A84C] hover:text-white transition-colors">
-              ← Coverage
-            </Link>
-            {district && (
-              <>
-                <span className="text-white/30">/</span>
-                <Link
-                  to={`/districts/${district.id ?? district.name}`}
-                  className="text-[#C9A84C] hover:text-white transition-colors"
-                >
-                  {district.name}
-                </Link>
-              </>
-            )}
-          </nav>
-
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {school.type && (
-              <span className="text-[11px] font-bold uppercase tracking-wider bg-[#C9A84C] text-[#0B2545] px-3 py-1.5 rounded-full">
-                {school.type}
-              </span>
-            )}
-            {school.level && (
-              <span className="text-[11px] font-bold uppercase tracking-wider bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded-full">
-                {school.level}
-              </span>
-            )}
-          </div>
-
-          <h1
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            {school.name}
-          </h1>
-          <p className="text-blue-100 mt-3 max-w-2xl">
-            {district ? `${district.name} District` : school.district}
-            {school.location ? ` • ${school.location}` : ""}
-          </p>
-
+      <PageHero
+        theme={NAVY_HERO}
+        image={school.img || "/assets/education_programs/map/milne_bay_map.jpg"}
+        imageAlt=""
+        imageOpacity={school.img ? 35 : 20}
+        contentClassName="max-w-5xl"
+        eyebrow={[school.type, school.level].filter(Boolean).join(" • ")}
+        title={school.name}
+        lead={`${district ? `${district.name} District` : school.district}${school.location ? ` • ${school.location}` : ""}`}
+      >
           {hasCoords(school) && (
             <a
               href={mapsUrl(school)}
@@ -229,8 +178,7 @@ export default function SchoolDetailPage() {
               Open in Google Maps
             </a>
           )}
-        </div>
-      </section>
+      </PageHero>
 
       {/* Key figures */}
       <section className="max-w-5xl mx-auto px-4 -mt-8 relative z-20">

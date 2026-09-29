@@ -73,6 +73,14 @@ type PageHeroProps = {
   overlay?: ReactNode;
   /** Classes for the column holding the text. */
   contentClassName?: string;
+  /**
+   * Page-specific content inside the banner, under the lead - the news and
+   * notices search fields live here. Kept as a slot so those pages can use the
+   * shared banner instead of hand-rolling their own to hold one control.
+   */
+  children?: ReactNode;
+  /** Anchor id, for in-page links that target the top of a page. */
+  id?: string;
 };
 
 export default function PageHero({
@@ -88,9 +96,18 @@ export default function PageHero({
   actions = [],
   overlay,
   contentClassName = "max-w-3xl",
+  children,
+  id,
 }: PageHeroProps) {
   return (
-    <section className={`relative h-[400px] sm:h-[480px] overflow-hidden ${theme.background}`}>
+    // The single banner component for every public page. One h1 inside one
+    // section, in the same order, at the same height, so the heading structure
+    // is identical wherever a visitor lands.
+    <section
+      id={id}
+      data-page-hero=""
+      className={`relative h-[400px] sm:h-[480px] overflow-hidden ${theme.background}`}
+    >
       <img
         src={image}
         alt={imageAlt}
@@ -133,6 +150,7 @@ export default function PageHero({
               ))}
             </div>
           )}
+          {children}
         </div>
       </div>
     </section>

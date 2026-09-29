@@ -5,7 +5,7 @@ import { useToast } from "@/admin/components/Toast";
 type Field = {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "select" | "number" | "image" | "file";
+  type?: "text" | "textarea" | "select" | "number" | "image" | "file" | "date";
   /**
    * Select choices. A plain string is both the label and the stored value; a
    * {label, value} pair is needed when the value must be something other than
@@ -433,6 +433,30 @@ export default function Crud({
                   required={f.required}
                   className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
                 />
+              ) : f.type === "date" ? (
+                <div>
+                  <input
+                    id={`field-${entity}-${f.key}`}
+                    type="text"
+                    value={form[f.key] ?? ""}
+                    onChange={(e) => {
+                      setInvalidField(null);
+                      setForm({ ...form, [f.key]: e.target.value });
+                    }}
+                    placeholder={f.placeholder ?? "15 January 2026"}
+                    required={f.required}
+                    aria-describedby={`hint-${entity}-${f.key}`}
+                    className="mt-1 w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 outline-none text-sm"
+                  />
+                  {/* Not a native date input: these tables store the value as
+                      the site displays it, which a date input cannot hold. */}
+                  <p
+                    id={`hint-${entity}-${f.key}`}
+                    className="text-xs text-gray-500 mt-1.5"
+                  >
+                    As displayed on the site, e.g. 15 January 2026
+                  </p>
+                </div>
               ) : f.type === "select" ? (
                 <select
                   id={`field-${entity}-${f.key}`}
@@ -457,6 +481,9 @@ export default function Crud({
               ) : (
                 <input
                   id={`field-${entity}-${f.key}`}
+                  // Kept a text input for dates: these tables store the value as
+                  // displayed on the site ("15 January 2026"), which a native
+                  // date input cannot hold. The hint below says so.
                   type={f.type === "number" ? "number" : "text"}
                   value={form[f.key] ?? ""}
                   onChange={(e) => {

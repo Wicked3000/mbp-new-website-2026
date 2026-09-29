@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import PageHero, { NAVY_HERO } from "@/components/PageHero";
 
 type EventRow = {
   id?: number | string;
@@ -119,22 +120,15 @@ export default function CalendarPage() {
       style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}
     >
       <SiteHeader />
-      <section className="bg-[#0B2545] px-4 py-14 sm:py-20">
-        <div className="max-w-7xl mx-auto">
-          <span className="text-[#C9A84C] text-xs font-bold uppercase tracking-widest">
-            Education Calendar
-          </span>
-          <h1
-            className="text-4xl sm:text-5xl font-bold text-white mt-3"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            {currentYear} Full Calendar
-          </h1>
-          <p className="text-blue-100 text-lg mt-4 max-w-2xl leading-relaxed">
-            Examination dates, governance meetings, school activities, and term operations.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        theme={NAVY_HERO}
+        image="/assets/education_programs/map/milne_bay_map.jpg"
+        imageAlt=""
+        imageOpacity={20}
+        eyebrow="Education Calendar"
+        title={`${currentYear} Full Calendar`}
+        lead="Examination dates, governance meetings, school activities, and term operations."
+      />
 
       <main id="main-content" className="max-w-7xl mx-auto px-4 py-10 sm:py-14">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-7">

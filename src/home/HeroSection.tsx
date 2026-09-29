@@ -52,6 +52,11 @@ export function HeroSection() {
 
   return (
     <section
+      // data-page-hero marks this as the page banner. It is not the shared
+      // PageHero component - the home page's banner is a rotating carousel,
+      // which has no equivalent elsewhere - but it serves the same structural
+      // role, so it carries the same marker and check:banners accepts it.
+      data-page-hero=""
       className="relative overflow-hidden bg-[#07192E]"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

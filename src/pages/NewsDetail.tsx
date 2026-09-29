@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import PageHero, { NAVY_HERO } from "@/components/PageHero";
 
 const FALLBACK = [
   {
@@ -81,32 +82,16 @@ export default function NewsDetail() {
       <SiteHeader />
 
       <main id="main-content">
-        <div className="relative h-[360px] sm:h-[420px] overflow-hidden bg-[#0B2545]">
-          <img
-            src={item.img}
-            alt={item.title}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#07192E] via-[#0B2545]/60 to-transparent" />
-          <div className="absolute bottom-0 inset-x-0 p-4 sm:p-8">
-            <div className="max-w-4xl mx-auto">
-              <span
-                className={`${item.tag_color || "bg-[#0D9488]"} text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full`}
-              >
-                {item.tag}
-              </span>
-              <h1
-                className="text-3xl sm:text-4xl font-bold text-white mt-3 leading-tight"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                {item.title}
-              </h1>
-              <div className="text-blue-100 text-sm mt-2">
-                {item.news_date} • Division of Education, Milne Bay
-              </div>
-            </div>
-          </div>
-        </div>
+        <PageHero
+          theme={NAVY_HERO}
+          image={item.img}
+          imageAlt=""
+          imageOpacity={100}
+          imagePosition="object-[50%_35%]"
+          eyebrow={item.tag || "News"}
+          title={item.title}
+          lead={`${item.news_date} • Division of Education, Milne Bay`}
+        />
 
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">

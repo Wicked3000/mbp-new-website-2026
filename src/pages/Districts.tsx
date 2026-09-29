@@ -4,6 +4,7 @@ import { useEntity } from "@/hooks/useDynamic";
 import { DISTRICT_FALLBACK } from "@/data/fallbacks";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import PageHero, { NAVY_HERO } from "@/components/PageHero";
 
 export default function DistrictsPage() {
   const { data } = useEntity("districts", DISTRICT_FALLBACK as any);
@@ -43,38 +44,15 @@ export default function DistrictsPage() {
     >
       <SiteHeader />
 
-      <section className="relative overflow-hidden bg-[#0B2545]">
-        <img
-          src="/assets/education_programs/map/milne_bay_map.jpg"
-          alt=""
-          aria-hidden="true"
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07192E]/92 via-[#0B2545]/80 to-[#0B2545]/50" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 py-14 sm:py-20">
-          <nav aria-label="Breadcrumb" className="mb-5">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#C9A84C] hover:text-white transition-colors"
-            >
-              ← Home
-            </Link>
-          </nav>
-          <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-[#E2C47A] text-[11px] font-bold uppercase tracking-[0.14em] px-3 py-1.5 rounded-full mb-4">
-            Coverage
-          </span>
-          <h1
-            className="text-4xl sm:text-5xl font-bold text-white leading-tight"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            All Districts
-          </h1>
-          <p className="text-blue-100 mt-3 max-w-2xl">
-            {districts.length} districts across Milne Bay Province, from mainland highlands to
-            remote atolls. Choose a district to see its schools.
-          </p>
-
+      <PageHero
+        theme={NAVY_HERO}
+        image="/assets/education_programs/map/milne_bay_map.jpg"
+        imageAlt=""
+        imageOpacity={20}
+        eyebrow="Coverage"
+        title="All Districts"
+        lead={`${districts.length} districts across Milne Bay Province, from mainland highlands to remote atolls. Choose a district to see its schools.`}
+      >
           <dl className="mt-8 grid grid-cols-3 gap-3 max-w-md">
             {[
               { k: "Districts", v: districts.length },
@@ -89,8 +67,7 @@ export default function DistrictsPage() {
               </div>
             ))}
           </dl>
-        </div>
-      </section>
+      </PageHero>
 
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-3">

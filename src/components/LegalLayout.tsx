@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import PageHero, { TEAL_HERO } from "@/components/PageHero";
 
 export type LegalSection = { heading: string; body: ReactNode };
 
@@ -23,28 +24,19 @@ export default function LegalLayout({
     <div className="min-h-screen" style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
       <SiteHeader />
 
-      <section className="relative overflow-hidden bg-[#0B2545]">
-        <img loading="lazy" decoding="async"
-          src="/assets/logo/mbp-logo-bg-removed.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute -top-16 -right-16 w-80 h-80 object-contain opacity-[0.04] pointer-events-none"
-        />
-        <div className="relative max-w-4xl mx-auto px-4 py-16 sm:py-20">
-          <div className="inline-flex items-center gap-2 bg-teal-500/20 border border-teal-500/40 text-teal-300 text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-teal-500 inline-block" />
-            {eyebrow}
-          </div>
-          <h1
-            className="text-4xl sm:text-5xl font-bold text-white leading-[1.1]"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            {title}
-          </h1>
-          <p className="text-teal-100 text-lg leading-relaxed mt-4 max-w-2xl">{subtitle}</p>
-          <p className="text-teal-200/70 text-sm mt-6">Last updated: {updated}</p>
-        </div>
-      </section>
+      <PageHero
+        theme={TEAL_HERO}
+        image="/assets/logo/mbp-logo-bg-removed.png"
+        imageAlt=""
+        imageOpacity={4}
+        imagePosition="object-[100%_0%]"
+        contentClassName="max-w-4xl"
+        eyebrow={eyebrow}
+        title={title}
+        lead={subtitle}
+      >
+        <p className="text-teal-200/70 text-sm mt-6">Last updated: {updated}</p>
+      </PageHero>
 
       <section className="py-14 px-4 bg-white">
         <div className="max-w-4xl mx-auto lg:flex lg:gap-12">

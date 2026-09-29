@@ -18,6 +18,7 @@
     "export:seeds": "node scripts/export-seeds.mjs",
     "sync:php": "node scripts/sync-php-entities.mjs",
     "verify": "node scripts/verify.mjs",
+    "check:banners": "node scripts/check-banners.mjs",
     "verify:sync": "node scripts/check-api-sync.mjs",
     "verify:wiring": "node scripts/verify-wiring.mjs"
   },

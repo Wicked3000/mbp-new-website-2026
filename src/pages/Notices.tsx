@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { useEntity } from "@/hooks/useDynamic";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import PageHero, { NAVY_HERO } from "@/components/PageHero";
 
 const FALLBACK_NOTICES = [
   {
@@ -84,47 +85,35 @@ export default function NoticesPage() {
       <SiteHeader />
 
       <main id="main-content">
-        <section className="relative h-[320px] sm:h-[380px] overflow-hidden bg-[#0B2545]">
-          <img
-            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&h=600&fit=crop&auto=format"
-            alt="Notice Board"
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B2545]/90 via-[#0B2545]/70 to-transparent" />
-          <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-[#C9A84C] text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-4 w-fit">
-              Official Notices • Milne Bay Education
-            </div>
-            <h1
-              className="text-4xl sm:text-5xl font-bold text-white leading-tight"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
+        <PageHero
+          theme={NAVY_HERO}
+          image="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&h=600&fit=crop&auto=format"
+          imageAlt=""
+          imageOpacity={30}
+          imagePosition="object-[50%_35%]"
+          eyebrow="Official Notices • Milne Bay Education"
+          title={
+            <>
               Notice <span className="text-[#14B8A6]">Board</span>
-            </h1>
-            <p className="text-blue-100 mt-3 max-w-2xl">
-              Official notices and announcements from the Division of Education, newest first.
-            </p>
-            <div className="mt-6 flex gap-3">
-              <div className="flex-1 max-w-md relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">⌕</span>
-                <input
-                  type="search"
-                  aria-label="Search notices"
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search notices..."
-                  className="w-full pl-9 pr-4 py-3 rounded-full bg-white text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#0D9488]/30"
-                />
-              </div>
-              <Link
-                to="/contact"
-                className="hidden sm:inline-flex bg-[#C9A84C] text-[#0B2545] font-bold px-6 py-3 rounded-full text-sm"
-              >
-                Contact Division
-              </Link>
-            </div>
+            </>
+          }
+          lead="Official notices and announcements from the Division of Education, newest first."
+          actions={[{ label: "Contact Division", to: "/contact", variant: "primary" }]}
+        >
+          <div className="mt-6 flex-1 max-w-md relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true">
+              ⌕
+            </span>
+            <input
+              type="search"
+              aria-label="Search notices"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search notices..."
+              className="w-full pl-9 pr-4 py-3 rounded-full bg-white text-sm text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#0D9488]/30"
+            />
           </div>
-        </section>
+        </PageHero>
 
         <section className="max-w-4xl mx-auto px-4 py-12">
           <div className="flex items-end justify-between mb-6 gap-4">
