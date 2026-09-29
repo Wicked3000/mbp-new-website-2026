@@ -1,5 +1,6 @@
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function CurriculumSection() {
   const SUBJECTS_FALLBACK = [
@@ -87,7 +88,7 @@ export function CurriculumSection() {
               key={subject.area}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all"
             >
-              <div className="text-3xl mb-3">{subject.icon}</div>
+              <div className="text-3xl mb-3"><Icon name={subject.icon} size={24} /></div>
               <div
                 className="text-[#0B2545] font-bold mb-1"
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -104,7 +105,7 @@ export function CurriculumSection() {
 
         <div className="mt-12 p-6 bg-teal-50 rounded-xl border border-teal-100">
           <div className="flex items-start gap-4">
-            <div className="text-3xl shrink-0">📋</div>
+            <div className="text-3xl shrink-0"><Icon name="clipboard-list" size={24} className="shrink-0" /></div>
             <div>
               <h3
                 className="text-xl font-bold text-[#0B2545] mb-2"

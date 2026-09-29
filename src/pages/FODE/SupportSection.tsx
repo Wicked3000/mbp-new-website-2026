@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function SupportSection() {
   const SUPPORT_FALLBACK = [
@@ -59,7 +60,7 @@ export function SupportSection() {
                   key={item.title}
                   className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-teal-400/50 hover:bg-white/10 transition-all"
                 >
-                  <span className="text-2xl shrink-0">{item.icon}</span>
+                  <span className="text-2xl shrink-0"><Icon name={item.icon} size={20} /></span>
                   <div>
                     <h3 className="text-white font-semibold">{item.title}</h3>
                     <p className="text-teal-100 text-sm">{item.desc}</p>
@@ -79,28 +80,28 @@ export function SupportSection() {
             <p className="text-teal-100 mb-6">{contact.body}</p>
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-white">
-                <span className="text-teal-400 text-xl">📞</span>
+                <span className="text-teal-400 text-xl"><Icon name="phone" size={18} className="text-teal-400" /></span>
                 <div>
                   <div className="text-sm text-teal-100">{contact.phone_label}</div>
                   <div className="font-semibold">{contact.phone_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
-                <span className="text-teal-400 text-xl">✉️</span>
+                <span className="text-teal-400 text-xl"><Icon name="mail" size={18} className="text-teal-400" />️</span>
                 <div>
                   <div className="text-sm text-teal-100">{contact.email_label}</div>
                   <div className="font-semibold">{contact.email_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
-                <span className="text-teal-400 text-xl">📱</span>
+                <span className="text-teal-400 text-xl"><Icon name="smartphone" size={18} className="text-teal-400" /></span>
                 <div>
                   <div className="text-sm text-teal-100">{contact.whatsapp_label}</div>
                   <div className="font-semibold">{contact.whatsapp_value}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
-                <span className="text-teal-400 text-xl">📍</span>
+                <span className="text-teal-400 text-xl"><Icon name="map-pin" size={18} className="text-teal-400" /></span>
                 <div>
                   <div className="text-sm text-teal-100">{contact.office_label}</div>
                   <div className="font-semibold">{contact.office_value}</div>

@@ -3,6 +3,7 @@ import PageHeroBanner, { TEAL_HERO } from "@/components/PageHero";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 function PageHero() {
   return (
@@ -91,7 +92,7 @@ function StatementSection() {
                     key={i}
                     className="flex items-start gap-3 p-3 bg-[#F8F6F1] rounded-lg border border-gray-100"
                   >
-                    <span className="text-teal-500 shrink-0 mt-0.5">✓</span>
+                    <span className="text-teal-500 shrink-0 mt-0.5"><Icon name="check" size={20} className="text-teal-500 shrink-0 mt-0.5" /></span>
                     <span className="text-gray-700">{item}</span>
                   </li>
                 ))}

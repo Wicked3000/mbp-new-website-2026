@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function DownloadsSection() {
   const DOWNLOADS_FALLBACK = [
@@ -61,7 +62,7 @@ export function DownloadsSection() {
                   doc.type === "PDF" ? "bg-red-50 text-red-600" : "bg-blue-50 text-blue-600"
                 }`}
               >
-                <span className="text-xl">{doc.type === "PDF" ? "📄" : "📝"}</span>
+                <Icon name={doc.type === "PDF" ? "file-text" : "pencil-line"} size={20} />
               </div>
               <div className="flex-1 min-w-0">
                 <span className="text-xs font-semibold uppercase tracking-wider text-amber-600">

@@ -1,5 +1,6 @@
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function DeliverySection() {
   const METHODS_FALLBACK = [
@@ -55,7 +56,7 @@ export function DeliverySection() {
               key={m.name}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-teal-200 hover:shadow-lg transition-all"
             >
-              <div className="text-3xl mb-3">{m.icon}</div>
+              <div className="text-3xl mb-3"><Icon name={m.icon} size={24} /></div>
               <h3
                 className="text-lg font-bold text-[#0B2545] mb-2"
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -70,7 +71,7 @@ export function DeliverySection() {
 
         <div className="mt-12 p-6 bg-teal-50 rounded-xl border border-teal-100">
           <div className="flex items-start gap-4">
-            <div className="text-3xl shrink-0">{callout.icon}</div>
+            <div className="text-3xl shrink-0"><Icon name={callout.icon} size={24} /></div>
             <div>
               <h3
                 className="text-xl font-bold text-[#0B2545] mb-2"

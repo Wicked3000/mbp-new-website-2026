@@ -5,6 +5,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero, { NAVY_HERO } from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 const FALLBACK_NOTICES = [
   {
@@ -103,7 +104,7 @@ export default function NoticesPage() {
         >
           <div className="mt-6 flex-1 max-w-md relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true">
-              ⌕
+              <Icon name="search" size={20} />
             </span>
             <input
               type="search"

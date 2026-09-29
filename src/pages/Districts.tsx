@@ -6,6 +6,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import PageHero, { NAVY_HERO } from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export default function DistrictsPage() {
   const { data } = useEntity("districts", DISTRICT_FALLBACK as any);
@@ -73,7 +74,7 @@ export default function DistrictsPage() {
       <section className="bg-white border-b border-gray-100">
         <Reveal className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">⌕</span>
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><Icon name="search" size={20} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" /></span>
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}

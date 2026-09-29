@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function EventsSection() {
   const FALLBACK_EVENTS = [
@@ -96,7 +97,7 @@ export function EventsSection() {
               <h3 className="font-bold text-[#0B2545] leading-snug group-hover:text-[#0D9488] transition-colors">
                 {e.title}
               </h3>
-              <p className="text-gray-500 text-xs mt-2 flex items-center gap-1.5">🕒 {e.time}</p>
+              <p className="text-gray-500 text-xs mt-2 flex items-center gap-1.5"><Icon name="clock" size={20} className="text-gray-500 mt-2 flex items-center gap-1.5" /> {e.time}</p>
               <Link
                 to="/calendar"
                 className="inline-flex items-center gap-1 mt-4 text-xs font-bold text-[#0B2545] group-hover:text-[#0D9488]"

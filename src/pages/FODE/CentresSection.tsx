@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function CentresSection() {
   const CENTRES_FALLBACK = [
@@ -91,7 +92,7 @@ export function CentresSection() {
               className="bg-white rounded-xl p-6 border border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all"
             >
               <div className="flex items-start gap-4 mb-4">
-                <div className="text-3xl shrink-0">{c.icon}</div>
+                <div className="text-3xl shrink-0"><Icon name={c.icon} size={24} /></div>
                 <div className="flex-1">
                   <h3
                     className="text-lg font-bold text-[#0B2545] mb-1"

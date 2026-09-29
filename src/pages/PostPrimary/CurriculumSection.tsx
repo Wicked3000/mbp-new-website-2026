@@ -1,5 +1,6 @@
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function CurriculumSection() {
   const STREAMS_FALLBACK = [
@@ -107,7 +108,7 @@ export function CurriculumSection() {
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-amber-300 hover:shadow-lg transition-all"
             >
               <div className={`${s.color} text-white rounded-lg p-2 inline-block mb-3`}>
-                <span className="text-xl">{s.icon}</span>
+                <span className="text-xl"><Icon name={s.icon} size={18} /></span>
               </div>
               <div
                 className="text-[#0B2545] font-bold mb-1"
@@ -125,7 +126,7 @@ export function CurriculumSection() {
 
         <div className="mt-12 p-6 bg-amber-50 rounded-xl border border-amber-100">
           <div className="flex items-start gap-4">
-            <div className="text-3xl shrink-0">{assessmentHead.icon}</div>
+            <div className="text-3xl shrink-0"><Icon name={assessmentHead.icon} size={24} /></div>
             <div>
               <h3
                 className="text-xl font-bold text-[#0B2545] mb-2"

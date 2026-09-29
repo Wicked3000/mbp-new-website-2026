@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 const FODE_CENTRE = "Alotau FODE Centre";
 
@@ -38,7 +39,7 @@ export function SelectionListsSection() {
             <summary className="flex items-center justify-between p-4 cursor-pointer list-none">
               <div className="flex items-center gap-3">
                 <span className="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center text-teal-600 font-bold text-lg">
-                  🏢
+                  <Icon name="building" size={20} />
                 </span>
                 <h4 className="font-semibold text-[#0B2545] pr-8">{FODE_CENTRE}</h4>
               </div>

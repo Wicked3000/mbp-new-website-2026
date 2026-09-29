@@ -1,5 +1,6 @@
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function InitiativesSection() {
   const INITIATIVES_FALLBACK = [
@@ -83,7 +84,7 @@ export function InitiativesSection() {
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className={`${init.color} text-white rounded-lg p-2 shrink-0`}>
-                  <span className="text-xl">{init.icon}</span>
+                  <span className="text-xl"><Icon name={init.icon} size={18} /></span>
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider px-2 py-1 bg-white/80 rounded">
                   {init.status}

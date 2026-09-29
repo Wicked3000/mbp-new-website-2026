@@ -19,6 +19,7 @@
     "sync:php": "node scripts/sync-php-entities.mjs",
     "verify": "node scripts/verify.mjs",
     "check:banners": "node scripts/check-banners.mjs",
+    "check:emoji": "node scripts/check-emoji.mjs",
     "check:motion": "node scripts/check-motion.mjs",
     "verify:sync": "node scripts/check-api-sync.mjs",
     "verify:wiring": "node scripts/verify-wiring.mjs"
@@ -29,6 +30,7 @@
     "dotenv": "^18.0.3",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.48.0",
     "multer": "^2.4.0",
     "mysql2": "^3.24.4",
     "react": "^19.0.0",

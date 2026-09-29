@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function KeyInfoSection() {
   return (
@@ -33,7 +34,7 @@ export function KeyInfoSection() {
             },
           ].map((item) => (
             <div key={item.title} className="bg-white rounded-xl p-6 border border-gray-100">
-              <div className="text-3xl mb-3">{item.icon}</div>
+              <div className="text-3xl mb-3"><Icon name={item.icon} size={24} /></div>
               <div
                 className="text-2xl font-bold text-[#0B2545] mb-1"
                 style={{ fontFamily: "'Playfair Display', serif" }}

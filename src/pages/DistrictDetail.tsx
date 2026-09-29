@@ -6,6 +6,7 @@ import SiteFooter from "@/components/SiteFooter";
 import PageHero, { NAVY_HERO } from "@/components/PageHero";
 import { DISTRICT_FALLBACK, SCHOOL_FALLBACK, hasCoords, mapsUrl } from "@/data/fallbacks";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export default function DistrictDetailPage() {
   const { id } = useParams();
@@ -116,7 +117,7 @@ export default function DistrictDetailPage() {
       <section className="bg-white border-b border-gray-100">
         <Reveal className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">⌕</span>
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><Icon name="search" size={20} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" /></span>
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
@@ -179,7 +180,7 @@ export default function DistrictDetailPage() {
                       className="w-full h-36 object-cover"
                     />
                   ) : (
-                    <div className="w-full h-36 bg-[#0B2545] grid place-items-center text-3xl">🏫</div>
+                    <div className="w-full h-36 bg-[#0B2545] grid place-items-center text-3xl"><Icon name="school" size={24} className="w-full h-36 bg-[#0B2545] grid place-items-center" /></div>
                   )}
                   <div className="p-5">
                     <div className="flex flex-wrap gap-1.5 mb-2">

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function ProgramsSection() {
   const PROGRAMS_FALLBACK = [
@@ -49,7 +50,7 @@ export function ProgramsSection() {
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-teal-300 hover:shadow-lg transition-all"
             >
               <div className={`${p.color} text-white rounded-lg p-2 inline-block mb-3`}>
-                <span className="text-xl">{p.icon}</span>
+                <span className="text-xl"><Icon name={p.icon} size={18} /></span>
               </div>
               <div
                 className="text-[#0B2545] font-bold text-sm mb-1"

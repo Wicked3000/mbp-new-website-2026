@@ -3,6 +3,7 @@ import PageHeroBanner, { NAVY_HERO } from "@/components/PageHero";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 function PageHero() {
   return (
@@ -132,7 +133,7 @@ function LeadershipSection() {
               key={leader.name}
               className="bg-white rounded-xl border border-gray-100 p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-300"
             >
-              <div className="text-4xl mb-4">{leader.icon}</div>
+              <div className="text-4xl mb-4"><Icon name={leader.icon} size={32} /></div>
               <div
                 className="text-[#0B2545] font-bold text-lg mb-1"
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -315,7 +316,7 @@ function PartnersSection() {
               key={p.name}
               className="bg-[#F8F6F1] rounded-xl p-6 border border-gray-100 hover:border-[#C9A84C] hover:shadow-md transition-all"
             >
-              <div className="text-3xl mb-3">{p.icon}</div>
+              <div className="text-3xl mb-3"><Icon name={p.icon} size={24} /></div>
               <div
                 className="text-[#0B2545] font-bold mb-1"
                 style={{ fontFamily: "'Playfair Display', serif" }}

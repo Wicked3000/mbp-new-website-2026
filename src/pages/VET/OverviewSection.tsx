@@ -1,5 +1,6 @@
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
+import Icon from "@/components/Icon";
 
 export function OverviewSection() {
   const OVERVIEW_FALLBACK = {
@@ -75,7 +76,7 @@ export function OverviewSection() {
                   key={item.title}
                   className="flex gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all"
                 >
-                  <div className="text-2xl shrink-0">{item.icon}</div>
+                  <div className="text-2xl shrink-0"><Icon name={item.icon} size={20} /></div>
                   <div>
                     <h3 className="text-[#0B2545] font-bold mb-1">{item.title}</h3>
                     <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -98,7 +99,7 @@ export function OverviewSection() {
                 <ul className="space-y-3">
                   {features.map((row: any, i: number) => (
                     <li key={i} className="flex items-start gap-3 text-sm">
-                      <span className="text-amber-300 shrink-0">✓</span>
+                      <span className="text-amber-300 shrink-0"><Icon name="check" size={20} className="text-amber-300 shrink-0" /></span>
                       <span className="text-gray-700">{row.feature}</span>
                     </li>
                   ))}

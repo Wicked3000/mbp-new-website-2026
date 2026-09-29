@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { MAIN_NAV, SEARCH_SUGGESTIONS } from "@/components/siteNav";
 import { ClockIcon, MailIcon, PhoneIcon } from "@/components/chromeIcons";
+import Icon from "@/components/Icon";
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,9 +22,8 @@ export default function SiteHeader() {
       <div className="bg-[#07192E] text-white text-[13px] py-2 px-4 border-b border-white/5">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
           <div className="flex gap-5 items-center">
-            {/* SVG glyphs rather than emoji: 📞 and ✉️ render differently per
-                platform, and the emoji presentation adds a colour that no other
-                text in this bar has. */}
+            {/* SVG glyphs rather than emoji, which render differently per
+                platform and add a colour that no other text in this bar has. */}
             <a
               href="tel:+6756411234"
               className="flex items-center gap-1.5 opacity-90 hover:text-[#C9A84C] transition-colors"
@@ -119,7 +119,7 @@ export default function SiteHeader() {
               }`}
             >
               <span className="text-[14px]" aria-hidden="true">
-                ⌕
+                <Icon name="search" size={20} />
               </span>{" "}
               Search
             </button>
@@ -130,7 +130,7 @@ export default function SiteHeader() {
               aria-controls="site-search-panel"
               className="sm:hidden w-10 h-10 rounded-full bg-white border border-gray-200 text-[#0B2545] grid place-items-center hover:bg-gray-50 transition-colors"
             >
-              <span aria-hidden="true">⌕</span>
+              <span aria-hidden="true"><Icon name="search" size={20} /></span>
             </button>
             <Link
               to="/contact"
@@ -145,8 +145,8 @@ export default function SiteHeader() {
               aria-expanded={menuOpen}
               aria-controls="site-mobile-menu"
             >
-              <span className="text-lg leading-none" aria-hidden="true">
-                {menuOpen ? "✕" : "☰"}
+              <span className="leading-none">
+                <Icon name={menuOpen ? "x" : "menu"} size={22} />
               </span>
             </button>
           </div>
@@ -161,7 +161,7 @@ export default function SiteHeader() {
               <div className="flex rounded-2xl overflow-hidden bg-gray-50 border border-gray-200 p-1.5 gap-1.5 focus-within:bg-white focus-within:border-[#0D9488] focus-within:ring-2 focus-within:ring-[#0D9488]/20 transition-all">
                 <div className="flex-1 relative flex items-center">
                   <span className="absolute left-3.5 text-gray-400" aria-hidden="true">
-                    ⌕
+                    <Icon name="search" size={20} />
                   </span>
                   <input
                     type="search"
@@ -185,7 +185,7 @@ export default function SiteHeader() {
                   aria-label="Close search"
                   className="w-10 h-10 rounded-xl bg-white border border-gray-200 text-gray-500 hover:text-[#0B2545] grid place-items-center shrink-0"
                 >
-                  <span aria-hidden="true">✕</span>
+                  <span aria-hidden="true"><Icon name="x" size={20} /></span>
                 </button>
               </div>
               <p className="sr-only" role="status">
@@ -209,7 +209,7 @@ export default function SiteHeader() {
                       className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 text-sm text-gray-700 border-b last:border-b-0 border-gray-50"
                     >
                       <span className="text-gray-400" aria-hidden="true">
-                        ⌕
+                        <Icon name="search" size={20} />
                       </span>{" "}
                       {s.label}
                     </Link>
@@ -249,7 +249,7 @@ export default function SiteHeader() {
                 }}
                 className="mt-2 w-full text-center bg-white border border-gray-200 text-[#0B2545] font-semibold py-2.5 rounded-full hover:bg-gray-50 flex items-center justify-center gap-2"
               >
-                <span aria-hidden="true">⌕</span> Search
+                <span aria-hidden="true"><Icon name="search" size={20} /></span> Search
               </button>
             </div>
           </nav>
