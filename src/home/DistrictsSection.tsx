@@ -51,8 +51,8 @@ export function DistrictsSection() {
               {/* The admin offers a district thumbnail ("Coverage section
                   thumbnails"), so it is rendered here. Without this the image
                   saved in the admin appeared on /districts and the district
-                  page but nowhere on the home page. The emoji is the fallback
-                  for the districts that have no image yet. */}
+                  page but nowhere on the home page. Districts without an image
+                  fall back to the province map, tinted back. */}
               <div className="relative h-24 overflow-hidden bg-[#0B2545]">
                 {d.img ? (
                   <img
@@ -74,9 +74,6 @@ export function DistrictsSection() {
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B2545]/70 to-transparent" />
-                <span className="absolute bottom-2 left-3 text-2xl" aria-hidden="true">
-                  🏫
-                </span>
               </div>
               <div className="p-5 pt-3">
                 <div className="flex items-start justify-between gap-2">
