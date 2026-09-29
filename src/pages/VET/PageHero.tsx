@@ -24,10 +24,6 @@ export function VETPageHero() {
       title={hero.title}
       highlight={hero.subtitle}
       lead={hero.description}
-      actions={[
-        { label: "Overview", to: "#overview", variant: "primary" },
-        { label: "Find Centres", to: "#centres", variant: "secondary" },
-      ]}
     />
   );
 }
