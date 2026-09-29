@@ -98,7 +98,7 @@ export function DistrictsSection() {
         </div>
         <div className="mt-6 rounded-2xl bg-[#0B2545] text-white p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="w-10 h-10 rounded-xl bg-white/10 grid place-items-center"><Icon name="map" size={20} className="w-10 h-10 rounded-xl bg-white/10 grid place-items-center" />️</span>
+            <span className="w-10 h-10 rounded-xl bg-white/10 grid place-items-center"><Icon name="map" size={20} className="w-10 h-10 rounded-xl bg-white/10 grid place-items-center" /></span>
             <div>
               <div className="font-bold">Need help locating a school?</div>
               <div className="text-blue-200 text-sm">

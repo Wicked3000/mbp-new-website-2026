@@ -58,7 +58,7 @@ export function SupportSection() {
                   key={item.title}
                   className="flex gap-4 p-4 bg-white/10 rounded-xl border border-white/20 hover:border-amber-300/50 hover:bg-white/15 transition-all"
                 >
-                  <span className="text-2xl shrink-0"><Icon name={item.icon} size={20} /></span>
+                  <span className="text-2xl shrink-0"><Icon name={item.icon} size={20} className="text-amber-300" /></span>
                   <div>
                     <h3 className="text-white font-semibold">{item.title}</h3>
                     <p className="text-teal-100 text-sm">{item.desc}</p>
@@ -85,7 +85,7 @@ export function SupportSection() {
                 </div>
               </div>
               <div className="flex items-center gap-3 text-white">
-                <span className="text-amber-300 text-xl"><Icon name="mail" size={18} className="text-amber-300" />️</span>
+                <span className="text-amber-300 text-xl"><Icon name="mail" size={18} className="text-amber-300" /></span>
                 <div>
                   <div className="text-sm text-teal-100">{contact.email_label}</div>
                   <div className="font-semibold">{contact.email_value}</div>

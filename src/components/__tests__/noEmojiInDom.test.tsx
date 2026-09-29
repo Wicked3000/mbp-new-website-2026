@@ -11,6 +11,7 @@ import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { SupportSection } from "@/pages/FODE/SupportSection";
+import { SupportSection as VETSupport } from "@/pages/VET/SupportSection";
 import { ProgramsSection } from "@/pages/VET/ProgramsSection";
 import { OverviewSection } from "@/pages/PostPrimary/OverviewSection";
 import { KeyInfoSection } from "@/pages/Selections/KeyInfoSection";
@@ -64,4 +65,36 @@ describe("sections that hold stored icon values", () => {
     // rendered as text the section would show emoji instead of glyphs.
     expect(c.querySelectorAll("svg").length).toBeGreaterThanOrEqual(5);
   });
+});
+
+describe("icon legibility on dark surfaces", () => {
+  // An SVG takes its colour from currentColor. On a dark panel with no colour
+  // of its own, that is the dark body text, so the glyph renders effectively
+  // black on near-black and simply vanishes. This is the failure the support
+  // sections had.
+  const SECTIONS: [string, () => React.ReactNode][] = [
+    ["FODE support", () => <SupportSection />],
+    ["VET support", () => <VETSupport />],
+  ];
+
+  for (const [name, node] of SECTIONS) {
+    it(`${name} gives every icon a colour`, () => {
+      const c = renderSection(node());
+      const svgs = [...c.querySelectorAll("svg")];
+      expect(svgs.length).toBeGreaterThan(0);
+      for (const svg of svgs) {
+        // Either the icon sets a colour, or the element it sits in does.
+        // Font-size classes also begin "text-", so they have to be excluded or
+        // they pass this check on their own - which is how the bug it is
+        // meant to catch slipped through the first time.
+        const own = svg.getAttribute("class") || "";
+        const inherited = svg.parentElement?.getAttribute("class") || "";
+        const classes = `${own} ${inherited}`.split(/\s+/);
+        const coloured = classes.find(
+          (t) => t.startsWith("text-") && !/^text-(xs|sm|base|lg|xl|\d+xl)$/.test(t),
+        );
+        expect(coloured, "an icon on a dark panel with no colour").toBeDefined();
+      }
+    });
+  }
 });

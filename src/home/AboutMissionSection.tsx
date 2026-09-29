@@ -77,7 +77,7 @@ export function AboutMissionSection() {
                   className="flex items-center gap-2.5 bg-white border border-gray-100 rounded-xl px-3.5 py-3 shadow-sm"
                 >
                   <span className="w-7 h-7 rounded-full bg-emerald-50 text-emerald-600 grid place-items-center text-sm">
-                    <Icon name="check" size={20} />
+                    <Icon name="check" size={15} />
                   </span>
                   <span className="text-sm font-semibold text-[#0B2545]">{row.feature}</span>
                 </div>

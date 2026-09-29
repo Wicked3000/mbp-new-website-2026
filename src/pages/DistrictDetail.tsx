@@ -180,7 +180,12 @@ export default function DistrictDetailPage() {
                       className="w-full h-36 object-cover"
                     />
                   ) : (
-                    <div className="w-full h-36 bg-[#0B2545] grid place-items-center text-3xl"><Icon name="school" size={24} className="w-full h-36 bg-[#0B2545] grid place-items-center" /></div>
+                    <div className="w-full h-36 bg-[#0B2545] grid place-items-center">
+                      {/* White on the navy panel. The icon had inherited the
+                          panel's own background classes, which put a dark
+                          glyph on a dark field. */}
+                      <Icon name="school" size={32} className="text-white/40" />
+                    </div>
                   )}
                   <div className="p-5">
                     <div className="flex flex-wrap gap-1.5 mb-2">

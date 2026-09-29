@@ -286,7 +286,7 @@ export function SchoolsSection() {
                   <td className="px-4 py-3">
                     {s.boarding ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                        <Icon name="check" size={20} /> Boarding
+                        <Icon name="check" size={13} className="mr-1" /> Boarding
                       </span>
                     ) : (
                       <span className="text-gray-400 text-sm">Day only</span>
