@@ -57,7 +57,12 @@ export function HeroSection() {
       // which has no equivalent elsewhere - but it serves the same structural
       // role, so it carries the same marker and check:banners accepts it.
       data-page-hero=""
-      className="relative overflow-hidden bg-[#07192E]"
+      // Fills the viewport minus the sticky header and the announcement bar
+      // above it, so the first screen is entirely hero. dvh rather than vh:
+      // on mobile, vh does not account for the browser chrome, which makes the
+      // bottom of the hero sit under the address bar. min-h, not h, so a long
+      // headline or a narrow screen grows the section instead of clipping it.
+      className="relative overflow-hidden bg-[#07192E] flex items-center min-h-[calc(100vh-7.5rem)] min-h-[calc(100svh-7.5rem)]"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setFocusWithin(true)}
@@ -117,7 +122,9 @@ export function HeroSection() {
         <span aria-hidden="true">›</span>
       </button>
 
-      {/* Dots */}
+      {/* Dots. The section is now viewport-height and its content is centred, so
+          the content block could reach these. The extra bottom padding on the
+          content keeps them clear of the last element. */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
         {list.map((_: any, i: number) => (
           <button
@@ -132,7 +139,9 @@ export function HeroSection() {
         ))}
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-14 sm:py-16 lg:py-20">
+      {/* pb leaves room for the slide dots, which sit at the section's bottom
+          edge now that it fills the viewport. */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 pt-14 pb-24 sm:pt-16 sm:pb-24 lg:pt-20">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/15 text-[#E2C47A] text-[11px] font-bold uppercase tracking-[0.14em] px-3 py-1.5 rounded-full mb-5">
             <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-pulse inline-block" />
