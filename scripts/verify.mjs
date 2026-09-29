@@ -320,6 +320,65 @@ wrong.length
   ? fail(`pages stating a district count other than ${districtsHeld}: ${wrong.join(", ")}`)
   : pass(`no page states a district count other than the ${districtsHeld} held`);
 
+// Stored text must not contain a "uXXXX" escape fragment. A \uXXXX escape that
+// lost its backslash is served to visitors as five literal characters: the
+// calendar read "8:00 AM u2022 All Centres" where a bullet belongs, and the
+// programme levels read "Elementary u2013 Grade 8".
+//
+// The database is scanned with a REGEXP, and the seeds by importing them and
+// walking the parsed values. Scanning the source text instead would flag every
+// legitimate \uXXXX in a regex literal - iconSet.ts and check-emoji.mjs both
+// need those - so the data is checked, not the code that reads it.
+//
+// The last character must be a digit: "succeed" and "stubbed" both contain a u
+// followed by four hex characters.
+const BROKEN_ESCAPE = /u[0-9a-fA-F]{4}/g;
+const isBroken = (value) =>
+  String(value).match(BROKEN_ESCAPE)?.some((m) => /\d/.test(m[m.length - 1])) ?? false;
+
+const [scanTables] = await pool.query(
+  "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_TYPE='BASE TABLE'",
+  [DB.database],
+);
+const brokenStored = [];
+for (const t of scanTables) {
+  const table = t.TABLE_NAME;
+  if (table === "users") continue;
+  const [cols] = await pool.query(
+    "SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=? AND DATA_TYPE IN ('varchar','text','longtext','mediumtext','char')",
+    [DB.database, table],
+  );
+  for (const { COLUMN_NAME: column } of cols) {
+    const [hits] = await pool.query(
+      `SELECT \`${column}\` v FROM \`${table}\` WHERE \`${column}\` REGEXP 'u2022|u2014|u2013|u2019|u201c|u201d|u00[0-9a-f][0-9a-f]'`,
+    );
+    for (const row of hits) {
+      if (isBroken(row.v)) brokenStored.push(`${table}.${column}: ${String(row.v).slice(0, 50)}`);
+    }
+  }
+}
+brokenStored.length
+  ? fail(`stored text with a broken escape: ${brokenStored.join("; ")}`)
+  : pass("no stored text contains a broken escape fragment");
+
+const { SEEDS } = await import("../src/lib/seedData.ts");
+const brokenSeeds = [];
+const walkSeed = (value, trail) => {
+  if (typeof value === "string") {
+    if (isBroken(value)) brokenSeeds.push(`${trail}: ${value.slice(0, 50)}`);
+  } else if (Array.isArray(value)) {
+    value.forEach((v, i) => walkSeed(v, `${trail}[${i}]`));
+  } else if (value && typeof value === "object") {
+    for (const [k, v] of Object.entries(value)) walkSeed(v, `${trail}.${k}`);
+  }
+};
+for (const [entity, rows] of Object.entries(SEEDS)) {
+  if (Array.isArray(rows)) rows.forEach((row, i) => walkSeed(row, `${entity}[${i}]`));
+}
+brokenSeeds.length
+  ? fail(`seed data with a broken escape: ${brokenSeeds.slice(0, 8).join("; ")}`)
+  : pass("no seed string contains a broken escape fragment");
+
 await pool.end();
 console.log(failures ? `\n${failures} FAILURE(S)\n` : "\nAll checks passed.\n");
 process.exit(failures ? 1 : 0);

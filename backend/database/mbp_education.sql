@@ -353,14 +353,14 @@ INSERT INTO notices (notice_date,title) VALUES
 ('Aug 20','Annual School Sports Carnival registration open');
 
 INSERT INTO events (month,day,title,event_time,cat,color) VALUES
-('OCT','07','Grade 8 National Examinations','8:00 AM \u2022 All Centres','Examinations','bg-[#0B2545]'),
-('OCT','14','PEB Quarterly Meeting \u2014 Alotau','9:00 AM \u2022 Provincial HQ','Governance','bg-[#0D9488]'),
-('NOV','03','School Sports Carnival 2026','All Day \u2022 Alotau Oval','Co-Curricular','bg-[#C9A84C] text-[#0B2545]'),
+('OCT','07','Grade 8 National Examinations','8:00 AM • All Centres','Examinations','bg-[#0B2545]'),
+('OCT','14','PEB Quarterly Meeting — Alotau','9:00 AM • Provincial HQ','Governance','bg-[#0D9488]'),
+('NOV','03','School Sports Carnival 2026','All Day • Alotau Oval','Co-Curricular','bg-[#C9A84C] text-[#0B2545]'),
 ('DEC','05','Grade 10 & 12 Results Release','Online & School Noticeboards','Results','bg-[#163663]');
 
 INSERT INTO programs (code,label,level,description,color,accent,href,img,sort_order) VALUES
-('01','Basic Education','Elementary \u2013 Grade 8','Providing foundational literacy, numeracy and life skills for all children from Prep through to Grade 8 across Milne Bay.','bg-[#0B2545]','bg-teal-500','/basic','/assets/education_programs/basic/banner.jpg',1),
-('02','Post Primary','Grade 9 \u2013 Grade 12','Secondary education pathways preparing students for tertiary admission, technical training, and employment in the formal sector.','bg-[#163663]','bg-amber-400','/post','/assets/education_programs/post/banner.jpg',2),
+('01','Basic Education','Elementary – Grade 8','Providing foundational literacy, numeracy and life skills for all children from Prep through to Grade 8 across Milne Bay.','bg-[#0B2545]','bg-teal-500','/basic','/assets/education_programs/basic/banner.jpg',1),
+('02','Post Primary','Grade 9 – Grade 12','Secondary education pathways preparing students for tertiary admission, technical training, and employment in the formal sector.','bg-[#163663]','bg-amber-400','/post','/assets/education_programs/post/banner.jpg',2),
 ('03','VET','Vocational Education','Skills and trades training for out-of-school youth and adults, delivered through registered VET providers across the province.','bg-[#0D9488]','bg-amber-300','/vet','/assets/education_programs/vet/banner.jpg',3),
 ('04','FODE','Flexible Open & Distance','Distance and open learning enabling students in remote areas to access quality secondary education without leaving their communities.','bg-[#0B2545]','bg-teal-400','/fode','/assets/education_programs/fode/banner.jpg',4);
 
