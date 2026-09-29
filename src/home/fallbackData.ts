@@ -98,13 +98,6 @@ export const PROGRAMS = [
   },
 ];
 
-export const STATS = [
-  { value: "312", label: "Schools", sub: "Province-wide" },
-  { value: "48,200+", label: "Students", sub: "Enrolled 2026" },
-  { value: "2,140", label: "Teachers", sub: "Qualified staff" },
-  { value: "4", label: "Districts", sub: "Covered" },
-];
-
 export const NOTICES = [
   { date: "Sep 22", title: "PEB Meeting – October 2026 agenda published" },
   { date: "Sep 17", title: "Teacher Relief Grant applications close 30 Sep" },

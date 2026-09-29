@@ -5,21 +5,13 @@ import SiteFooter from "@/components/SiteFooter";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 import { useEntity } from "@/hooks/useDynamic";
-import { DISTRICTS_FALLBACK } from "@/hooks/useDistricts";
+import { STATS_FALLBACK } from "@/data/fallbacks";
+import { StatsRow } from "@/components/StatsRow";
 
-/**
- * Shown only if the stats API is unreachable. The district row is counted from
- * the districts table rather than written here, so the fallback cannot state a
- * different number from the rest of the site.
- */
-const STATS_FALLBACK = [
-  { value_text: "312", label: "Schools", sub: "Province-wide" },
-  { value_text: "48,200+", label: "Students", sub: "Enrolled 2026" },
-  { value_text: "2,140", label: "Teachers", sub: "Qualified staff" },
-  { value_text: String(DISTRICTS_FALLBACK.length), label: "Districts", sub: "Covered" },
-  { value_text: "25+", label: "Years", sub: "Of Service" },
-  { value_text: "4", label: "Programs", sub: "Education Streams" },
-];
+
+// The fallback lives in src/data/fallbacks.ts, shared with the home page: the two
+// pages each had their own and disagreed, so one showed four figures with the API up
+// and six with it down. See STATS_FALLBACK there.
 
 /**
  * The banner rotates: each photograph brings its own words with it, rather than
@@ -295,20 +287,12 @@ function StatsSection() {
   return (
     <section className="bg-[#0B2545] py-12 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-8 text-center">
-          {list.map((s: any) => (
-            <div key={s.label}>
-              <div
-                className="text-4xl sm:text-5xl font-bold text-[#C9A84C]"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                {s.value}
-              </div>
-              <div className="text-white font-semibold mt-1">{s.label}</div>
-              <div className="text-blue-300 text-sm">{s.sub}</div>
-            </div>
-          ))}
-        </div>
+        <Reveal>
+          {/* The shared row, so these figures look the same as the home page's.
+              This was a separate six-column grid holding four items, which left
+              two empty columns and pushed the numbers off to the left. */}
+          <StatsRow items={list} />
+        </Reveal>
       </div>
     </section>
   );

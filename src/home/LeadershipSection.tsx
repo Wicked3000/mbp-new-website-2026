@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import { useEntity } from "@/hooks/useDynamic";
 import { useDistrictCount } from "@/hooks/useDistricts";
 import Reveal from "@/components/Reveal";
-import { STATS } from "./fallbackData";
+import { STATS_FALLBACK } from "@/data/fallbacks";
 
 export function LeadershipSection() {
   const { data } = useEntity("leadership", []);
   const leader = (data as any[])[0];
   const districtCount = useDistrictCount();
-  const { data: stats } = useEntity("stats", STATS as any);
+  const { data: stats } = useEntity("stats", STATS_FALLBACK as any);
   const byLabel = (label: string) => {
     const row = (stats as any[]).find((s: any) => s.label === label);
     return row?.value_text ?? row?.value;

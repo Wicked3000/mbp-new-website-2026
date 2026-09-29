@@ -9,6 +9,24 @@ export const DISTRICT_FALLBACK = [
   { id: 4, name: "Kiriwina-Goodenough", capital: "Losuia", schools: 18, type: "Island", students: "2,100+", img: "", sort_order: 4 },
 ];
 
+/*
+ * The figures strip, one copy for every page that shows it.
+ *
+ * The home page and the About page each had their own, and they disagreed: the
+ * About page's held six rows - including "25+ Years" and "4 Programs", which do
+ * not exist in the stats table - while the home page's held the four that do.
+ * So with the API up one page showed four figures and with it down the other
+ * showed six, and the layout changed with them. The district row is counted from
+ * the districts rather than typed, for the same reason the pages count it: a
+ * number written out here is one more place to forget to update.
+ */
+export const STATS_FALLBACK: any[] = [
+  { value_text: "312", label: "Schools", sub: "Province-wide" },
+  { value_text: "48,200+", label: "Students", sub: "Enrolled 2026" },
+  { value_text: "2,140", label: "Teachers", sub: "Qualified staff" },
+  { value_text: String(DISTRICT_FALLBACK.length), label: "Districts", sub: "Covered" },
+];
+
 export const SCHOOL_FALLBACK: any[] = [
   {
     id: 1,
