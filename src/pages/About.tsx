@@ -201,11 +201,16 @@ function HistorySection() {
         </div>
 
         <div className="relative">
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-[#C9A84C] hidden lg:block" />
-          <div className="space-y-10">
+          {/* The spine only exists at lg, where the badge sits in the margin. */}
+          <div className="absolute left-7 top-0 bottom-0 w-0.5 bg-[#C9A84C] hidden lg:block" />
+          <div className="space-y-8 lg:space-y-10">
             {MILESTONES.map((m) => (
+              /* The badge is in the flow below lg and absolute at lg and up.
+                 Absolutely positioned, it was anchored at left-0 while the card
+                 was only pushed in by ml-4, so on a phone the 64px circle
+                 covered most of the card and the year sat on the paragraph. */
               <div key={m.year} className="relative lg:pl-20">
-                <div className="absolute left-0 top-4 w-16 h-16 lg:w-14 lg:h-14 lg:left-[-8px] rounded-full bg-[#0B2545] border-4 border-white flex items-center justify-center shadow-lg z-10">
+                <div className="lg:absolute lg:left-[-7px] lg:top-0 w-16 h-16 lg:w-14 lg:h-14 rounded-full bg-[#0B2545] border-4 border-white flex items-center justify-center shadow-lg mb-4 lg:mb-0 lg:z-10">
                   <span
                     className="text-[#C9A84C] text-xs font-bold leading-none text-center"
                     style={{ fontFamily: "'Playfair Display', serif" }}
@@ -213,7 +218,7 @@ function HistorySection() {
                     {m.year}
                   </span>
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 ml-4 lg:ml-0">
+                <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm border border-gray-100">
                   <h3
                     className="text-xl font-bold text-[#0B2545] mb-2"
                     style={{ fontFamily: "'Playfair Display', serif" }}
