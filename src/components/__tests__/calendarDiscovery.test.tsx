@@ -8,7 +8,6 @@
 // and every check passes.
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { FOOTER_NAV, MAIN_NAV, SEARCH_SUGGESTIONS } from "@/components/siteNav";
@@ -35,7 +34,7 @@ afterEach(() => {
  * open, otherwise a second call would toggle it shut and find no input.
  */
 function searchLinks(term: string): HTMLAnchorElement[] {
-  act(() => root.render(<MemoryRouter><SiteHeader /></MemoryRouter>));
+  act(() => root.render(<SiteHeader />));
   let input = container.querySelector("input[type=search]");
   if (!input) {
     const toggle = [...container.querySelectorAll("button")].find(

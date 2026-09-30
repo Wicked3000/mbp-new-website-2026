@@ -15,10 +15,10 @@ dotenv.config();
 // those directories rather than at the old single-file paths.
 const PAGES = [];
 for (const dir of [
-  "src/pages/BasicEducation",
-  "src/pages/PostPrimary",
-  "src/pages/VET",
-  "src/pages/FODE",
+  "src/views/BasicEducation",
+  "src/views/PostPrimary",
+  "src/views/VET",
+  "src/views/FODE",
   "src/home",
 ]) {
   for (const f of fs.readdirSync(dir)) {
@@ -74,19 +74,19 @@ if (!checkedFiles) fail("no section files with useEntity calls were found - is t
 console.log("\n[fields the components read exist on their tables]");
 // component alias -> table, for the spots where a rename would render blank
 const CHECKS = [
-  ["src/pages/PostPrimary/CurriculumSection.tsx", /s\.subjects/g, "post_streams", "subjects"],
-  ["src/pages/PostPrimary/CurriculumSection.tsx", /s\.grades/g, "post_streams", "grades"],
-  ["src/pages/PostPrimary/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
-  ["src/pages/PostPrimary/PathwaysSection.tsx", /p\.stats/g, "post_pathways", "stats"],
-  ["src/pages/VET/ProgramsSection.tsx", /p\.trades/g, "vet_programs", "trades"],
-  ["src/pages/VET/SelectionListsSection.tsx", /row\.name/g, "vet_centre_names", "name"],
-  ["src/pages/VET/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
-  ["src/pages/FODE/DeliverySection.tsx", /m\.availability/g, "fode_delivery_methods", "availability"],
-  ["src/pages/FODE/EnrolmentSection.tsx", /d\.date_text/g, "fode_key_dates", "date_text"],
-  ["src/pages/FODE/ProgramsSection.tsx", /p\.target/g, "fode_programs", "target"],
-  ["src/pages/FODE/DeliverySection.tsx", /row\.bullet/g, "fode_app_callout", "bullet"],
-  ["src/pages/FODE/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
-  ["src/pages/BasicEducation/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
+  ["src/views/PostPrimary/CurriculumSection.tsx", /s\.subjects/g, "post_streams", "subjects"],
+  ["src/views/PostPrimary/CurriculumSection.tsx", /s\.grades/g, "post_streams", "grades"],
+  ["src/views/PostPrimary/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
+  ["src/views/PostPrimary/PathwaysSection.tsx", /p\.stats/g, "post_pathways", "stats"],
+  ["src/views/VET/ProgramsSection.tsx", /p\.trades/g, "vet_programs", "trades"],
+  ["src/views/VET/SelectionListsSection.tsx", /row\.name/g, "vet_centre_names", "name"],
+  ["src/views/VET/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
+  ["src/views/FODE/DeliverySection.tsx", /m\.availability/g, "fode_delivery_methods", "availability"],
+  ["src/views/FODE/EnrolmentSection.tsx", /d\.date_text/g, "fode_key_dates", "date_text"],
+  ["src/views/FODE/ProgramsSection.tsx", /p\.target/g, "fode_programs", "target"],
+  ["src/views/FODE/DeliverySection.tsx", /row\.bullet/g, "fode_app_callout", "bullet"],
+  ["src/views/FODE/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
+  ["src/views/BasicEducation/DownloadsSection.tsx", /doc\.size_text/g, "downloads", "size_text"],
   ["src/home/AboutMissionSection.tsx", /row\.feature/g, "home_mission_points", "feature"],
   ["src/home/HelpCTASection.tsx", /row\.name/g, "home_cta_channels", "name"],
 ];
@@ -101,7 +101,7 @@ for (const [file, re, table, col] of CHECKS) {
 if (!mapFails) pass(`${CHECKS.length} field mappings verified against their tables`);
 
 console.log("\n[fode centres: centre_type is mapped back to type in the component]");
-const fode = fs.readFileSync("src/pages/FODE/CentresSection.tsx", "utf8");
+const fode = fs.readFileSync("src/views/FODE/CentresSection.tsx", "utf8");
 const mapsType = /centre_type\s*\|\|\s*c\.type/.test(fode) || /type:\s*c\.centre_type/.test(fode);
 const cardReadsType = /\{\s*c\.type\s*\}/.test(fode) || /c\.type\s*===\s*"/.test(fode);
 mapsType && cardReadsType

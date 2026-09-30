@@ -26,7 +26,11 @@ function sourceFiles(dir: string): string[] {
   return out;
 }
 
-const all = [...sourceFiles("src/pages"), ...sourceFiles("src/home")];
+// src/pages was renamed to src/views in the Vite -> App Router migration. The
+// name had to change: Next.js treats any directory called `pages` as a Pages
+// Router root and refuses to build alongside `app/`. These are the view
+// components behind app/(site)/**/page.tsx, not the routes themselves.
+const all = [...sourceFiles("src/views"), ...sourceFiles("src/home")];
 
 const DATA_VALUE = /icon\s*:\s*"[\u{1F300}-\u{1FAFF}]/u;
 

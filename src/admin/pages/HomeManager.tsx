@@ -1,3 +1,5 @@
+"use client";
+
 import ManagerTabs, { type ManagerTab } from "@/admin/components/ManagerTabs";
 import HeroManager from "@/admin/pages/HeroManager";
 import NewsManager from "@/admin/pages/NewsManager";

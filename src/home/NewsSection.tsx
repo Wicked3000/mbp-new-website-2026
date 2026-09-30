@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { useEntity } from "@/hooks/useDynamic";
 import { NEWS, NOTICES } from "./fallbackData";
 import Reveal from "@/components/Reveal";
@@ -41,7 +43,7 @@ export function NewsSection() {
                 </h2>
               </div>
               <Link
-                to="/news"
+                href="/news"
                 className="hidden sm:inline-flex items-center gap-1.5 text-sm font-bold text-[#0B2545] hover:text-[#0D9488] transition-colors border border-gray-200 hover:border-[#0D9488]/30 bg-white px-4 py-2 rounded-full"
               >
                 View All <span aria-hidden>→</span>
@@ -51,7 +53,7 @@ export function NewsSection() {
             <div className="grid sm:grid-cols-2 gap-6">
               {normNews[0] && (
                 <Link
-                  to={`/news/${normNews[0].id}`}
+                  href={`/news/${normNews[0].id}`}
                   className="sm:col-span-2 bg-white rounded-[18px] overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col sm:flex-row"
                 >
                   <div className="relative sm:w-[52%] h-56 sm:h-auto bg-[#0B2545] overflow-hidden shrink-0">
@@ -90,7 +92,7 @@ export function NewsSection() {
               {normNews.slice(1).map((n: any) => (
                 <Link
                   key={n.title + n.id}
-                  to={`/news/${n.id}`}
+                  href={`/news/${n.id}`}
                   className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
                 >
                   <div className="relative h-40 bg-[#0B2545] overflow-hidden">
@@ -143,7 +145,7 @@ export function NewsSection() {
               {normNotices.map((n: any, i: number) => (
                 <Link
                   key={n.title + i}
-                  to="/notices"
+                  href="/notices"
                   className={`flex gap-4 px-5 py-4 hover:bg-[#F8F6F1] transition-colors group ${
                     i < normNotices.length - 1 ? "border-b border-gray-100" : ""
                   }`}
@@ -160,7 +162,7 @@ export function NewsSection() {
               ))}
               <div className="px-5 py-3.5 bg-[#F8F6F1] border-t border-gray-100 flex items-center justify-between">
                 <Link
-                  to="/notices"
+                  href="/notices"
                   className="text-sm font-bold text-[#0D9488] hover:text-[#0B2545] transition-colors"
                 >
                   View All Notices →

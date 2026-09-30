@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useEntity } from "@/hooks/useDynamic";
 import { useDistrictCount } from "@/hooks/useDistricts";
 import { HERO_FALLBACK } from "./fallbackData";
@@ -171,13 +173,13 @@ export function HeroSection() {
 
           <div className="flex flex-wrap gap-3 mt-8">
             <Link
-              to="/basic"
+              href="/basic"
               className="inline-flex items-center gap-2 bg-[#C9A84C] text-[#0B2545] font-bold px-6 py-3 rounded-full hover:bg-[#d4b45e] transition-colors shadow-md"
             >
               Explore Programs →
             </Link>
             <Link
-              to="/contact"
+              href="/contact"
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white font-semibold px-6 py-3 rounded-full border border-white/20 hover:bg-white hover:text-[#0B2545] transition-colors"
             >
               Contact Division

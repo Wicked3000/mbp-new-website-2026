@@ -11,7 +11,14 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const root = path.resolve(import.meta.dirname, "..");
-const css = fs.readFileSync(path.join(root, "index.css"), "utf8");
+// src/index.css moved to app/globals.css with the Vite -> App Router migration.
+const css = fs.readFileSync(path.join(root, "..", "app", "globals.css"), "utf8");
+// The route wrapper moved with it: App.tsx is gone, and app/(site)/template.tsx
+// now carries the .page-enter class.
+const template = fs.readFileSync(
+  path.join(root, "..", "app", "(site)", "template.tsx"),
+  "utf8",
+);
 
 /**
  * The declaration block of one step of a @keyframes rule. The frames are
@@ -20,7 +27,7 @@ const css = fs.readFileSync(path.join(root, "index.css"), "utf8");
  */
 function step(animation: string, name: string) {
   const rule = new RegExp(`@keyframes\\s+${animation}\\s*\\{`, "m").exec(css);
-  if (!rule) throw new Error(`no @keyframes ${animation} in src/index.css`);
+  if (!rule) throw new Error(`no @keyframes ${animation} in app/globals.css`);
   let depth = 0;
   let body = "";
   for (let i = rule.index + rule[0].length; i < css.length; i++) {
@@ -77,8 +84,10 @@ describe("fixed chrome", () => {
   });
 
   it("the wrapper carries the transition class, so the dependency is real", () => {
-    const app = fs.readFileSync(path.join(root, "App.tsx"), "utf8");
-    expect(app).toMatch(/className=\{isAdmin \? undefined : "page-enter"\}/);
+    // In App Router the wrapper is app/(site)/template.tsx. The admin exclusion
+    // is no longer a conditional class - the template simply does not exist in
+    // the admin tree, so the admin cannot inherit a transformed ancestor at all.
+    expect(template).toMatch(/className="page-enter"/);
   });
 });
 

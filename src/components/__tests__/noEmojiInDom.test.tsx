@@ -7,14 +7,13 @@
 // rendered as one, so this renders real sections and reads the DOM.
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { SupportSection } from "@/pages/FODE/SupportSection";
-import { SupportSection as VETSupport } from "@/pages/VET/SupportSection";
-import { ProgramsSection } from "@/pages/VET/ProgramsSection";
-import { OverviewSection } from "@/pages/PostPrimary/OverviewSection";
-import { KeyInfoSection } from "@/pages/Selections/KeyInfoSection";
+import { SupportSection } from "@/views/FODE/SupportSection";
+import { SupportSection as VETSupport } from "@/views/VET/SupportSection";
+import { ProgramsSection } from "@/views/VET/ProgramsSection";
+import { OverviewSection } from "@/views/PostPrimary/OverviewSection";
+import { KeyInfoSection } from "@/views/Selections/KeyInfoSection";
 import { DistrictsSection } from "@/home/DistrictsSection";
 
 let container: HTMLDivElement;
@@ -34,11 +33,9 @@ afterEach(() => {
 const PICTO = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{26FF}\u{2B00}-\u{2BFF}]/u;
 
 function renderSection(node: React.ReactNode) {
-  act(() =>
-    root.render(
-      <MemoryRouter>{node}</MemoryRouter>,
-    ),
-  );
+  // No router wrapper. React Router's <Link> refused to render without a
+  // MemoryRouter above it; next/link emits a plain <a> and needs no context.
+  act(() => root.render(node));
   return container;
 }
 

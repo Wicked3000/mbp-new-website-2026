@@ -8,12 +8,11 @@
 // markup with the right words in them.
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { StatsRow } from "@/components/StatsRow";
 import { StatsSection } from "@/home/StatsSection";
-import AboutPage from "@/pages/About";
+import AboutPage from "@/views/About";
 
 let container: HTMLDivElement;
 let root: Root;
@@ -42,7 +41,8 @@ function grid() {
 }
 
 function render(node: React.ReactNode) {
-  act(() => root.render(<MemoryRouter>{node}</MemoryRouter>));
+  // No router wrapper: next/link renders without a router context.
+  act(() => root.render(node));
   return grid();
 }
 

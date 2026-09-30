@@ -1,4 +1,7 @@
-import { Link, useLocation } from "react-router-dom";
+"use client";
+
+﻿import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useMemo } from "react";
 import { MAIN_NAV, SEARCH_SUGGESTIONS } from "@/components/siteNav";
 import { ClockIcon, MailIcon, PhoneIcon } from "@/components/chromeIcons";
@@ -8,7 +11,16 @@ export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const location = useLocation();
+  // useLocation().pathname had a direct equivalent; the object shape did not,
+  // so the three call sites below read `pathname` rather than
+  // `location.pathname`.
+  //
+  // The `?? ""` is load-bearing, not defensive noise: usePathname() returns null
+  // when there is no App Router above it. In the real app there always is, but
+  // the header is also rendered directly by the component tests, and an
+  // unguarded `.startsWith` there threw on every one of them. React Router's
+  // useLocation could not return null, so this failure mode is new.
+  const pathname = usePathname() ?? "";
 
   // Matched against the label and any keywords, so an entry is reachable by the
   // words a visitor would type as well as the words it is labelled with.
@@ -45,7 +57,7 @@ export default function SiteHeader() {
           <div className="flex gap-4 items-center opacity-80 text-xs">
             <span className="hidden md:inline-flex items-center gap-1.5">
               <ClockIcon className="opacity-60 shrink-0" />
-              Mon – Fri: 8:00am – 4:30pm
+              Mon â€“ Fri: 8:00am â€“ 4:30pm
             </span>
             <span className="hidden sm:block opacity-30" aria-hidden="true">
               |
@@ -68,7 +80,7 @@ export default function SiteHeader() {
 
       <header className="bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 border-b border-gray-100 sticky top-0 z-50 shadow-[0_2px_20px_rgba(11,37,69,0.06)]">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3 group">
             <img
               src="/assets/logo/mbp-logo-bg-removed.png"
               alt="Milne Bay Province Division of Education"
@@ -90,12 +102,12 @@ export default function SiteHeader() {
           <nav aria-label="Primary" className="hidden lg:flex items-center gap-1">
             {MAIN_NAV.map((link) => {
               const active =
-                location.pathname === link.href ||
-                (link.href !== "/" && location.pathname.startsWith(link.href));
+                pathname === link.href ||
+                (link.href !== "/" && pathname.startsWith(link.href));
               return (
                 <Link
                   key={link.label}
-                  to={link.href}
+                  href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={`px-3.5 py-2 text-[13.5px] font-semibold rounded-full transition-all ${
                     active
@@ -136,7 +148,7 @@ export default function SiteHeader() {
               <span aria-hidden="true"><Icon name="search" size={20} /></span>
             </button>
             <Link
-              to="/contact"
+              href="/contact"
               className="hidden sm:inline-flex items-center gap-2 bg-[#0D9488] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#0b7a6e] transition-colors shadow-sm"
             >
               Get Help
@@ -170,7 +182,7 @@ export default function SiteHeader() {
                     id="siteheader-search"
                     type="search"
                     aria-label="Search the site"
-                    placeholder="Search the calendar, schools, forms…"
+                    placeholder="Search the calendar, schools, formsâ€¦"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     autoFocus
@@ -186,7 +198,7 @@ export default function SiteHeader() {
                   fragment of wherever the header happened to be sitting.
                 */}
                 <Link
-                  to={query.trim() ? `/search?q=${encodeURIComponent(query.trim())}` : "/search"}
+                  href={query.trim() ? `/search?q=${encodeURIComponent(query.trim())}` : "/search"}
                   onClick={() => {
                     setQuery("");
                     setSearchOpen(false);
@@ -216,7 +228,7 @@ export default function SiteHeader() {
                   {searchSuggestions.map((s) => (
                     <Link
                       key={s.label}
-                      to={s.to}
+                      href={s.to}
                       onClick={() => {
                         setQuery("");
                         setSearchOpen(false);
@@ -245,10 +257,10 @@ export default function SiteHeader() {
               {MAIN_NAV.map((link) => (
                 <Link
                   key={link.label}
-                  to={link.href}
-                  aria-current={location.pathname === link.href ? "page" : undefined}
+                  href={link.href}
+                  aria-current={pathname === link.href ? "page" : undefined}
                   className={`block py-2.5 px-3 text-sm font-medium rounded-lg border ${
-                    location.pathname === link.href
+                    pathname === link.href
                       ? "bg-[#0B2545] text-white border-[#0B2545]"
                       : "text-gray-700 border-transparent hover:bg-gray-50 hover:text-[#0D9488]"
                   }`}

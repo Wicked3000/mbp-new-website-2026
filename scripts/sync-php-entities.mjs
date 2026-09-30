@@ -1,12 +1,12 @@
 // Regenerates the entity map and public-read allowlist inside
-// backend/api/entities.php from the Node API's server/app.js, so the two API
+// backend/api/entities.php from the Node API's lib/entities.ts, so the two API
 // clients cannot drift apart again. Run after adding an entity to ENTITY_MAP:
 //
 //   node scripts/sync-php-entities.mjs
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ENTITY_MAP, PUBLIC_READ } from "../server/app.js";
+import { ENTITY_MAP, PUBLIC_READ } from "../lib/entities.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const target = path.join(root, "backend", "api", "entities.php");

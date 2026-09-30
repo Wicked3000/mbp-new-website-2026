@@ -8,7 +8,6 @@
 // pinned here.
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MemoryRouter, MemoryRouter as MR } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SEARCH_GROUPS, searchRows, searchableText } from "@/lib/searchIndex";
@@ -137,13 +136,8 @@ describe("the header search box", () => {
    * lives inside the panel - is no longer in the document.
    */
   function searchTarget(term: string) {
-    act(() =>
-      root.render(
-        <MR>
-          <SiteHeader />
-        </MR>,
-      ),
-    );
+    // No router wrapper: next/link renders without a router context.
+    act(() => root.render(<SiteHeader />));
     let input = container.querySelector("input[type=search]");
     if (!input) {
       const toggle = [...container.querySelectorAll("button")].find(

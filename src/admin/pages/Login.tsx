@@ -1,5 +1,8 @@
+"use client";
+
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 
 export default function Login() {
@@ -7,14 +10,19 @@ export default function Login() {
   const [pass, setPass] = useState("password");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const nav = useNavigate();
+  const router = useRouter();
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setErr("");
     setLoading(true);
     try {
       await api.login(user, pass);
-      nav("/admin");
+      // router.refresh() is required, not optional: the session now lives in a
+      // cookie the client cannot read, so the (dash) layout - which performs the
+      // real auth check on the server - is still holding the pre-login render.
+      // Without the refresh it would redirect straight back here.
+      router.push("/admin");
+      router.refresh();
     } catch (e: any) {
       setErr(e.message || "Login failed");
     } finally {
@@ -103,18 +111,19 @@ export default function Login() {
             <div className="text-center text-xs text-gray-500">
               Backend:{" "}
               <span className="font-mono">
-                {(import.meta as any).env?.VITE_API_BASE || "http://localhost/mbp-api"}
+                {process.env.NEXT_PUBLIC_API_BASE || "/api"}
               </span>{" "}
-              - falls back to local mock if XAMPP offline.
+              - same-origin Route Handler. Falls back to a local mock if the
+              database is unreachable.
               <br />
-              <Link to="/" className="text-[#0D9488] font-semibold hover:underline">
+              <Link href="/" className="text-[#0D9488] font-semibold hover:underline">
                 ← Back to site
               </Link>
             </div>
           </form>
         </div>
         <div className="text-center text-white/50 text-xs mt-4">
-          XAMPP → start Apache + MySQL → import backend/database/mbp_education.sql
+          Start the database, then apply the schema with: npm run db:ensure
         </div>
       </div>
     </div>

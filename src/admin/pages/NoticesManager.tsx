@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useToast } from "@/admin/components/Toast";

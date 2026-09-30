@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { useEntity } from "@/hooks/useDynamic";
 import { QUICK_LINKS } from "./fallbackData";
 
@@ -175,7 +177,7 @@ export function QuickLinksStrip() {
             const className =
               "flex items-center gap-4 px-5 py-6 hover:bg-[#F8F6F1] transition-colors group";
             return href ? (
-              <Link key={ql.label} to={href} className={className}>
+              <Link key={ql.label} href={href} className={className}>
                 {body}
               </Link>
             ) : (

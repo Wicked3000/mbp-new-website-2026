@@ -18,25 +18,25 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (f) => fs.readFileSync(path.join(root, f), "utf8");
 
 const ROUTES = {
-  "/": "src/pages/HomePage.tsx",
-  "/about": "src/pages/About.tsx",
-  "/basic": "src/pages/BasicEducation/index.tsx",
-  "/post": "src/pages/PostPrimary/index.tsx",
-  "/vet": "src/pages/VET/index.tsx",
-  "/fode": "src/pages/FODE/index.tsx",
-  "/contact": "src/pages/Contact.tsx",
-  "/accessibility": "src/pages/Accessibility.tsx",
-  "/privacy": "src/pages/Privacy.tsx",
-  "/terms": "src/pages/Terms.tsx",
-  "/districts": "src/pages/Districts.tsx",
-  "/districts/:id": "src/pages/DistrictDetail.tsx",
-  "/schools/:id": "src/pages/SchoolDetail.tsx",
-  "/downloads": "src/pages/Downloads.tsx",
-  "/calendar": "src/pages/Calendar.tsx",
-  "/selections": "src/pages/Selections/index.tsx",
-  "/news": "src/pages/News.tsx",
-  "/news/:id": "src/pages/NewsDetail.tsx",
-  "/notices": "src/pages/Notices.tsx",
+  "/": "src/views/HomePage.tsx",
+  "/about": "src/views/About.tsx",
+  "/basic": "src/views/BasicEducation/index.tsx",
+  "/post": "src/views/PostPrimary/index.tsx",
+  "/vet": "src/views/VET/index.tsx",
+  "/fode": "src/views/FODE/index.tsx",
+  "/contact": "src/views/Contact.tsx",
+  "/accessibility": "src/views/Accessibility.tsx",
+  "/privacy": "src/views/Privacy.tsx",
+  "/terms": "src/views/Terms.tsx",
+  "/districts": "src/views/Districts.tsx",
+  "/districts/:id": "src/views/DistrictDetail.tsx",
+  "/schools/:id": "src/views/SchoolDetail.tsx",
+  "/downloads": "src/views/Downloads.tsx",
+  "/calendar": "src/views/Calendar.tsx",
+  "/selections": "src/views/Selections/index.tsx",
+  "/news": "src/views/News.tsx",
+  "/news/:id": "src/views/NewsDetail.tsx",
+  "/notices": "src/views/Notices.tsx",
 };
 
 // The banner, and the two home sections that sit above the fold or are chrome.
@@ -97,7 +97,8 @@ for (const [route, file] of Object.entries(ROUTES)) {
 }
 
 console.log("\n[the reveal is wired to the shared stylesheet]");
-const css = read(path.join("src", "index.css"));
+// src/index.css moved to app/globals.css in the Vite -> App Router migration.
+const css = read(path.join("app", "globals.css"));
 css.includes("@keyframes reveal-up") ? console.log("  ok    reveal-up is defined") : fail("no reveal-up keyframes");
 css.includes(".reveal[data-revealed=\"true\"]")
   ? console.log("  ok    .reveal is driven by data-revealed")

@@ -8,7 +8,6 @@
 // editing a fiction.
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { QuickLinksStrip } from "@/home/QuickLinksStrip";
@@ -31,9 +30,7 @@ afterEach(() => {
 function render() {
   act(() =>
     root.render(
-      <MemoryRouter>
-        <QuickLinksStrip />
-      </MemoryRouter>,
+      <QuickLinksStrip />,
     ),
   );
   return container;
@@ -107,9 +104,7 @@ describe("home page quick links", () => {
     // appears to do nothing.
     act(() =>
       root.render(
-        <MemoryRouter>
-          <QuickLinksStrip />
-        </MemoryRouter>,
+        <QuickLinksStrip />,
       ),
     );
     // Sanity: the real fallback tiles all have destinations.

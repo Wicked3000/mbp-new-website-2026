@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import Crud from "@/admin/components/Crud";
 import { useEntity } from "@/hooks/useDynamic";

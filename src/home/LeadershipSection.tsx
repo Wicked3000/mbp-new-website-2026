@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { useEntity } from "@/hooks/useDynamic";
 import { useDistrictCount } from "@/hooks/useDistricts";
 import Reveal from "@/components/Reveal";
@@ -73,13 +75,13 @@ export function LeadershipSection() {
             </p>
             <div className="flex flex-wrap gap-3 mt-8">
               <Link
-                to="/about"
+                href="/about"
                 className="bg-[#0B2545] text-white font-bold px-6 py-3 rounded-full hover:bg-[#163663] transition-colors shadow-sm text-sm"
               >
                 Meet the Team →
               </Link>
               <Link
-                to="/contact"
+                href="/contact"
                 className="bg-white border border-gray-200 text-[#0B2545] font-bold px-6 py-3 rounded-full hover:border-[#0D9488] hover:text-[#0D9488] transition-colors text-sm"
               >
                 Contact the Office

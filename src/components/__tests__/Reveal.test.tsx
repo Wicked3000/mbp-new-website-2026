@@ -72,7 +72,9 @@ function stubMatchMedia(reduced: boolean) {
   );
 }
 
-const css = () => fs.readFileSync(path.resolve(import.meta.dirname, "../../index.css"), "utf8");
+// src/index.css moved to app/globals.css with the Vite -> App Router migration.
+const css = () =>
+  fs.readFileSync(path.resolve(import.meta.dirname, "../../../app/globals.css"), "utf8");
 
 beforeEach(() => {
   container = document.createElement("div");

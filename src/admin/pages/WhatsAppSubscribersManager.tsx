@@ -1,3 +1,5 @@
+"use client";
+
 import Crud from "@/admin/components/Crud";
 
 const CHANNELS = [

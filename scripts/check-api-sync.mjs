@@ -1,6 +1,6 @@
 // Guards the two API clients against drifting apart.
 //
-// The browser can be served by either the Node API (server/app.js) or the PHP
+// The browser can be served by either the Node API (lib/entities.ts) or the PHP
 // API (backend/api/entities.php). They each keep their own entity map, and when
 // they disagree the loser answers 400 "Unknown entity" for a section that is
 // plainly in the database - which is what silently emptied the Home Page admin.
@@ -10,7 +10,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ENTITY_MAP, PUBLIC_READ } from "../server/app.js";
+import { ENTITY_MAP, PUBLIC_READ } from "../lib/entities.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const php = fs.readFileSync(path.join(root, "backend", "api", "entities.php"), "utf8");

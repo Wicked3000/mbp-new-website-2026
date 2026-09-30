@@ -1,4 +1,7 @@
-import { Link, useLocation, useNavigate, Outlet } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import {
@@ -31,11 +34,34 @@ const NAV = [
   { label: "Settings", icon: SettingsIcon, to: "/admin/settings" },
 ] as const;
 
-export default function AdminLayout() {
+/**
+ * Admin chrome.
+ *
+ * Rendered by app/admin/(dash)/layout.tsx, which has already verified the
+ * session cookie on the server and passes the signed-in `user` in as a prop.
+ *
+ * The three changes from the React Router version:
+ *
+ * - `useLocation().pathname` -> `usePathname()`, for the active-nav highlight.
+ * - `useNavigate()` -> `useRouter().push()`, for the post-logout redirect.
+ * - `<Outlet />` -> `children`, because App Router nests through layout props
+ *   rather than a routed outlet.
+ *
+ * The `user` prop replaces `api.user()`. That call read localStorage, which is
+ * gone with the token, and would have thrown during the server render that Next
+ * performs for client components - producing a hydration mismatch on the
+ * username even if it had not.
+ */
+export default function AdminShell({
+  user,
+  children,
+}: {
+  user: { id: number; username: string; email: string; role: string };
+  children: React.ReactNode;
+}) {
   const [open, setOpen] = useState(false);
-  const loc = useLocation();
-  const nav = useNavigate();
-  const user = api.user();
+  const pathname = usePathname();
+  const router = useRouter();
   const sidebarRef = useRef<HTMLElement>(null);
   const sidebarCloseRef = useRef<HTMLButtonElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
@@ -107,7 +133,7 @@ export default function AdminLayout() {
               onClick={() => closeSidebar(true)}
               className="lg:hidden ml-auto w-8 h-8 rounded-full bg-white/10 grid place-items-center"
             >
-              ✕
+              âœ•
             </button>
           </div>
           <div className="px-3 py-3 flex-1 overflow-auto">
@@ -117,14 +143,14 @@ export default function AdminLayout() {
             <nav className="space-y-1">
               {NAV.map((n) => {
                 const active =
-                  loc.pathname === n.to || (n.to !== "/admin" && loc.pathname.startsWith(n.to));
+                  pathname === n.to || (n.to !== "/admin" && pathname.startsWith(n.to));
                 const Icon = n.icon as React.ComponentType<{
                   className?: string;
                 }>;
                 return (
                   <Link
                     key={n.to}
-                    to={n.to}
+                    href={n.to}
                     aria-current={active ? "page" : undefined}
                     onClick={() => {
                       closeSidebar(false);
@@ -157,9 +183,13 @@ export default function AdminLayout() {
               </div>
               <button
                 type="button"
-                onClick={() => {
-                  api.logout();
-                  nav("/admin/login");
+                onClick={async () => {
+                  // Clears the session cookie server-side. The old version
+                  // deleted two localStorage keys and left the JWT valid until
+                  // it expired; see app/api/auth/logout/route.ts.
+                  await api.logout();
+                  router.push("/admin/login");
+                  router.refresh();
                 }}
                 className="text-xs font-bold bg-white text-[#07192E] px-3 py-1.5 rounded-full hover:bg-[#C9A84C]"
               >
@@ -167,10 +197,10 @@ export default function AdminLayout() {
               </button>
             </div>
             <Link
-              to="/"
+              href="/"
               className="mt-3 flex items-center justify-center gap-2 text-xs font-semibold text-white/70 hover:text-white"
             >
-              ← Back to Site
+              â† Back to Site
             </Link>
           </div>
         </aside>
@@ -196,7 +226,7 @@ export default function AdminLayout() {
                 onClick={() => setOpen(!open)}
                 className="lg:hidden w-10 h-10 rounded-xl border border-gray-200 grid place-items-center"
               >
-                ☰
+                â˜°
               </button>
               <div className="hidden sm:block">
                 <div
@@ -213,11 +243,11 @@ export default function AdminLayout() {
                     aria-hidden="true"
                     className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
                   />
-                  DB: {(import.meta as any).env?.VITE_API_BASE || "http://localhost/mbp-api"}{" "}
+                  DB: {process.env.NEXT_PUBLIC_API_BASE || "/api"}{" "}
                   <span className="opacity-50">(falls back to local)</span>
                 </span>
                 <Link
-                  to="/"
+                  href="/"
                   className="hidden sm:inline-flex bg-[#0B2545] text-white text-sm font-semibold px-4 py-2 rounded-full hover:bg-[#163663]"
                 >
                   View Site
@@ -226,7 +256,7 @@ export default function AdminLayout() {
             </div>
           </header>
           <main id="main-content" tabIndex={-1} className="p-4 sm:p-6 flex-1">
-            <Outlet />
+            {children}
           </main>
         </div>
       </div>

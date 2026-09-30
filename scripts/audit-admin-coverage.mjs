@@ -18,7 +18,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ENTITY_MAP } from "../server/app.js";
+import { ENTITY_MAP } from "../lib/entities.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => fs.readFileSync(path.join(root, p), "utf8");
@@ -151,10 +151,10 @@ console.log("\n[4] Every section a page renders can be edited in the admin]");
 // section file is one section, which is the granularity the admin tabs use.
 const SECTIONS = {
   Home: "src/home",
-  BasicEducation: "src/pages/BasicEducation",
-  PostPrimary: "src/pages/PostPrimary",
-  VET: "src/pages/VET",
-  FODE: "src/pages/FODE",
+  BasicEducation: "src/views/BasicEducation",
+  PostPrimary: "src/views/PostPrimary",
+  VET: "src/views/VET",
+  FODE: "src/views/FODE",
 };
 const MANAGER = {
   Home: "HomeManager",

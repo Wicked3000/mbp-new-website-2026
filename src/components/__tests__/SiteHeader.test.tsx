@@ -7,7 +7,6 @@
 // it already carries the meaning.
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import SiteHeader from "../SiteHeader";
@@ -21,9 +20,7 @@ beforeEach(() => {
   root = createRoot(container);
   act(() =>
     root.render(
-      <MemoryRouter>
-        <SiteHeader />
-      </MemoryRouter>,
+      <SiteHeader />,
     ),
   );
 });

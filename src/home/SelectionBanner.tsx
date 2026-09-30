@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
 
@@ -41,14 +43,14 @@ export function SelectionBanner() {
             </div>
             <div className="flex gap-3 shrink-0">
               <Link
-                to={banner.primary_href}
+                href={banner.primary_href}
                 className="bg-white text-[#0B2545] font-bold px-5 py-2.5 rounded-full hover:bg-[#C9A84C] transition-colors shadow-sm text-sm"
               >
                 {banner.primary_label} →
               </Link>
               {banner.secondary_label && (
                 <Link
-                  to={banner.secondary_href}
+                  href={banner.secondary_href}
                   className="hidden sm:inline-flex items-center bg-white/10 border border-white/20 text-white font-semibold px-5 py-2.5 rounded-full hover:bg-white hover:text-[#0B2545] transition-colors text-sm"
                 >
                   {banner.secondary_label}

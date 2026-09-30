@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
@@ -62,7 +64,7 @@ export function EventsSection() {
             </p>
           </div>
           <Link
-            to="/calendar"
+            href="/calendar"
             className="hidden sm:inline-flex items-center gap-2 border border-gray-200 bg-white text-[#0B2545] font-bold px-5 py-2.5 rounded-full hover:border-[#0D9488] hover:text-[#0D9488] transition-colors text-sm"
           >
             View Full Calendar →
@@ -99,7 +101,7 @@ export function EventsSection() {
               </h3>
               <p className="text-gray-500 text-xs mt-2 flex items-center gap-1.5"><Icon name="clock" size={20} className="text-gray-500 mt-2 flex items-center gap-1.5" /> {e.time}</p>
               <Link
-                to="/calendar"
+                href="/calendar"
                 className="inline-flex items-center gap-1 mt-4 text-xs font-bold text-[#0B2545] group-hover:text-[#0D9488]"
               >
                 Details <span className="group-hover:translate-x-0.5 transition-transform">→</span>

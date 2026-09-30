@@ -7,7 +7,6 @@
 // two sources had to be changed separately, and nothing compared them.
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { AboutMissionSection } from "@/home/AboutMissionSection";
@@ -30,9 +29,7 @@ afterEach(() => {
 function render() {
   act(() =>
     root.render(
-      <MemoryRouter>
-        <AboutMissionSection />
-      </MemoryRouter>,
+      <AboutMissionSection />,
     ),
   );
   return container;

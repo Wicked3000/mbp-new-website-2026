@@ -1,18 +1,28 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+const MOCK_KEY = "mbp_mock_db_v1";
+
+/**
+ * The admin session no longer lives in localStorage.
+ *
+ * These keys are asserted to stay absent rather than merely unused. A test that
+ * only checked the new behaviour would still pass if some forgotten code path
+ * wrote the token back into storage, which is the specific regression the
+ * httpOnly cookie was introduced to prevent.
+ */
 const TOKEN_KEY = "mbp_admin_token";
 const USER_KEY = "mbp_admin_user";
-const MOCK_KEY = "mbp_mock_db_v1";
 
 function jsonResponse(body: unknown, status = 200) {
   return { ok: status >= 200 && status < 300, status, json: async () => body };
 }
 
 /**
- * Fresh localStorage, a fresh copy of the module (its import seeds the offline
- * store), and a fetch stubbed from a path -> response map. Anything unmapped
- * throws the way a dead network does, so the offline paths get exercised too.
+ * Fresh localStorage, a fresh copy of the module (its first call seeds the
+ * offline store), and a fetch stubbed from a path -> response map. Anything
+ * unmapped throws the way a dead network does, so the offline paths get
+ * exercised too.
  */
 type RouteHandler = (ctx: { path: string; init: RequestInit; url: string }) => unknown;
 
@@ -38,24 +48,63 @@ afterEach(() => {
 });
 
 describe("auth", () => {
-  it("stores the token and user on a successful login", async () => {
+  it("does not put the session in web storage on a successful login", async () => {
     const { api } = await setup({
-      "/auth/login.php": () =>
-        jsonResponse({ token: "t0ken", user: { id: 1, username: "admin", role: "super_admin" } }),
+      "/auth/login": () =>
+        jsonResponse({ user: { id: 1, username: "admin", role: "super_admin" } }),
     });
     await api.login("admin", "a long passphrase");
-    expect(localStorage.getItem(TOKEN_KEY)).toBe("t0ken");
-    expect(api.isAuthed()).toBe(true);
-    expect(api.user()?.username).toBe("admin");
+    // The token is not in the response body at all, so there is nothing for the
+    // page to store. Even if a future response did leak one, the client below
+    // does not persist it.
+    expect(localStorage.getItem(TOKEN_KEY)).toBeNull();
+    expect(localStorage.getItem(USER_KEY)).toBeNull();
+  });
+
+  it("never sets an Authorization header", async () => {
+    const { api, fetchMock } = await setup({
+      "/entities": () => jsonResponse({ data: [] }),
+    });
+    await api.list("contact_messages");
+    const headers = fetchMock.mock.calls[0]?.[1]?.headers as Record<string, string>;
+    // The session is an httpOnly cookie the browser attaches on its own. A
+    // bearer header would put the token back in reach of page script.
+    expect(headers.Authorization).toBeUndefined();
+  });
+
+  it("sends credentials so the session cookie travels with admin calls", async () => {
+    const { api, fetchMock } = await setup({
+      "/entities": () => jsonResponse({ data: [] }),
+    });
+    await api.list("contact_messages");
+    const init = fetchMock.mock.calls[0]?.[1] as RequestInit;
+    expect(init.credentials).toBe("same-origin");
+  });
+
+  it("calls the un-suffixed route, not the legacy .php path", async () => {
+    const { api, fetchMock } = await setup({ "/auth/login": () => jsonResponse({ user: {} }) });
+    await api.login("admin", "a long passphrase");
+    const url = String(fetchMock.mock.calls[0]?.[0]);
+    expect(url).toContain("/auth/login");
+    // The sixteen alias() shims in the Express app existed only to translate
+    // these. If one reappears, the client and the Route Handler have drifted.
+    expect(url).not.toContain(".php");
+  });
+
+  it("uses a same-origin relative base url", async () => {
+    const { api, fetchMock } = await setup({ "/auth/login": () => jsonResponse({ user: {} }) });
+    await api.login("admin", "a long passphrase");
+    const url = String(fetchMock.mock.calls[0]?.[0]);
+    // Not http://localhost/mbp-api: the API is a Route Handler in this app.
+    expect(url.startsWith("/")).toBe(true);
   });
 
   it("reports invalid credentials instead of signing anyone in", async () => {
     const { api } = await setup({
-      "/auth/login.php": () => jsonResponse({ error: "Invalid credentials" }, 401),
+      "/auth/login": () => jsonResponse({ error: "Invalid credentials" }, 401),
     });
     await expect(api.login("admin", "wrong")).rejects.toMatchObject({ status: 401 });
     expect(localStorage.getItem(TOKEN_KEY)).toBeNull();
-    expect(api.isAuthed()).toBe(false);
   });
 
   it("never falls back to a local account when the API is unreachable", async () => {
@@ -64,22 +113,21 @@ describe("auth", () => {
     expect(localStorage.getItem(TOKEN_KEY)).toBeNull();
   });
 
-  it("replaces the stored token when the password changes", async () => {
-    const { api } = await setup({
-      "/auth/change-password.php": () => jsonResponse({ ok: true, token: "fresh" }),
+  it("clears the session through the server on logout", async () => {
+    const { api, fetchMock } = await setup({
+      "/auth/logout": () => jsonResponse({ ok: true }),
     });
-    localStorage.setItem(TOKEN_KEY, "old");
-    localStorage.setItem(USER_KEY, JSON.stringify({ username: "admin" }));
-    await api.changePassword("current one", "a different one");
-    expect(localStorage.getItem(TOKEN_KEY)).toBe("fresh");
+    await api.logout();
+    const url = String(fetchMock.mock.calls[0]?.[0]);
+    expect(url).toContain("/auth/logout");
+    expect(fetchMock.mock.calls[0]?.[1]?.method).toBe("POST");
   });
 
-  it("sends the bearer token on admin reads", async () => {
-    const { api, fetchMock } = await setup({ "/entities.php": () => jsonResponse({ data: [] }) });
-    localStorage.setItem(TOKEN_KEY, "t0ken");
-    await api.list("contact_messages");
-    const headers = fetchMock.mock.calls[0]?.[1]?.headers as Record<string, string>;
-    expect(headers.Authorization).toBe("Bearer t0ken");
+  it("still signs out locally when the logout request fails", async () => {
+    const { api } = await setup({});
+    // The admin must not be stranded in a half-signed-out state because the
+    // network blipped.
+    await expect(api.logout()).resolves.toBeUndefined();
   });
 });
 
@@ -93,15 +141,14 @@ describe("offline fallback", () => {
 
   it("does not swallow a rejected write", async () => {
     const { api } = await setup({
-      "/entities.php": () => jsonResponse({ error: "Read only" }, 403),
+      "/entities": () => jsonResponse({ error: "Read only" }, 403),
     });
-    localStorage.setItem(TOKEN_KEY, "t0ken");
     await expect(api.create("users", { username: "x" })).rejects.toMatchObject({ status: 403 });
   });
 
   it("surfaces a contact rejection instead of pretending it was saved", async () => {
     const { api } = await setup({
-      "/contact.php": () => jsonResponse({ error: "Unable to save the message" }, 500),
+      "/contact": () => jsonResponse({ error: "Unable to save the message" }, 500),
     });
     await expect(
       api.contact({ full_name: "A", email: "a@b.c", subject: "Hi", message: "There" }),
@@ -143,7 +190,6 @@ describe("uploads", () => {
     const { api } = await setup({
       "/upload": () => jsonResponse({ ok: true, url: "/uploads/logo_1_abcd.png" }),
     });
-    localStorage.setItem(TOKEN_KEY, "t0ken");
     await expect(api.upload(png())).resolves.toBe("/uploads/logo_1_abcd.png");
   });
 
@@ -151,19 +197,16 @@ describe("uploads", () => {
     const { api } = await setup({
       "/upload": () => jsonResponse({ error: "Unsupported file type" }, 400),
     });
-    localStorage.setItem(TOKEN_KEY, "t0ken");
     await expect(api.upload(png())).rejects.toMatchObject({ status: 400 });
   });
 
   it("surfaces an expired session instead of pretending the upload worked", async () => {
     const { api } = await setup({ "/upload": () => jsonResponse({ error: "Missing token" }, 401) });
-    localStorage.setItem(TOKEN_KEY, "t0ken");
     await expect(api.upload(png())).rejects.toMatchObject({ status: 401 });
   });
 
   it("keeps working when the API is not deployed", async () => {
     const { api } = await setup({});
-    localStorage.setItem(TOKEN_KEY, "t0ken");
     await expect(api.upload(png())).resolves.toMatch(/^data:/);
   });
 });

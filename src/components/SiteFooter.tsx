@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { FOOTER_NAV } from "@/components/siteNav";
 import SocialFloat, { SOCIAL_NETWORKS } from "@/components/SocialFloat";
 import BackToTop from "@/components/BackToTop";
@@ -74,7 +76,7 @@ export default function SiteFooter() {
               {FOOTER_NAV.map((link) => (
                 <li key={link.label}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="text-gray-400 text-sm hover:text-white transition-colors"
                   >
                     {link.label}
@@ -102,7 +104,7 @@ export default function SiteFooter() {
                     </a>
                   ) : (
                     <Link
-                      to={l.to}
+                      href={l.to}
                       className="text-gray-400 text-sm hover:text-white transition-colors"
                     >
                       {l.label}
@@ -155,13 +157,13 @@ export default function SiteFooter() {
             © 2026 Milne Bay Province Division of Education. All rights reserved.
           </span>
           <div className="flex gap-5 text-xs">
-            <Link to="/privacy" className="text-gray-500 hover:text-white transition-colors">
+            <Link href="/privacy" className="text-gray-500 hover:text-white transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="text-gray-500 hover:text-white transition-colors">
+            <Link href="/terms" className="text-gray-500 hover:text-white transition-colors">
               Terms of Use
             </Link>
-            <Link to="/accessibility" className="text-gray-500 hover:text-white transition-colors">
+            <Link href="/accessibility" className="text-gray-500 hover:text-white transition-colors">
               Accessibility
             </Link>
           </div>

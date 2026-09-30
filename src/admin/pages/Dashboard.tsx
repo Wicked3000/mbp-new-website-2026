@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { api } from "@/lib/api";
 
 export default function Dashboard() {
@@ -72,7 +74,7 @@ export default function Dashboard() {
         {cards.map((c) => (
           <Link
             key={c.label}
-            to={c.to}
+            href={c.to}
             className={`${
               c.color.includes("text-") ? c.color : c.color + " text-white"
             } rounded-2xl p-5 flex items-center justify-between hover:shadow-lg transition-shadow`}
@@ -126,7 +128,7 @@ export default function Dashboard() {
             ].map((a) => (
               <Link
                 key={a.label}
-                to={a.to}
+                href={a.to}
                 className="rounded-xl border border-gray-100 bg-[#F8F6F1] p-4 hover:bg-white hover:border-[#0D9488]/30 hover:shadow transition-all"
               >
                 <div className="font-bold text-[#0B2545] text-sm">{a.label}</div>
@@ -139,7 +141,7 @@ export default function Dashboard() {
         <div className="bg-white rounded-2xl border border-gray-100 p-5">
           <div className="flex items-center justify-between mb-3">
             <div className="font-bold text-[#0B2545]">Recent Messages</div>
-            <Link to="/admin/messages" className="text-xs font-bold text-[#0D9488]">
+            <Link href="/admin/messages" className="text-xs font-bold text-[#0D9488]">
               View all →
             </Link>
           </div>

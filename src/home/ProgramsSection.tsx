@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { useEntity } from "@/hooks/useDynamic";
 import { PROGRAMS } from "./fallbackData";
 import Reveal from "@/components/Reveal";
@@ -44,7 +46,7 @@ export function ProgramsSection() {
           {list.map((p: any) => (
             <Link
               key={p.code}
-              to={p.href}
+              href={p.href}
               className="rounded-[18px] overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group"
             >
               <div className="relative h-44 overflow-hidden">

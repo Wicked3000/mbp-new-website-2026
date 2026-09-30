@@ -1,3 +1,5 @@
+"use client";
+
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
 

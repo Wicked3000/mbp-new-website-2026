@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { useEntity } from "@/hooks/useDynamic";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
@@ -86,7 +88,7 @@ export function AboutMissionSection() {
 
             <div className="flex flex-wrap gap-3 mt-8">
               <Link
-                to={mission.button_href}
+                href={mission.button_href}
                 className="bg-[#0B2545] text-white font-bold px-6 py-3 rounded-full hover:bg-[#163663] transition-colors shadow-sm text-sm inline-flex items-center gap-2"
               >
                 {mission.button_label}

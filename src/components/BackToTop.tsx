@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 // Appears once the visitor has scrolled past the hero, and returns them to the

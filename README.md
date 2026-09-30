@@ -1,6 +1,6 @@
 # Milne Bay Province Division of Education Website
 
-React + Vite + Tailwind CSS website for the Milne Bay Province Division of Education, with a Node/MySQL API, legacy PHP API support, and an admin dashboard.
+Next.js (App Router) + Tailwind CSS website for the Milne Bay Province Division of Education. The site and its MySQL-backed API are one application: Route Handlers under `app/api/` serve `/api/*` from the same process, so there is no second server, no CORS, and no dev proxy. The legacy PHP API under `backend/` is still supported for offline fallback.
 
 ## Recent Updates
 
@@ -48,29 +48,24 @@ React + Vite + Tailwind CSS website for the Milne Bay Province Division of Educa
 
 3. Start MySQL and import `backend/database/mbp_education.sql` into the `mbp_education` database.
 
-4. Start the frontend and API together:
+4. Apply the schema. This is a separate step because App Router has no boot
+   hook, so nothing repairs the database for you at startup:
 
    ```bash
-   npm run dev:all
+   npm run db:ensure
    ```
 
-5. Open `http://localhost:8443`.
+5. Start the site and API together - it is one process:
 
-To run only the frontend:
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run dev
-```
-
-To run only the Node API:
-
-```bash
-npm run dev:api
-```
+6. Open `http://localhost:3000`.
 
 ## Admin Dashboard
 
-Open `http://localhost:8443/admin/login`.
+Open `http://localhost:3000/admin/login`.
 
 The seed data creates an `admin` account **without a password**, so nothing can
 be signed into until you set one. Any password committed to the repository is a
@@ -94,8 +89,9 @@ Never deploy with the seeded account or the published development `JWT_SECRET`.
 
 ```bash
 npm run build
-npm run dev:api
-npx tsc --noEmit
+npm run start
+npm run db:ensure
+npm run typecheck
 npm test
 npm run format
 npm run admin:password -- admin 'a long unique passphrase'
@@ -103,10 +99,10 @@ npm run admin:password -- admin 'a long unique passphrase'
 
 ## The Two API Clients
 
-The browser can be served by either the Node API (`server/`) or the legacy PHP
-API (`backend/api/`). Both keep their own copy of the entity map, and
-`server/app.js` is the single source of truth. After adding an entity to
-`ENTITY_MAP`, regenerate the PHP copy and confirm they agree:
+The browser is served by the Next.js Route Handlers in `app/api/`, or by the
+legacy PHP API (`backend/api/`) when that is deployed instead. Both keep their
+own copy of the entity map, and `lib/entities.ts` is the single source of truth. After adding an entity to
+`ENTITY_MAP` in `lib/entities.ts`, regenerate the PHP copy and confirm they agree:
 
 ```bash
 npm run sync:php
@@ -119,15 +115,16 @@ original 19 entities, so every page-section request answered
 
 ## Project Structure
 
-- `src/App.tsx` - site routes, the admin auth guard and the skip link.
+- `app/` - the route tree. `app/(site)/` holds the public pages, `app/admin/(dash)/` the authenticated admin pages behind a server-side guard, and `app/api/` the Route Handlers.
 - `src/home` - home page sections, one component per file.
-- `src/pages` - public pages. The four programme pages live in their own folders (`FODE/`, `VET/`, `PostPrimary/`, `BasicEducation/`) with one file per section; the smaller pages are single files.
+- `src/views` - the components behind the public pages (renamed from `src/pages`; Next.js refuses to build if any directory is called `pages`). The four programme pages live in their own folders (`FODE/`, `VET/`, `PostPrimary/`, `BasicEducation/`) with one file per section; the smaller pages are single files.
 - `src/components` - shared chrome (`SiteHeader`, `SiteFooter`, `PageHero` and the inner-page banner).
 - `src/admin` - admin dashboard pages and shared CRUD components.
 - `src/lib/api.ts` - API client and the offline fallback store.
 - `src/lib/seedData.ts` - fallback content used by the localStorage store.
-- `server/app.js` - Express app: routes, auth, rate limiting (testable).
-- `server/index.js` - Node API entrypoint, schema self-healing, listener.
+- `lib/db.ts` - `mysql2` pool singleton, cached on `globalThis` so hot reloads do not leak connections.
+- `lib/auth.ts` - JWT signing, the session cookie, and the `auth_version` revocation check.
+- `lib/entities.ts` - the entity allowlist and column map (a security boundary: it is interpolated into SQL).
+- `lib/ensure-schema.ts` - idempotent schema self-healing, run by `npm run db:ensure`.
 - `backend` - legacy PHP API and database SQL.
-- `assets` - source images used by Vite imports.
 - `public/assets` - static public assets.

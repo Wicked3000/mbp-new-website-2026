@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useState, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 /**
  * The banner at the top of every inner page. Colours come from a theme so a page
@@ -279,7 +281,7 @@ export default function PageHero({
                 {frame.actions.map((action) => (
                   <Link
                     key={action.to}
-                    to={action.to}
+                    href={action.to}
                     className={`inline-flex items-center gap-2 px-6 py-3 rounded transition-colors ${
                       action.variant === "primary"
                         ? theme.primaryAction

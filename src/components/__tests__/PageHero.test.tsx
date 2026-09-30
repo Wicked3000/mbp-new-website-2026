@@ -7,7 +7,6 @@
 // image is hidden from assistive tech, and that the heading order holds.
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import PageHero, { NAVY_HERO, TEAL_HERO } from "../PageHero";
@@ -29,8 +28,7 @@ afterEach(() => {
 function render(extra: Record<string, unknown> = {}) {
   act(() =>
     root.render(
-      <MemoryRouter>
-        <PageHero
+      <PageHero
           theme={NAVY_HERO}
           image="/assets/education_programs/map/milne_bay_map.jpg"
           imageAlt=""
@@ -38,8 +36,7 @@ function render(extra: Record<string, unknown> = {}) {
           title="All Districts"
           lead="17 districts."
           {...extra}
-        />
-      </MemoryRouter>,
+        />,
     ),
   );
   return container;

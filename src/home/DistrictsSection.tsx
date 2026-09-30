@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { useDistricts } from "@/hooks/useDistricts";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
@@ -33,7 +35,7 @@ export function DistrictsSection() {
             </p>
           </div>
           <Link
-            to="/districts"
+            href="/districts"
             className="inline-flex items-center gap-2 bg-[#0B2545] text-white font-bold px-5 py-2.5 rounded-full hover:bg-[#163663] transition-colors text-sm shadow-sm"
           >
             View All Districts →
@@ -43,7 +45,7 @@ export function DistrictsSection() {
           {districts.map((d) => (
             <Link
               key={d.name}
-              to={`/districts/${d.id ?? d.name}`}
+              href={`/districts/${d.id ?? d.name}`}
               className="group rounded-2xl border border-gray-100 bg-[#F8F6F1] overflow-hidden hover:bg-white hover:shadow-lg hover:border-[#0D9488]/20 hover:-translate-y-1 transition-all"
             >
               {/* The admin offers a district thumbnail ("Coverage section
@@ -104,7 +106,7 @@ export function DistrictsSection() {
             </div>
           </div>
           <Link
-            to="/basic#schools"
+            href="/basic#schools"
             className="bg-[#C9A84C] text-[#0B2545] font-bold px-5 py-2.5 rounded-full hover:bg-[#d4b45e] transition-colors text-sm shrink-0"
           >
             Find a School
